@@ -3,12 +3,21 @@
 
 using namespace sl;
 
-int baudrate = 115200;
-std::string serialPort = "/dev/ttyAMA0";
+int main()
+{
+    int baudrate = 115200;
+    std::string serialPort = "/dev/ttyAMA0";
 
-// Create Driver and establish serial channel
-ILidarDriver *drv = *createLidarDriver();
-Result<IChannel *> channel = createSerialPortChannel(serialPort, baudrate);
+    // Create Driver and establish serial channel
+    ILidarDriver *drv;
+    drv = *createLidarDriver();
+    IChannel *channel = *createSerialPortChannel(serialPort, baudrate);
 
-// Connect Lidar via channel
-auto res = drv->connect(*channel);
+    // Connect Lidar via channel
+    auto res = drv->connect(channel);
+
+    delete drv;
+    delete channel;
+
+    return 0;
+}
