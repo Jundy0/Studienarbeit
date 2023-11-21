@@ -1,0 +1,3 @@
+[submodule "lib/rplidar_sdk"]
+	path = lib/rplidar_sdk
+	url = https://github.com/Slamtec/rplidar_sdk
