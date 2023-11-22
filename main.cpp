@@ -18,6 +18,8 @@ typedef struct
     bool valid;
 } point_t;
 
+void setPWM(int dutyCycle);
+
 int main()
 {
     gpioSetMode(GPIO_PWM, PI_OUTPUT);
