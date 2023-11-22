@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Add the RPLIDAR SDK library
 include_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src"
 )
@@ -31,8 +32,13 @@ set(SDK_FILES
 "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/hal/thread.cpp"
 )
 
+# Add all class src files
+set(CLASS_FILES
+"${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidar.cpp"
+)
+
 # Add the main executable
-add_executable(main main.cpp ${SDK_FILES})
+add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES})
 
 # Link against pthread
 target_link_libraries(main -pthread pigpio)
