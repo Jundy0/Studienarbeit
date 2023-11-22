@@ -42,6 +42,30 @@ int main()
         return -1;
     }
 
+    size_t count = 8192;
+
+    sl_lidar_response_measurement_node_hq_t scanData[count];
+
+    res = drv->grabScanDataHq(scanData, count);
+
+    if (res == SL_RESULT_OK)
+    {
+        printf("Grabbed scan data\n");
+    }
+    else
+    {
+        printf("Failed to grab scan data\n");
+        printf("Error code: %d\n", res);
+        return -1;
+    }
+
+    printf("Scan data:\n");
+    for (int i = 0; i < count; i++)
+    {
+        printf("Angle: %f\n", scanData[i].angle_z_q14 * 90.f / (1 << 14));
+        printf("Distance: %f\n", scanData[i].dist_mm_q2 / (1 << 2));
+    }
+
     delete drv;
     delete channel;
 
