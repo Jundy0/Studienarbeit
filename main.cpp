@@ -1,10 +1,12 @@
 #include <string>
 #include <math.h>
+#include <pigpio.h>
 #include "rplidar.h"
 
 #define COUNT 8192
 #define BAUDRATE 115200
 #define SERIALPORT "/dev/ttyAMA0"
+#define GPIO_PWM 18
 
 typedef struct
 {
@@ -18,6 +20,10 @@ typedef struct
 
 int main()
 {
+    gpioSetMode(GPIO_PWM, PI_OUTPUT);
+
+    setPWM(1000);
+
     u_result res;
 
     rp::standalone::rplidar::RPlidarDriver *drv;
@@ -93,5 +99,12 @@ int main()
 
     delete drv;
 
+    setPWM(0);
+
     return 0;
+}
+
+void setPWM(int dutyCycle)
+{
+    gpioPWM(GPIO_PWM, dutyCycle);
 }

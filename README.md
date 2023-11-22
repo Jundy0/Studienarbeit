@@ -33,6 +33,12 @@ cd Studienarbeit
 git submodule update --init --recursive
 ```
 
+4. Install pigpio
+
+```bash
+sudo apt-get install libpigpio-dev
+```
+
 # Build:
 
 1. Create Build Folder

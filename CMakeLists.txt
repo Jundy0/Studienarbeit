@@ -35,4 +35,4 @@ set(SDK_FILES
 add_executable(main main.cpp ${SDK_FILES})
 
 # Link against pthread
-target_link_libraries(main -pthread)
+target_link_libraries(main -pthread pigpio)
