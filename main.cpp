@@ -1,6 +1,6 @@
 #include <string>
 #include <math.h>
-#include "sl_lidar.h"
+#include "rplidar.h"
 
 #define COUNT 8192
 #define BAUDRATE 115200
@@ -18,14 +18,14 @@ typedef struct
 
 int main()
 {
-    sl_result res;
+    u_result res;
 
-    sl::ILidarDriver *drv = *sl::createLidarDriver();
-    sl::IChannel *channel = *sl::createSerialPortChannel(SERIALPORT, BAUDRATE);
+    rp::standalone::rplidar::RPlidarDriver *drv;
+    drv = rp::standalone::rplidar::RPlidarDriver::CreateDriver(rp::standalone::rplidar::DRIVER_TYPE_SERIALPORT);
 
-    res = drv->connect(channel);
+    res = drv->connect(SERIALPORT, BAUDRATE);
 
-    if (res == SL_RESULT_OK)
+    if (res == RESULT_OK)
     {
         printf("Connected to Lidar\n");
     }
@@ -38,7 +38,7 @@ int main()
 
     res = drv->startScan(true, true);
 
-    if (res == SL_RESULT_OK)
+    if (res == RESULT_OK)
     {
         printf("Started scanning\n");
     }
@@ -51,12 +51,12 @@ int main()
 
     size_t count = COUNT;
 
-    sl_lidar_response_measurement_node_hq_t scanData[count];
+    rplidar_response_measurement_node_hq_t scanData[count];
     point_t points[count];
 
     res = drv->grabScanDataHq(scanData, count);
 
-    if (res == SL_RESULT_OK)
+    if (res == RESULT_OK)
     {
         printf("Grabbed scan data\n");
     }
@@ -76,7 +76,7 @@ int main()
         points[i].angle = angle;
         points[i].x = cos(angle) * distance;
         points[i].y = sin(angle) * distance;
-        points[i].sinal_strength = scanData[i].quality >> SL_LIDAR_RESP_MEASUREMENT_QUALITY_SHIFT;
+        points[i].sinal_strength = scanData[i].quality >> RPLIDAR_RESP_MEASUREMENT_QUALITY_SHIFT;
         points[i].valid = distance > 0;
     }
 
@@ -92,7 +92,6 @@ int main()
     }
 
     delete drv;
-    delete channel;
 
     return 0;
 }
