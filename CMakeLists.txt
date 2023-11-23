@@ -37,8 +37,10 @@ set(CLASS_FILES
 "${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidar.cpp"
 )
 
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/lib/matplot")
+
 # Add the main executable
 add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES})
 
 # Link against pthread
-target_link_libraries(main -pthread pigpio)
+target_link_libraries(main -pthread pigpio matplot)

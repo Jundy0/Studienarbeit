@@ -79,7 +79,7 @@ void A1Lidar::getScanData(point_t *data, size_t count)
 
     for (int i = 0; i < count; i++)
     {
-        const double angle = scanData[i].angle_z_q14 * (90.f / 16384.f);
+        const double angle = -scanData[i].angle_z_q14 * ((90.f / 16384.f) * (M_PI / 180.f));
         const double distance = scanData[i].dist_mm_q2 / 4000.0f;
         data[i].radius = distance;
         data[i].angle = angle;
