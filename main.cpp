@@ -15,11 +15,18 @@ int main()
 
     lidar->startScan();
 
-    point_t points1[COUNT];
+    point_t *points = (point_t *)malloc(sizeof(point_t) * COUNT);
 
-    lidar->getScanData(points1, COUNT);
+    lidar->getScanData(points, COUNT);
 
     lidar->stopScan();
+
+    for (int i = 0; i < COUNT; i++)
+    {
+        printf("Angle: %f, Distance: %f, Valid: %s\n", points[i].x, points[i].y, points[i].valid ? "true" : "false");
+    }
+
+    free(points);
 
     delete lidar;
 }
