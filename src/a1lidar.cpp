@@ -2,6 +2,7 @@
 
 #include <pigpio.h>
 #include <math.h>
+#include <unistd.h>
 
 A1Lidar::A1Lidar(std::string serialPort, int baudRate, int pwmPin)
 {
@@ -37,7 +38,8 @@ void A1Lidar::setPWM(int dutyCycle)
 
 void A1Lidar::startScan()
 {
-    this->setPWM(500000);
+    this->setPWM(750000);
+    sleep(1);
     u_result res = drv->startScan(true, true);
 
     if (res == RESULT_OK)
@@ -54,6 +56,7 @@ void A1Lidar::startScan()
 
 void A1Lidar::stopScan()
 {
+    sleep(1);
     this->setPWM(0);
     drv->stop();
 }
@@ -76,13 +79,13 @@ void A1Lidar::getScanData(point_t *data, size_t count)
 
     for (int i = 0; i < count; i++)
     {
-        const double angle = scanData[i].angle_z_q14 * (90.f / 16384.f / (180.0f / M_PI));
+        const double angle = scanData[i].angle_z_q14 * (90.f / 16384.f);
         const double distance = scanData[i].dist_mm_q2 / 4000.0f;
         data[i].radius = distance;
         data[i].angle = angle;
         data[i].x = distance * cos(angle);
         data[i].y = distance * sin(angle);
-        data[i].sinal_strength = scanData[i].quality;
-        data[i].valid = distance > 0;
+        data[i].quality = scanData[i].quality;
+        data[i].valid = scanData[i].quality > 7;
     }
 }

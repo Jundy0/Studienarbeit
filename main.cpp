@@ -4,7 +4,7 @@
 #include "rplidar.h"
 #include "a1lidar.h"
 
-#define COUNT 8192
+#define COUNT 8124
 #define BAUDRATE 115200
 #define SERIALPORT "/dev/ttyAMA0"
 #define GPIO_PWM 18
@@ -23,7 +23,10 @@ int main()
 
     for (int i = 0; i < COUNT; i++)
     {
-        printf("Angle: %f, Distance: %f, Valid: %s\n", points[i].x, points[i].y, points[i].valid ? "true" : "false");
+        if (points[i].quality > 1)
+        {
+            printf("Angle: %f, Radius: %f, Quality: %f\n", points[i].angle, points[i].radius, points[i].quality);
+        }
     }
 
     free(points);

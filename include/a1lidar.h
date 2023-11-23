@@ -9,7 +9,7 @@ typedef struct
     double angle;
     double x;
     double y;
-    double sinal_strength;
+    double quality;
     bool valid;
 } point_t;
 
