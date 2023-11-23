@@ -19,6 +19,8 @@ public:
     virtual ~IA1Lidar(){};
 
     virtual void setPWM(int dutyCycle) = 0;
+    virtual void startMotor() = 0;
+    virtual void stopMotor() = 0;
     virtual void startScan() = 0;
     virtual void stopScan() = 0;
     virtual void getScanData(point_t *data, size_t count) = 0;
@@ -31,6 +33,8 @@ public:
     ~A1Lidar();
 
     void setPWM(int dutyCycle);
+    void startMotor();
+    void stopMotor();
     void startScan();
     void stopScan();
     void getScanData(point_t *data, size_t count);

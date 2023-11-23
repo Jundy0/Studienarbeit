@@ -36,10 +36,20 @@ void A1Lidar::setPWM(int dutyCycle)
     gpioHardwarePWM(this->pwmPin, 100, dutyCycle);
 }
 
-void A1Lidar::startScan()
+void A1Lidar::startMotor() 
 {
     this->setPWM(750000);
     sleep(1);
+}
+
+void A1Lidar::stopMotor()
+{
+    this->setPWM(0);
+}
+
+void A1Lidar::startScan()
+{
+    this->startMotor();
     u_result res = drv->startScan(true, true);
 
     if (res == RESULT_OK)
@@ -56,14 +66,14 @@ void A1Lidar::startScan()
 
 void A1Lidar::stopScan()
 {
-    sleep(1);
-    this->setPWM(0);
+    this->stopMotor();
     drv->stop();
 }
 
 void A1Lidar::getScanData(point_t *data, size_t count)
 {
     rplidar_response_measurement_node_hq_t scanData[count];
+
     u_result res = drv->grabScanDataHq(scanData, count);
 
     if (res == RESULT_OK)
