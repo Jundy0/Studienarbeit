@@ -1,7 +1,10 @@
+set (CORE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../core/include")
+set (CORE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../core/src")
+
 include_directories(
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${CORE_INCLUDE_DIR}"
 )
 
 set(CORE_CLASS_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/a.cpp"
+    "${CORE_SOURCE_DIR}/a.cpp"
 )

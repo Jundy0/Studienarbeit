@@ -4,8 +4,10 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/lib/rplidar_sdk/sdk/include",
-                "${workspaceFolder}/lib/rplidar_sdk/sdk/src"
+                "${workspaceFolder}/src/core/include",
+                "${workspaceFolder}/src/core/src",
+                "${workspaceFolder}/src/lidar/lib/rplidar_sdk/sdk/include",
+                "${workspaceFolder}/src/lidar/lib/rplidar_sdk/sdk/src"
             ],
             "defines": [
                 "_DEBUG",
