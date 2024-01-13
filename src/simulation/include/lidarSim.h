@@ -1,5 +1,5 @@
-#ifndef __LIDARSIM_H__
-#define __LIDARSIM_H__
+#ifndef __LIDAR_SIM_H__
+#define __LIDAR_SIM_H__
 
 #include "lidar.h"
 
@@ -15,4 +15,4 @@ public:
     void getScanData(point_t *data, size_t count);
 };
 
-#endif // __LIDARSIM_H__
+#endif // __LIDAR_SIM_H__
