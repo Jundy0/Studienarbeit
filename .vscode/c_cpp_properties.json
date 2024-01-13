@@ -6,8 +6,12 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/src/core/include",
                 "${workspaceFolder}/src/core/src",
+                "${workspaceFolder}/src/lidar/include",
+                "${workspaceFolder}/src/lidar/src",
                 "${workspaceFolder}/src/lidar/lib/rplidar_sdk/sdk/include",
-                "${workspaceFolder}/src/lidar/lib/rplidar_sdk/sdk/src"
+                "${workspaceFolder}/src/lidar/lib/rplidar_sdk/sdk/src",
+                "${workspaceFolder}/src/simulation/include",
+                "${workspaceFolder}/src/simulation/src"
             ],
             "defines": [
                 "_DEBUG",

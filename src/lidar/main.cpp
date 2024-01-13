@@ -11,7 +11,7 @@
 
 int main()
 {
-    IA1Lidar *lidar = new A1Lidar(SERIALPORT, BAUDRATE, GPIO_PWM);
+    ILidar *lidar = new A1Lidar(SERIALPORT, BAUDRATE, GPIO_PWM);
 
     lidar->startScan();
 

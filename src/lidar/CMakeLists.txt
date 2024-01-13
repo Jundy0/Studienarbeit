@@ -37,8 +37,10 @@ set(CLASS_FILES
 "${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidar.cpp"
 )
 
+include("${CMAKE_CURRENT_SOURCE_DIR}/../core/CMakeLists.txt")
+
 # Add the main executable
-add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES})
+add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES} ${CORE_CLASS_FILES})
 
 # Link against pthread
 target_link_libraries(main -pthread pigpio)

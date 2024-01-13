@@ -10,9 +10,7 @@ include_directories(
 )
 
 set(CLASS_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidar.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/test.cpp"
-
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lidarSim.cpp"
 )
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/CMakeLists.txt")
