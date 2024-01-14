@@ -36,11 +36,5 @@
 build/
 
 # LaTeX
-/Latex/*.out
-/Latex/*.aux
-/Latex/*.log
-/Latex/*.synctex.gz
-/Latex/*.fdb_latexmk
-/Latex/*.fls
-/Latex/*.toc
+/Latex/out/
 

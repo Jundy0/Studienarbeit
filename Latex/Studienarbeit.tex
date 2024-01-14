@@ -1,144 +1,100 @@
-\documentclass[12pt]{article}
+\documentclass[a4paper,12pt]{article}
 
 \usepackage{amsmath}
-
 \usepackage{graphicx}
-
+\usepackage[hyperfootnotes=false]{hyperref}
 \usepackage{hyperref}
-
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber, citestyle=authoryear, bibstyle=authoryear, hyperref=true]{biblatex}
+\usepackage{csquotes}
+\usepackage{pdfpages}
+\usepackage{float}
+\usepackage{listings}
 
-\title{My LaTeX Title}
+\newcommand{\customcaption}[2]{\caption[#1]{ #1. #2.}}
 
-\author{Guillaume Blanchet}
+\addbibresource{literatur/literatur.bib}
 
-\date{2020–01–13}
+\pagestyle{fancy}
+\setlength{\headheight}{15.5pt}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+
+\definecolor{boxgray}{gray}{0.9}
+\definecolor{commentgray}{gray}{0.5}
+\definecolor{darkgreen}{rgb}{0,.5,0}
+
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{PigBlue}{RGB}{42, 0, 255}
+\definecolor{PigRed}{RGB}{255, 0, 0}
+
+\definecolor{keywordColor1}{RGB}{0, 0, 153}
+\definecolor{keywordColor2}{RGB}{102, 102, 51}
+\definecolor{keywordColor3}{RGB}{0, 102, 102}
+\definecolor{keywordColor4}{RGB}{153, 51, 51}
+\definecolor{keywordColor5}{RGB}{58, 19, 58}
+
+\lstset{
+	basicstyle=\ttfamily\scriptsize,
+	commentstyle=\color{commentgray}\textit,
+	showstringspaces=false,
+	stringstyle=\color{darkgreen},
+	keywordstyle=\color{blue},
+	numbers=none,
+	numberstyle=\tiny,
+	stepnumber=1,
+	numbersep=15pt,
+	tabsize=2,
+	fontadjust=true,
+	frame=single,
+	backgroundcolor=\color{boxgray},
+	captionpos=b,
+	linewidth=1\linewidth,
+	xleftmargin=0.009\linewidth,
+	breaklines=true,
+	aboveskip=16pt,
+}
+
+
+\def\myTopic{Weiterentwicklung eines selbstfahrenden Fahrzeuges mit Lidar und anderen Sensoren}
 
 \begin{document}
 
-\pagenumbering{roman}
+\pagenumbering{Roman}
 
-\begin{titlepage}
-	\begin{minipage}{6in}
-	\vspace*{-2cm}
-    \centering
-    \raisebox{-0.5\height}{}
-    \hfill
-    \raisebox{-0.5\height}{\includegraphics[height=2cm]{graphics/DHBW_logo.jpg}}
-    \end{minipage}
-	\begin{center}
-		\vspace*{0.5cm}
-		\LARGE\textbf{Weiterentwicklung eines selbstfahrenden Fahrzeuges mit Lidar
-        und anderen Sensoren}\\
-		% \Large\rm\mySubTopic\\
-		\vspace*{2cm}
-		\textbf{Studienarbeit}\\
-		\normalsize
-		{\"u}ber die ersten drei Quartale des 3. Studienjahres\\
-		\vspace*{1.3cm}
-		an der Fakult{\"a}t f{\"u}r Technik\\
-		im Studiengang Informationstechnik\\
-		\vspace*{1cm}
-		an der DHBW Ravensburg\\
-		Campus Friedrichshafen\\
-		\vspace*{1cm}
-		von\\
-		Justin Serrer - 5577068 - TIT21 \\ 
-		Timo Waibel - 8161449 - TIT21 \\
-		Janik Frick - 4268671 - TIT21 \\
-		\vspace*{2cm}
-		\vfill
-	\end{center}
-	\begin{tabular}{ll}
-	\end{tabular}
-\end{titlepage}
-\newpage
-\tableofcontents
-\newpage
-\listoffigures
-\newpage
+\input{pages/1_titel}
 
-\section{Einleitung}
-In diesem Abschnitt wird auf das generelle Ziel der Arbeit eingegangen.
-Des weiteren wird Erläutert, weshalb das Ziel der Arbeit wichtig ist, wie die Arbeit aufgebaut ist und welche Probleme und Schwierigkeiten durch bereits getätigte Versuche einer Umsetzung des Arbeits-Ziels bereits bekannt sind.
+\pagestyle{fancy}
 
-\begin{enumerate}
-    \item Was ist das Ziel der Studienarbeit?\\
-    Menschen sind bequem.
-    Daher ist, wie man am Beispiel von autonom fahrenden Autos sehen kann, Automation ein immer wichtiger werdendes Thema.\\
+\input{pages/2_sperrvermerk}
+\input{pages/3_erklaerung}
+\input{pages/4_genderErklaerung}
+\input{pages/5_inhaltsverzeichnis}
+\input{pages/6_abkuerzungsverzeichnis}
+\input{pages/7_abbildungsverzeichnis}
+\input{pages/8_listingsverzeichnis}
 
-    Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Algorithmus für ein Modell-Auto. 
-    Der Algorithmus soll Hindernisse erkennen und das Auto automatisch um diese herum navigieren.
-    Zur Umsetzung der Aufgabe, stehen, neben einem RPLiDAR A1M8-R6 der Firma Slamtec, auch weitere Sensoren zur Verf{\"u}gung.
-    Den Hardware-Teil der Arbeit übernimmt eine Gruppe an E-Technik-Studenten, weshalb eine weitere Aufgabe die Koordination mit dieser Gruppe ist.
-    Eine gute Kommunikation ist wichtig, so dass, nachdem jede Gruppe ihre Ziele erreicht hat, eine Zusammenf{\"u}hrung von Hard- und Software ohne viel Aufwand m{\"o}glich ist.
-    Da unserer Gruppe die Hardware nicht dauerhaft zur Verfügung steht, ist ein weiteres Ziel der Arbeit die Simulation und der damit einhergehenden Abstraktion der Hardware, so dass der Algorithmus auch ohne Verfügbarkeit der Hardware getestet werden kann.    
+\fancyhead[L]{\nouppercase{\leftmark}}
+\pagenumbering{arabic}
 
-    \item Wie ist die Studienarbeit aufgebaut?\\
-    ???
+\input{chapters/1_einleitung}
+\input{chapters/2_ueberblick}
+\input{chapters/3_slam}
+\input{chapters/4_simulation}
+\input{chapters/5_implementierung}
+\input{chapters/6_fazit}
 
-    \item Bekannte Probleme\\
-    Es wurde bereits mehrfach versucht, im Rahmen einer Studienarbeit, diese Aufgabe umzusetzen.
-    Die bisherigen Gruppen stießen dabei auf diverse Probleme.
-    Das Hauptproblem war der Aufbau der Gruppen.
-    Diese bestanden ausschließlich aus Elektrotechnik-Studenten, was zu Folge hatte, dass das Grundlagenwissen, welches zur Entwicklung eines solchen Algorithmus benötigt wird, nicht vorhanden war.
-    Somit war es den bisherigen Gruppen nicht möglich, einen Algorithmus, innerhalb des vorgegebenen Zeitrahmens zu entwickeln.
-    Einige der Gruppen versuchten, durch die Hilfe der Robot-Operating-System-Software, bereits existierende Algorithmen zu nutzen. 
-    Aufgrund des hohen Rechenaufwandes, waren diese jedoch nicht mit der zur Verfügung stehenden Hardware kompatibel, da diese zu wenig Ressourcen bat.\\
+\begin{appendix}
+    \input{pages/9_attachments}
+\end{appendix}
 
-    Um die bekannten Probleme zu umgehen, wurde sich dazu entschieden, den Hardware-Teil der Aufgabe einer Gruppe an Elektrotechnik-Studenten und den Software-Teil uns Informatik-Studenten zuzuteilen.
-    Durch die Aufteilung der Aufgabe, verringert sich der Workload für jede der Gruppen. 
-    Zusätzlich hat jede Gruppe eine Aufgabe, für die das entsprechende Grundlagenwissen bereits vorhanden ist.
-    Des weiteren wurde leistungsstärkere Hardware zur Verfügung gestellt, um die Hardware als limitierende Faktor zu eliminieren.
+\input{pages/10_literaturverzeichnis}
 
-\end{enumerate}
-
-\section{Überblick Hardware und Software}
-
-\subsection{Hardware}
-\begin{enumerate}
-    \item Raspberry PI\\
-    \item LiDAR\\
-\end{enumerate}
-
-\subsection{Software}
-\begin{enumerate}
-    \item ROS oder alles selbst programmieren\\
-\end{enumerate}
-
-\section{SLAM-Algorithmus}
-
-\begin{enumerate}
-    \item Was ist SLAM?\\
-    \item Wie funktioniert SLAM?\\
-    \item Welche SLAM-Algorithmen gibt es?\\
-    \item Welcher SLAM-Algorithmus ist für uns geeignet?\\
-
-\end{enumerate}
-\section{Simulation des Ausweichalgorithmus}
-
-\begin{enumerate}
-    \item Warum simulieren?\\
-    \item Was simulieren?\\
-    \item Woher bekommen wir die Daten?\\
-    \item Wie werden die Daten verarbeitet?\\
-    \item Wie werden die Daten visualisiert?\\
-\end{enumerate}
-
-\section{Implementierung des Ausweichalgorithmus}
-
-\begin{enumerate}
-    \item Zugirff auf die Daten\\
-    \item Verarbeitung der Daten\\
-    \item Ausweichalgorithmus\\
-    \item Welche Technologien werden verwendet?\\
-\end{enumerate}
-
-
-\section{Fazit}
-\begin{enumerate}
-    \item Was haben wir erreicht?\\
-    \item Etspricht das dem erhofften Ergebnis?\\
-\end{enumerate}
 \end{document}
