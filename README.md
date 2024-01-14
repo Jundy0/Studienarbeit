@@ -18,48 +18,78 @@ GitHub Repo für unsere Studienarbeit
 1. Clone this repo
 
 ```bash
-git clone https://github.com/Jundy0/Studienarbeit
+git clone https://github.com/Jundy0/Studienarbeit --recurse-submodules
 ```
 
-2. Go to the folder
-
-```bash
-cd Studienarbeit
-```
-
-3. Install the sdk
-
-```bash
-git submodule update --init --recursive
-```
-
-4. Install pigpio
+2. Install pigpio
 
 ```bash
 sudo apt-get install libpigpio-dev
 ```
 
-# Build:
+# Lidar (Running on Raspberry Pi):
 
-1. Create Build Folder
+## Build:
+
+1. Go to Lidar Folder
+
+```bash
+cd src/lidar
+```
+
+2. Create Build Folder
 
 ```bash
 mkdir build
 ```
 
-2. Go to the folder
+3. Go to Build Folder
 
 ```bash
 cd build
 ```
 
-3. Build the project
+4. Gernate Build Files
 
 ```bash
 cmake .. -G "Unix Makefiles"
 ```
 
-4. Build the project
+5. Build the project
+
+```bash
+make
+```
+
+# Simulation (Running on Windows):
+
+## Build:
+
+1. Go to Simulation Folder
+
+```bash
+cd src/simulation
+```
+
+2. Create Build Folder
+
+```bash
+mkdir build
+```
+
+3. Go to Build Folder
+
+```bash
+cd build
+```
+
+4. Gernate Build Files
+
+```bash
+cmake .. -G "Unix Makefiles"
+```
+
+5. Build the project
 
 ```bash
 make

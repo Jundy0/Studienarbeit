@@ -17,5 +17,3 @@ set(CLASS_FILES
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/CMakeLists.txt")
 
 add_executable(main main.cpp ${CLASS_FILES} ${CORE_CLASS_FILES})
-
-target_link_libraries(main)

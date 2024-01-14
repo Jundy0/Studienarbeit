@@ -1,7 +1,8 @@
-#include "lidar.h"
-#include "vehicleControl.h"
 #ifndef __EVASION_CONTROL_H__
 #define __EVASION_CONTROL_H__
+
+#include "lidar.h"
+#include "vehicleControl.h"
 
 class EvasionControl
 {
