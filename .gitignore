@@ -38,3 +38,4 @@ build/
 # LaTeX
 /Latex/out/
 
+.vscode/
