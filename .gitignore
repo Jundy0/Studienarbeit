@@ -38,4 +38,5 @@ build/
 # LaTeX
 /Latex/out/
 
-.vscode/
+/.vscode/
+.vscode/settings.json
