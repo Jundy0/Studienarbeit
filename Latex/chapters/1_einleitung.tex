@@ -1,20 +1,25 @@
 \section{Einleitung}
-In diesem Abschnitt wird auf das generelle Ziel der Arbeit eingegangen.
+Die Automatisierung im Straßenverkehr befindet sich in stetigem Wachstum, wobei selbstfahrende Fahrzeuge zunehmend an Bedeutung gewinnen. \\
+Auch im Bereich der Modell-Autos und Roboter ist Automatisierung eine präsentes Thema. \\ 
+Zwar ist die Umsetzung eines selbstfahrenden Modell-Autos oder Roboters, aufgrund der vorhersehbareren und weniger komplexen Umgebung, einfacher als die Umsetzung eines selbstfahrenden PKW, jedoch stellt sie trotzdem eine Herausforderung dar.
+\\\\
+Die zuverlässige Navigation eines selbstfahrenden Modell-Auto erfordert nicht nur präzise Ortung sämtlicher Objekte in der nähren Umgebung, sondern auch die Fähigkeit, neue Hindernisse zu erkennen und die eigene Position im Raum bestimmen.
+
+
+\section{Problemstellung, Ziel und Umsetzung}
+In diesem Abschnitt wird auf die Problemstellung, das generelle Ziel und die geplante Umsetzung der Arbeit eingegangen. \\
 Des weiteren wird Erläutert, weshalb das Ziel der Arbeit wichtig ist, wie die Arbeit aufgebaut ist und welche Probleme und Schwierigkeiten durch bereits getätigte Versuche einer Umsetzung des Arbeits-Ziels bereits bekannt sind.
 
-\subsection{Was ist das Ziel der Studienarbeit?}
-    Menschen sind bequem. %Ich würde Automation nicht nur als Zeichen von Bequemlichkeit, sondern auch als Zeichen von Effizienz und Sicherheit betrachten, was die wensentlich spannenderen Aspekete in BEzug auf unsere Studienarbeit sein werden
-    Daher ist, wie man am Beispiel von autonom fahrenden Autos sehen kann, Automation ein immer wichtiger werdendes Thema.\\
+\subsection{Problemstellung}
 
-    Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Ausweichalgorithmus für ein Modell-Auto. 
-    Der Algorithmus soll Hindernisse erkennen und das Auto automatisch um diese herum navigieren.
-    Zur Umsetzung der Aufgabe, stehen neben einem RPLiDAR A1M8-R6 der Firma Slamtec auch weitere Sensoren zur Verfügung.
-    Den Hardware-Teil der Arbeit übernimmt eine Gruppe an E-Technik-Studenten, weshalb eine weitere Aufgabe die Koordination mit dieser Gruppe ist.
-    Eine gute Kommunikation ist wichtig, so dass, nachdem jede Gruppe ihre Ziele erreicht hat, eine Zusammenführung von Hard- und Software ohne viel Aufwand möglich ist.
-    Da unserer Gruppe die Hardware nicht dauerhaft zur Verfügung steht, ist ein weiteres Ziel der Arbeit die Simulation und der damit einhergehenden Abstraktion der Hardware, so dass der Algorithmus auch ohne Verfügbarkeit der Hardware getestet werden kann.    
 
-\subsection{Wie ist die Studienarbeit aufgebaut?}
+\subsection{Ziel}
+Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Algorithmus für ein Modell-Auto. Dieser soll mit Hilfe der Daten diverser Sensoren, Hindernisse erkennen und das Auto automatisch um diese herum navigieren. \\
+Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. Daher ist ein weiteres Ziel der Arbeit, die Simulation des Fahrzeugs.
 
+\subsection{Umsetzung}
+Zur Umsetzung der Aufgabe, stehen, neben einem RPLiDAR A1M8-R6 der Firma Slamtec, auch weitere Sensoren zur Verfügung. \\
+Da der Hardware-Teil einer anderen Gruppe zugeteilt ist, ist eine gute Kommunikation zwischen den Gruppen notwendig. Somit kann, nachdem jede Gruppe ihre Ziele erreicht hat, eine Zusammenführung von Hard- und Software ohne viel Aufwand ermöglicht werden. \\
 
 \subsection{Bekannte Probleme}
     Es wurde bereits mehrfach versucht, im Rahmen einer Studienarbeit, diese Aufgabe umzusetzen.
@@ -24,6 +29,7 @@ Des weiteren wird Erläutert, weshalb das Ziel der Arbeit wichtig ist, wie die A
     Somit war es den bisherigen Gruppen nicht möglich, einen Algorithmus, innerhalb des vorgegebenen Zeitrahmens zu entwickeln.
     Einige der Gruppen versuchten, durch die Hilfe der Robot-Operating-System-Software, bereits existierende Algorithmen zu nutzen. 
     Aufgrund des hohen Rechenaufwandes, waren diese jedoch nicht mit der zur Verfügung stehenden Hardware kompatibel, da diese zu wenig Ressourcen bat. \\ % Meinst du Vergangenheit von bieten oder haben? bieten wäre bot
+
 
     Um die bekannten Probleme zu umgehen, wurde sich dazu entschieden, den Hardware-Teil der Aufgabe einer Gruppe an Elektrotechnik-Studenten und den Software-Teil uns Informatik-Studenten zuzuteilen.
     Durch die Aufteilung der Aufgabe, verringert sich der Workload für jede der Gruppen. 

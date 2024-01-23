@@ -50,4 +50,5 @@ Latex/*.run.xml
 Latex/*.synctex.gz
 Latex/*.toc
 
-.vscode/
+/.vscode/
+.vscode/settings.json
