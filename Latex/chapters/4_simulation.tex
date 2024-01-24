@@ -37,6 +37,76 @@ mit denen der Algorithmus ausgeführt werden kann. Zusätzlich müssen die simul
 \subsection{Aufbau der Simulation}
 Um die Simulation für eine erste Validierung der Algorithmik nutzen zu können, ist die Voraussetzung dass die simulierte Funktionalität auch der Funktionalität entspricht, die später im realen Einsatz genutzt wird.
 Gibt es Abweichungen zwischen den Funktionalitäten, so kann nur eine Schätzung vorgenommen werden, wie sich der Algorithmus im praktischen Einsatz verhält. \\
+Wie zu Beginn der Arbeit formuliert, soll zunächst ein Algorithmus entwickelt werden, der das Ausweichen auf gerader Linie ermöglicht. 
+Da es aktuell keine Möglichkeit gibt, ein Ziel einzugeben, wird die aktuelle Ausrichtung des Fahrzeugs als Fahrtrichtung verwendet. Das ermöglicht eine Funktionalität unabhängig von der Position des Fahrzeugs. 
+Dann fährt das Auto in diese Richtung. Wird auf der Strecke ein Hinderniss erkannt, versucht der Algorithmus dem Hinderniss auszueichen. Ist dies möglich wird das Auto auf die ursprüngliche Gerade zurückgeführt. \\
+Um eine Simulation zu implenentieren, ist zu klären, ob diese Funktionalität in einer Simulation realitätsnah möglich ist, oder ob eine vereinfachte Version simuliert werden muss.\\
+
+\subsubsection{Kritische Funktionalitäten}
+Zunächst müssend die Funktionalitäten identifiziert werden, die in der Simulation Probleme veruursachen könnten.
+\begin{enumerate}
+    \item Sensordaten
+    \item Umgebung 
+    \item Ausweichen
+    \item Lokalisierung
+    \item Fahrzeug
+\end{enumerate}
+
+\paragraph{Sensordaten}
+Die Sensordaten bilden die Grundlage für die gesamte Simulation. Auf den Sensordaten basiert die Lokalisierung im Raum und das Erkennen und Ausweichen eines Hindernisses. 
+Die Simulation dieser Daten stellt damit die größte Herausforderung in der Simulation dar, da die Daten in Frequenz und Aufbau den realen Daten möglichst genau entsprechen sollten.
+Vor allem der Aufbau der Daten sollte den realen Daten so nahe wie möglich kommen, da zusätzliche oder fehlende Daten in der Qualität der Auswertung deutlich zu erkennen sein könnten.
+Gibt es Unterschiede in der Frequenz sind die Auswirkungen weniger problematisch. Eine geringere ode höhere Frequenz kann durch die mögliche Geschwindigkeiten des Modell-Autos oder an anderen Stellen ausgeglichen werden.
+
+\paragraph{Umgebung}
+Die Umgebung ist ebenfalls ein essentieller Bestandteil. Denn die Umgebung muss so simuliert werden, dass diese von den Sensoren erkannt werden kann. Ist das nicht der Fall, ist jede Simulation der Sensorik unbrauchbar.
+Die genaue Implementierung ist unabhängig von der realen Welt. Dennoch ist darauf zu achten, dass die für die Sensorik notwendigen vorhanden sind.
+
+\paragraph{Ausweichen}
+Die Logik des Ausweichens ist die eigentliche Funktionalität die implenentiert werden soll. Diese ist der zentrale Baustein im System. 
+Ist diese nicht vorhanden, ist die Simulation nicht brauchbar, um die Funktionalität zu validieren.
+
+\paragraph{Lokalisierung}
+Die Lokalisierung des simulierten Fahrzeugs ist ebenfalls ein wichitger Bestandteil der Simulation, denn die Lokalisierung ist dafür verantwortlich zu entscheiden ob das Ausweichmanöver abggeschlossen ist.
+
+\paragraph{Fahrzeug}
+Das Fahrzeug dient in der Simulation nur der Visualisierung. Physische Eigenschaften wie zum Beispiel der Kurvenradius und Reibung der Reifen sind nicht von Bedeutung. Außerdem kann das Auto visuell stark vereinfacht dargestellt werden. 
+
+
+\subsubsection{Prüfung der kritischen Funktionalitäten}
+\label{Prüfung}
+In diesem Abschnitt werden die einzelnen Funktionalitäten auf Umsetzbarkeit geprüft. Ist eine Umsetzung möglich, kann diese Funktionalität so implenentiert werden, andernfalls muss eine Alternative erarbeitet werden.
+
+\paragraph{Sensordaten}
+Folgende Sensordaten müssen simuliert werden: \\
+- LIDAR: Der Lidar Sensor erzeugt durch Rotation und das Aussenden von Laserstrahlen eine Punktwolke die die Umgebung abbildet.
+ Diese Daten sind gut zu simulieren, da hierfür auseghend von der aktuellen Position in jede Richtung Strahlen simuliert werden können, die die Entfernung von Objekten bestimmen. \\
+- Ultraschall: Bei der Implementierung der Simulation des Ultraschall-Sensors ist mehr Aufwand nötig, da der Sensor nicht in jede Richtung Signale sendet, sondern konstant in eine Richtung. +
+Die Komplexität kommt durch das Verhalten der Schallwellen, die sich im Raum ausbreiten. Trotz der zusätzlichen Komplexität sollte eine ausreichend gute Simulation möglich sein.\\
+- Geschwindigkeit: Die Komplexität der Ermittlung der Geschwindigkeit ist gering, da diese Information als Variable direkt im simulierten Auto hinterlegt werden kann.\\
+- Lenkwinkel: Kann ähnlich wie die Geschwindigkeit als Variable gespeichert werden. 
+
+\paragraph{Umgebung}
+Die Komplexität einer vereinfachten Umgebung ist als gering einzuschätzen, da für die Erkennung die Positionsdaten, sowie geometrische Form und Längen- und Breitenmaße ausreichend sind, um eine Überschneidung mit Strahlen oder Wellen mathematisch zu berechnen.
+Die vereinfachte Umgebung enthält nur Gegenstände, deren Form eine einfache Berechnung zulässt. Dazu gehören zum Beispiel Quadrate und Rechtecke. \\
+Soll die Komplexität der Umgebung erhöht werden, steigt der Aufwand der mathematischen Berechnungen. Die Komplexität der Simulation sollte aber auf einem ähnlichen Niveau bleiebn.
+
+\paragraph{Ausweichen}
+Das Ausweichen weist eine geringe Komplexität auf, da es für diese Aufgabe bereits viele verschiedene Lösungsstrategien gibt. 
+
+\paragraph{Lokalisierung}
+Die Lokalisierung erfolgt auf Basis der empfangenen Sensordaten. Die Korrektheit ist abhängig von der Qualität der enpfangenen Daten.
+Aus diesem Grund ist an dieser Stelle mit der größten Abweichung von Simulation und Realität zu rechnen. Daraus resultiert die HErausforderung die Position an so vielen Parametern wie möglich zu bestimmen.
+Denn je mehr Parameter genutzt werden, desto geringer der Einfluss von verfälschnten Daten. 
+
+\paragraph{Fahrzeug}
+Das Fahrzeug ist wenig komplex in der Implementierung, da eine vereinfachte Visualisierung, zum Beispiel mit einem Punkt, der sich bewegen kann, ausreichend ist.
+
+\subsubsection{Auswertung der Prüfung}
+Auf Basis der vermuteten Umsetzbarkeit der kritischen Funktionalitäten in Kapitel \ref{Prüfung} stellt sich die Simulation des Ausweichalgorithmus und der dazugehörigen Komponenten als machbar heraus. \\
+Es gibt Teilaufgaben in der Simulation deren Komplexität höher ist, als die anderer Bestandteile, aber auch diese befinden sich in einem Umfang der umsetzbar ist.\\
+
+
 %TODO: Ziel im realen Einsatz aufgreifen und diskutieren ob der Einsatzzweck so nachgebildet werden kann oder nicht. 
 %Wenn die Simulation eine abgeänderte Funktionalität aufweist, so ist zu beschreiben, wie geplant ist die Erkenntnisse der Simulation auf das Modell-Auto zu übertragen.   
 
