@@ -16,19 +16,29 @@ Der Begriff des Modells wird ebenfalls in der Arbeit beschrieben. Ein Modell ist
 In der Simulationstechnik gibt es unterschiedliche Arten von Simulation. In diesem Kontext von Bedeutung ist die Unterscheidung zwischen realer Simulation und Computersimulation. Reale Simulationen kommen zum Einsatz, wenn durch einen Fehler keine Gefahr für Personen und Umwelt besteht.
 Außerdem kann es sein, dass ein Nachstellen der Umweltbedingungen so komplex ist, dass eine Nachbildung am Computer nicht ausreichend möglich oder zeitlich zu aufwendig ist. Computersimulationen kommen dann zum Einsatz, wenn ein Fehler schädliche Folgen für Perosnen und Umwelt
 herbeiführen könnten und sich die Einflussfaktoren auf das System am Computer nachahmen lassen \cite{Britannica2023}. 
-Eine Computersimulation kann auch dann genutzt werden, wenn das Erstellen eines realen Modells nicht möglich oder nicht rentabel ist. Ein weiterer Anwendungsfall einer Computersimulation tritt ein, wenn das reale Modell noch in der Entwicklungsphase ist. In diesen Fällen stellt die Simulation sicher, dass erste Versuche mit Algorithmen, die unabhängig vom Modell funktionieren, möglich sind. 
+Eine Computersimulation kann auch dann genutzt werden, wenn das Erstellen eines realen Modells nicht möglich oder nicht rentabel ist. Ein weiterer Anwendungsfall einer Computersimulation tritt ein, wenn das reale Modell noch in der Entwicklungsphase ist. 
+In diesen Fällen stellt die Simulation sicher, dass erste Versuche mit Algorithmen, die unabhängig vom Modell funktionieren, möglich sind. 
 Dadurch kann damit begonnen werden an Technologien und Methodiken zu arbeiten, ohne auf eine reale Umsetzung warten zu müssen.
 \subsection{Simulation im Kontext eines Ausweichalgorithmus}
-Im Rahmen dieser Arbeit ist eine Simulation geplant. Die Konstellation des Teams das am selbstfahrenden Modell-Auto beteiligt ist, begünstigt den Einsatz einer Simulation. Der verfügbare Zeitraum für Hard- und Software ist gleich lang. 
-Aus diesem Grund ist es nicht möglich mit der Entwicklung des Ausweichalgorithmus zu warten, bis das reale Modell-Auto einsatzbereit ist. Wie im vorheirigen Kapitel beschrieben, ist in solchen Fällen eine Simulation ein guter Weg für eine simultane Entwicklung der Algorithmik und des Modells.
-Die Simulation hilft dabei den Algorithmus zu entwickeln und in einer ersten Form zu validieren. Neben dem zeitlichen Faktor ist auch ein möglicher Schaden im Fehlerfall ein Grund für den Einsatz einer Simulation. Würde es in einem Test zu einem Fehler kommen, könnte das Modell-Auto je nach Szenario 
-so beschädigt werden, dass eine aufwendige Reparatur notwendig oder sogar unmöglich wäre. Dadurch würde die weitere Entwicklung verzögert werden. Um dieses Szenario zu vermeiden ist es wichitg den Algorithmus mit Hilfe der Simulation so weit zu entwickeln, dass die Chance für das Eintreten eines solchen Szenarios möglichst gering ist.
-Auch für den Fall, dass das Modell am Ende nicht einsatzbereit ist, sorgt die Simulation dafür, dass der Ausweichalgorithmus zumindest im Rahmen einer Simulation überprüft und getestet werden kann. Zusätzlich sorgt die Simulation für einen reduzierten Kommuniaktionsaufwand, denn die Entwicklung und Verwendung der Simulation erfolgt unabhängig von der Teilgruppe, die für das Aufbauen des Modells verantwortlich ist.\\
+Im Rahmen dieser Arbeit ist eine Simulation geplant. Die Konstellation des Teams das am selbstfahrenden Modell-Auto beteiligt ist, 
+begünstigt den Einsatz einer Simulation. Der verfügbare Zeitraum für Hard- und Software ist gleich lang. 
+Aus diesem Grund ist es nicht möglich mit der Entwicklung des Ausweichalgorithmus zu warten, bis das reale Modell-Auto einsatzbereit ist. 
+Wie im vorheirigen Kapitel beschrieben, ist in solchen Fällen eine Simulation ein guter Weg für eine simultane Entwicklung der Algorithmik und des Modells.
+Die Simulation hilft dabei den Algorithmus zu entwickeln und in einer ersten Form zu validieren.
+Neben dem zeitlichen Faktor ist auch ein möglicher Schaden im Fehlerfall ein Grund für den Einsatz einer Simulation. Würde es in einem Test zu einem Fehler kommen, könnte das Modell-Auto je nach Szenario 
+so beschädigt werden, dass eine aufwendige Reparatur notwendig oder sogar unmöglich wäre. Dadurch würde die weitere Entwicklung verzögert werden. 
+Um dieses Szenario zu vermeiden ist es wichitg den Algorithmus mit Hilfe der Simulation so weit zu entwickeln, dass die Chance für das Eintreten eines solchen Szenarios möglichst gering ist.
+Auch für den Fall, dass das Modell am Ende nicht einsatzbereit ist, sorgt die Simulation dafür, dass der Ausweichalgorithmus zumindest im Rahmen einer Simulation überprüft und getestet werden kann. 
+Zusätzlich sorgt die Simulation für einen reduzierten Kommuniaktionsaufwand, denn die Entwicklung und Verwendung der Simulation erfolgt unabhängig vom Aufbau des Modells.\\
 Der Einsatz einer Simulation scheint in diesem Kontext eine gute und einfache Option zu sein, wie Hard- und Software parallel zueinander entwickelt werden können. Allerdings gibt es auch Faktoren die eine Simulation erschweren. 
 Der Aufbau einer Umgbeung in der der Algorithmus erprobt und entwickelt werden soll, ist grundlegend wenig herausfordernd. Allerdings muss die Umgebung so aufgebaut werden, dass für diese Umgebung Sensordaten generiert werden können,
-mit denen der Algorithmus ausgeführt werden kann. Zusätzlich müssen die simulierten Daten in Umfang und Freuquenz mit denen des späteren Modells übereinstimmen, um die Funktionalität später auf das Modell übertragen werden können. 
+mit denen der Algorithmus ausgeführt werden kann. Zusätzlich müssen die simulierten Daten in Umfang und Freuquenz mit denen des späteren Modells übereinstimmen, um die Funktionalität später auf das Modell übertragen zu können. \\
 
-
+\subsection{Aufbau der Simulation}
+Um die Simulation für eine erste Validierung der Algorithmik nutzen zu können, ist die Voraussetzung dass die simulierte Funktionalität auch der Funktionalität entspricht, die später im realen Einsatz genutzt wird.
+Gibt es Abweichungen zwischen den Funktionalitäten, so kann nur eine Schätzung vorgenommen werden, wie sich der Algorithmus im praktischen Einsatz verhält. \\
+%TODO: Ziel im realen Einsatz aufgreifen und diskutieren ob der Einsatzzweck so nachgebildet werden kann oder nicht. 
+%Wenn die Simulation eine abgeänderte Funktionalität aufweist, so ist zu beschreiben, wie geplant ist die Erkenntnisse der Simulation auf das Modell-Auto zu übertragen.   
 
 \begin{lstlisting}[language=C++, caption=Beispiel Listing]
     class a {
