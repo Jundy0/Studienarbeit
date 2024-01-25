@@ -1,40 +1,54 @@
 \section{Einleitung}
 Die Automatisierung im Straßenverkehr befindet sich in stetigem Wachstum, wobei selbstfahrende Fahrzeuge zunehmend an Bedeutung gewinnen. \\
-Auch im Bereich der Modell-Autos und Roboter ist Automatisierung eine präsentes Thema. \\ 
+Auch im Bereich der Modell-Autos und Roboter ist Automatisierung eine präsentes Thema. \\
 Zwar ist die Umsetzung eines selbstfahrenden Modell-Autos oder Roboters, aufgrund der vorhersehbareren und weniger komplexen Umgebung, einfacher als die Umsetzung eines selbstfahrenden PKW, jedoch stellt sie trotzdem eine Herausforderung dar.
-\\\\
-Die zuverlässige Navigation eines selbstfahrenden Modell-Auto erfordert nicht nur präzise Ortung sämtlicher Objekte in der nähren Umgebung, sondern auch die Fähigkeit, neue Hindernisse zu erkennen und die eigene Position im Raum bestimmen.
-
 
 \section{Problemstellung, Ziel und Umsetzung}
 In diesem Abschnitt wird auf die Problemstellung, das generelle Ziel und die geplante Umsetzung der Arbeit eingegangen. \\
 Des weiteren wird Erläutert, weshalb das Ziel der Arbeit wichtig ist, wie die Arbeit aufgebaut ist und welche Probleme und Schwierigkeiten durch bereits getätigte Versuche einer Umsetzung des Arbeits-Ziels bereits bekannt sind.
 
 \subsection{Problemstellung}
+Die zuverlässige Navigation eines selbstfahrenden Modell-Auto erfordert nicht nur präzise Ortung sämtlicher Objekte in der näheren Umgebung, sondern auch die Fähigkeit, die eigene Position im Raum zu ermitteln und so möglichst effektiv um Hindernisse herum zu navigieren. \\
+
+%Zu kurz, keine Ideen mehr
 
 
 \subsection{Ziel}
-Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Algorithmus für ein Modell-Auto. Dieser soll mit Hilfe der Daten diverser Sensoren, Hindernisse erkennen und das Auto automatisch um diese herum navigieren. \\
-Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. Daher ist ein weiteres Ziel der Arbeit, die Simulation des Fahrzeugs.
+Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Algorithmus für ein Modell-Auto. Dieser soll mit Hilfe der Daten diverser Sensoren, Hindernisse
+erkennen und das Auto automatisch um diese herum navigieren. \\
+
 %TODO: Einschränkungen des Algorithmus festhalten: Erste Idde war ja die gerade Linie, auf der sich das Fahrzeug bewegen soll.
+
+Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. Daher ist ein weiteres Ziel der Arbeit, die Simulation des Fahrzeugs.
 
 \subsection{Umsetzung}
 Zur Umsetzung der Aufgabe, stehen, neben einem RPLiDAR A1M8-R6 der Firma Slamtec, auch weitere Sensoren zur Verfügung. \\
-Da der Hardware-Teil einer anderen Gruppe zugeteilt ist, ist eine gute Kommunikation zwischen den Gruppen notwendig. Somit kann, nachdem jede Gruppe ihre Ziele erreicht hat, eine Zusammenführung von Hard- und Software ohne viel Aufwand ermöglicht werden. \\
+
+Bevor die eigentliche Arbeit an einem Algorithmus beginnen kann, muss die gegebene Hardware getestet werden.
+Zudem ist, um das weitere Vorgehen planen zu können, notwendig, sich mit der Hardware vertraut zu machen.
+Zu wissen, welche Daten von den Sensoren, wann gesendet werden, ermöglicht es, präziser zu planten, wodurch die Entwicklung des Algorithmus effizienter werden soll. \\
+
+Des weiteren ist auch die Entwicklung einer Möglichkeit die Hardware zu simulieren notwendig, da der Zugriff auf die physische Hardware begrenzt ist.
+Hierbei ist es wichtig, die, für den Algorithmus notwendige Hardware, so genau wie möglich zu simulieren.
+Je genauer die Simulation ist, desto unwahrscheinlicher treten Probleme bei der Zusammenführung von Hard- und Software auf. \\
+
+Da der Hardware-Teil der Arbeit einer anderen Gruppe zugeteilt ist, ist eine gute Kommunikation zwischen den Gruppen notwendig.
+Somit kann, nachdem jede Gruppe ihre Ziele erreicht hat, eine Zusammenführung von Hard- und Software ohne viel Aufwand ermöglicht werden. \\
 
 \subsection{Bekannte Probleme}
-    Es wurde bereits mehrfach versucht, im Rahmen einer Studienarbeit, diese Aufgabe umzusetzen.
-    Die bisherigen Gruppen stießen dabei auf diverse Probleme.
-    Das Hauptproblem war der Aufbau der Gruppen.
-    Diese bestanden ausschließlich aus Elektrotechnik-Studenten, was zu Folge hatte, dass das Grundlagenwissen, welches zur Entwicklung eines solchen Algorithmus benötigt wird, nicht vorhanden war.
-    Somit war es den bisherigen Gruppen nicht möglich, einen Algorithmus, innerhalb des vorgegebenen Zeitrahmens zu entwickeln.
-    Einige der Gruppen versuchten, durch die Hilfe der Robot-Operating-System-Software, bereits existierende Algorithmen zu nutzen. 
-    Aufgrund des hohen Rechenaufwandes, waren diese jedoch nicht mit der zur Verfügung stehenden Hardware kompatibel, da diese zu wenig Ressourcen bat. \\ % Meinst du Vergangenheit von bieten oder haben? bieten wäre bot
+Es wurde bereits mehrfach versucht, im Rahmen einer Studienarbeit, diese Aufgabe umzusetzen.
+Die bisherigen Gruppen stießen dabei auf diverse Probleme.
+Das Hauptproblem war der Aufbau der Gruppen.
+Diese bestanden ausschließlich aus Elektrotechnik-Studenten, was zu Folge hatte, dass das Grundlagenwissen, welches zur Entwicklung eines solchen Algorithmus benötigt wird, nicht vorhanden war.
+Somit war es den bisherigen Gruppen nicht möglich, einen Algorithmus, innerhalb des vorgegebenen Zeitrahmens zu entwickeln.
+Einige der Gruppen versuchten, durch die Hilfe der Robot-Operating-System-Software, bereits existierende Algorithmen zu nutzen.
+Aufgrund des hohen Rechenaufwandes, waren diese jedoch nicht mit der zur Verfügung stehenden Hardware kompatibel, da diese zu wenig Ressourcen bot. \\
 
 
-    Um die bekannten Probleme zu umgehen, wurde sich dazu entschieden, den Hardware-Teil der Aufgabe einer Gruppe an Elektrotechnik-Studenten und den Software-Teil uns Informatik-Studenten zuzuteilen.
-    Durch die Aufteilung der Aufgabe, verringert sich der Workload für jede der Gruppen. 
-    Zusätzlich hat jede Gruppe eine Aufgabe, für die das entsprechende Grundlagenwissen bereits vorhanden ist.
-    Des weiteren wurde leistungsstärkere Hardware zur Verfügung gestellt, um die Hardware als limitierende Faktor zu eliminieren. % Die neue Hardware bietet noch immer Limitationen, diese sind aber weitaus geringer als bei den Vorgängerarbeiten
+Um die bekannten Probleme zu umgehen, wurde sich dazu entschieden, den Hardware-Teil der Aufgabe einer Gruppe an Elektrotechnik-Studenten und den Software-Teil uns Informatik-Studenten zuzuteilen.
+Durch die Aufteilung der Aufgabe, verringert sich der Workload für jede der Gruppen.
+Zusätzlich hat jede Gruppe eine Aufgabe, für die das entsprechende Grundlagenwissen bereits vorhanden ist.
+Des weiteren wurde leistungsstärkere Hardware zur Verfügung gestellt, so dass die Limitation der Hardware deutlich geringer ist.
+Um Probleme zu vermeiden, sollte bei der Entwicklung des Algorithmus sollte jedoch weiterhin darauf geachtete werden, den Algorithmus so effizient wie möglich zu machen.
 
 \newpage
