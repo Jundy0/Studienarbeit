@@ -1,49 +1,32 @@
 \section{Problemstellung, Ziel und Umsetzung}
-In diesem Abschnitt wird auf die Problemstellung, das generelle Ziel und die geplante Umsetzung der Arbeit eingegangen. \\
+In diesem Abschnitt wird auf die Problemstellung, das generelle Ziel und die geplante Umsetzung der Arbeit eingegangen.
 Des weiteren wird Erläutert, weshalb das Ziel der Arbeit wichtig ist, wie die Arbeit aufgebaut ist und welche Probleme und Schwierigkeiten durch bereits getätigte Versuche einer Umsetzung des Arbeits-Ziels bereits bekannt sind.
 
 \subsection{Problemstellung}
-Die zuverlässige Navigation eines selbstfahrenden Modell-Auto erfordert nicht nur präzise Ortung sämtlicher Objekte in der näheren Umgebung, sondern auch die Fähigkeit, die eigene Position im Raum zu ermitteln und so möglichst effektiv um Hindernisse herum zu navigieren. \\
+Bisherige Versuche, ein selbstfahrendes Auto, im Rahmen einer Studienarbeit zu entwerfen und einen entsprechenden Algorithmus zu programmieren, sind gescheitert. Die beiden Hauptprobleme der bisherigen Arbeiten, war zum einen der Bau eines geeigneten Fahrzeugs und zum Anderen die Entwicklung einer Software, welche es dem Auto ermöglicht, ohne manuelle Steuerung, Hindernisse zu erkennen und um diese herum zu navigieren. Da es sich bei den Studenten der bisherigen Gruppen ausschließlich um Studenten mit einem Schwerpunkt in Elektrotechnik handelte, war die Entwicklung und Implementierung der Software zum autonomen Fahren die größere Herausforderung.
 
-%Zu kurz, keine Ideen mehr
+Da keine der bisherigen Gruppen, das Problem der Software lösen konnte, wurde sich dazu entschieden, die Aufgaben aufzuteilen. Die Aufgabe, der Erstellung eines funktionsfähigen Modell-Autos und einer Schnittstelle, zur Steuerung des Autos, wurde einer Gruppe von Studenten mit einem Schwerpunkt in Elektrotechnik zugeteilt. Somit ist das Hauptproblem dieser Arbeit, die Entwicklung und Implementierung eines Ausweichalgorithmus, welcher das Auto, über die, von der anderen Gruppe zur Verfügung gestellten Schnittstelle, steuern soll und so eine autonome Hindernis-Detektierung und Vermeidung ermöglicht.
 
+Da die Aufgabe auf mehrere Gruppen aufgeteilt wurde, ist ein weiteres Problem die Kommunikation zwischen den Gruppen. Um einen reibungslosen und effizienten Ablauf gewährleisten zu können, sollte diese möglichst Umfangreich sein.
+
+Ein weiteres Problem, welches durch die Aufteilung auf verschiedene Gruppen entsteht, ist die eingeschränkte Verfügbarkeit der Hardware. Da die Gruppe, welche den Hardware-Teil der Aufgabe übernimmt, diese erst bauen und anschließend auch testen muss, ist sie nur eingeschränkt verfügbar. Daher ist zur Entwicklung der Software, eine Abstrahierung der Hardware notwendig. Konkret bedeutet das, dass die Schnittstelle zur Steuerung, sowie die Daten der Sensoren simuliert werden müssen, um ein Testen des Algorithmus auch ohne Verfügbarkeit der Hardware zu ermöglichen.
 
 \subsection{Ziel}
 Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Algorithmus für ein Modell-Auto. Dieser soll mit Hilfe der Daten diverser Sensoren, Hindernisse
-erkennen und das Auto automatisch um diese herum navigieren. \\
+erkennen und das Auto, unter Verwendung einer bereitgestellten Schnittstelle, um die Hindernisse herum navigieren.
 
-%TODO: Einschränkungen des Algorithmus festhalten: Erste Idde war ja die gerade Linie, auf der sich das Fahrzeug bewegen soll.
+%TODO: Einschränkungen des Algorithmus festhalten: Erste Idee war ja die gerade Linie, auf der sich das Fahrzeug bewegen soll.
 
-Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. Daher ist ein weiteres Ziel der Arbeit, die Simulation des Fahrzeugs.
+Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. Somit ist das Entwickeln einer solchen Simulation der Hardware ein weiteres Ziel der Arbeit.
 
 \subsection{Umsetzung}
-Zur Umsetzung der Aufgabe, stehen, neben einem RPLiDAR A1M8-R6 der Firma Slamtec, auch weitere Sensoren zur Verfügung. \\
+Um eine umfangreiche Kommunikation zwischen den Gruppen zu ermöglichen, müssen Kommunikationswege so früh wie möglich erstellt werden. Des weiteren sollten Termine für regelmäßige Meetings festgelegt werden, um einen konstanten Austausch von Informationen zwischen den Gruppen zu gewährleisten.
 
-Bevor die eigentliche Arbeit an einem Algorithmus beginnen kann, muss die gegebene Hardware getestet werden.
-Zudem ist, um das weitere Vorgehen planen zu können, notwendig, sich mit der Hardware vertraut zu machen.
-Zu wissen, welche Daten von den Sensoren, wann gesendet werden, ermöglicht es, präziser zu planten, wodurch die Entwicklung des Algorithmus effizienter werden soll. \\
+Zur Umsetzung der Aufgabe selbst, stehen, neben einem RPLiDAR A1M8-R6 der Firma Slamtec, auch weitere Sensoren, wie Ultraschall-, Lenkwinkel- und Geschwindigkeits-Sensoren, sowie ein Raspberry PI 4 zur Verfügung.
+Bevor die eigentliche Arbeit an einem Algorithmus beginnen kann, muss die gegebene Hardware getestet werden. Zudem ist es, um das weitere Vorgehen planen zu können, notwendig, sich mit der Hardware vertraut zu machen. Zu wissen, welche Daten von den Sensoren, wann gesendet werden, ermöglicht es, präziser zu planten, wodurch die Entwicklung des Algorithmus effizienter wird.
 
-Des weiteren ist auch die Entwicklung einer Möglichkeit die Hardware zu simulieren notwendig, da der Zugriff auf die physische Hardware begrenzt ist.
-Hierbei ist es wichtig, die, für den Algorithmus notwendige Hardware, so genau wie möglich zu simulieren.
-Je genauer die Simulation ist, desto unwahrscheinlicher treten Probleme bei der Zusammenführung von Hard- und Software auf. \\
+Nachdem verstanden wurde, wie die Hardware funktioniert, muss eine Möglichkeit, diese zu simulieren, entwickelt werden. Hierbei ist es wichtig, die, für den Algorithmus notwendige Hardware, so genau wie möglich zu simulieren. Je genauer die Simulation ist, desto unwahrscheinlicher treten Probleme bei der Zusammenführung von Hard- und Software auf.
 
-Da der Hardware-Teil der Arbeit einer anderen Gruppe zugeteilt ist, ist eine gute Kommunikation zwischen den Gruppen notwendig.
-Somit kann, nachdem jede Gruppe ihre Ziele erreicht hat, eine Zusammenführung von Hard- und Software ohne viel Aufwand ermöglicht werden. \\
-
-\subsection{Bekannte Probleme}
-Es wurde bereits mehrfach versucht, im Rahmen einer Studienarbeit, diese Aufgabe umzusetzen.
-Die bisherigen Gruppen stießen dabei auf diverse Probleme.
-Das Hauptproblem war der Aufbau der Gruppen.
-Diese bestanden ausschließlich aus Elektrotechnik-Studenten, was zu Folge hatte, dass das Grundlagenwissen, welches zur Entwicklung eines solchen Algorithmus benötigt wird, nicht vorhanden war.
-Somit war es den bisherigen Gruppen nicht möglich, einen Algorithmus, innerhalb des vorgegebenen Zeitrahmens zu entwickeln.
-Einige der Gruppen versuchten, durch die Hilfe der Robot-Operating-System-Software, bereits existierende Algorithmen zu nutzen.
-Aufgrund des hohen Rechenaufwandes, waren diese jedoch nicht mit der zur Verfügung stehenden Hardware kompatibel, da diese zu wenig Ressourcen bot. \\
-
-
-Um die bekannten Probleme zu umgehen, wurde sich dazu entschieden, den Hardware-Teil der Aufgabe einer Gruppe an Elektrotechnik-Studenten und den Software-Teil uns Informatik-Studenten zuzuteilen.
-Durch die Aufteilung der Aufgabe, verringert sich der Workload für jede der Gruppen.
-Zusätzlich hat jede Gruppe eine Aufgabe, für die das entsprechende Grundlagenwissen bereits vorhanden ist.
-Des weiteren wurde leistungsstärkere Hardware zur Verfügung gestellt, so dass die Limitation der Hardware deutlich geringer ist.
-Um Probleme zu vermeiden, sollte bei der Entwicklung des Algorithmus sollte jedoch weiterhin darauf geachtete werden, den Algorithmus so effizient wie möglich zu machen.
+%TODO: Weitere Schritte, die gemacht werden sollen
 
 \newpage
