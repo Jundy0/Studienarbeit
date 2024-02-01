@@ -1,21 +1,31 @@
 \section{Überblick Hardware und Software}
+In diesem Kapitel wird auf die verschiedene Hardware und Software, welche zur Entwicklung des Ausweichalgorithmus verwendet werden kann, eingegangen.
 
 \subsection{Hardware}
+Dieser Abschnitt beschreibt die Hardware, welche für die Entwicklung des Ausweichalgorithmus relevant ist. 
+
 \begin{enumerate}
-    \item Raspberry Pi 4 Model B
+    \item \textbf{Raspberry Pi 4 Model B} \\
     Der Raspberry Pi 4 ist ein single-board-computer, welcher im Jahr 2019 auf dem Markt erschien. Er besitzt eine ARM-basierte 64-bit CPU, welche mit 1.5GHz getaktet ist. Das Modell, welches im Rahmen unserer Studienarbeit genutzt wird, besitzt 4GB Arbeitsspeicher. Außerdem verfügt der Raspberry Pi 4 über 40 \acf{gpio} Pins, welche zur Kommunikation mit den Sensoren und der Steuerungs-Schnittstelle genutzt werden können. \cite{RasPi2023}
 
-    \item Slamtec RPLiDAR A1M8-R6
-  
+    \item \textbf{Slamtec RPLiDAR A1M8-R6} \\
+    Der RPliDAR A1M8-R6 von Slamtec ist ein zweidimensionaler Laser-Scanner, welcher mittels \acf{lidar}, ein 360° Scan der Umgebung erstellen kann. \cite[p. 3]{Slamtec2020}
+    Er hat eine effektive Reichweite von 0.15 bis 12 Meter und bei einer Scan-Rate von 5.5 Scans pro Sekunde, sowie eine Scan-Frequenz von 8000 Hz, eine Auflösung von weniger als einem Grad. \cite[p. 8]{Slamtec2020}
     
-    \item Weitere Sensoren
-
-
+    \item \textbf{Weitere Sensoren} \\
+    Da der \ac{lidar}-Sensor nur zweidimensionale Scans macht, können Hindernisse, welche kleiner wie die Scan-Höhe des \ac{lidar} sind, von diesem nicht erfasst werden. Daher sind weitere Sensoren, wie z.B. Ultraschall-Sensoren notwendig, um auch niedrige Hindernisse erkennen zu können. Außerdem wäre eine Sensor zur Bestimmung des aktuellen Lenkwinkels und ein weiterer Sensor zum Bestimmen der aktuellen Geschwindigkeit sinnvoll. Die Daten dieser Sensoren könnten bei der Ermittlung der Position im Raum von Nutzen sein. 
 \end{enumerate}
 
 \subsection{Software}
+In diesem Abschnitt wird auf die Software eingegangen, welche zur Entwicklung des Algorithmus zur Verfügung steht.
+
 \begin{enumerate}
-    \item ROS oder alles selbst programmieren
+    \item \textbf{ROS} \\
+    
+
+    \item \textbf{SDK} \\
+    
+
 \end{enumerate}
 
 \newpage
