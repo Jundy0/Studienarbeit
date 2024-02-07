@@ -2,7 +2,7 @@
 #include <math.h>
 #include <pigpio.h>
 #include "rplidar.h"
-#include "a1lidar.h"
+#include "a1lidarSensor.h"
 
 #define COUNT 8124
 #define BAUDRATE 115200

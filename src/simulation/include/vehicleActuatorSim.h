@@ -1,7 +1,7 @@
 #ifndef __VEHICLE_ACTUATOR_SIM_H__
 #define __VEHICLE_ACTUATOR_SIM_H__
 
-#include "vehicleControl.h"
+#include "vehicleActuator.h"
 
 class VehicleActuatorSim : public IVehicleActuator
 {

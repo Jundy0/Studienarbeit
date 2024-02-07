@@ -1,7 +1,7 @@
 #ifndef __LIDAR_SENSOR_SIM_H__
 #define __LIDAR_SENSOR_SIM_H__
 
-#include "lidar.h"
+#include "lidarSensor.h"
 
 class LidarSensorSim : public ILidarSensor
 {

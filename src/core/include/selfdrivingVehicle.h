@@ -1,8 +1,8 @@
 #ifndef __SELFDRIVING_VEHICLE_H__
 #define __SELFDRIVING_VEHICLE_H__
 
-#include "lidar.h"
-#include "vehicleControl.h"
+#include "lidarSensor.h"
+#include "vehicleActuator.h"
 
 class SelfdrivingVehicle
 {
