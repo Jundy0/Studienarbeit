@@ -1,10 +1,10 @@
-#include "a1lidar.h"
+#include "a1lidarSensor.h"
 
 #include <pigpio.h>
 #include <math.h>
 #include <unistd.h>
 
-A1Lidar::A1Lidar(std::string serialPort, int baudRate, int pwmPin)
+A1LidarSensor::A1LidarSensor(std::string serialPort, int baudRate, int pwmPin)
 {
     this->pwmPin = pwmPin;
     gpioInitialise();
@@ -26,17 +26,17 @@ A1Lidar::A1Lidar(std::string serialPort, int baudRate, int pwmPin)
     }
 }
 
-A1Lidar::~A1Lidar()
+A1LidarSensor::~A1LidarSensor()
 {
     delete drv;
 }
 
-void A1Lidar::setPWM(int dutyCycle)
+void A1LidarSensor::setPWM(int dutyCycle)
 {
     gpioHardwarePWM(this->pwmPin, 100, dutyCycle);
 }
 
-void A1Lidar::startScan()
+void A1LidarSensor::startScan()
 {
     this->setPWM(750000);
     sleep(1);
@@ -54,14 +54,14 @@ void A1Lidar::startScan()
     }
 }
 
-void A1Lidar::stopScan()
+void A1LidarSensor::stopScan()
 {
     sleep(1);
     this->setPWM(0);
     drv->stop();
 }
 
-void A1Lidar::getScanData(point_t *data, size_t count)
+void A1LidarSensor::getScanData(lidar_point_t *data, size_t count)
 {
     rplidar_response_measurement_node_hq_t scanData[count];
     u_result res = drv->grabScanDataHq(scanData, count);

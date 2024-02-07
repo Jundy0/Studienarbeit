@@ -1,13 +1,13 @@
-#include "vehicleControlSim.h"
+#include "vehicleActuatorSim.h"
 
 #include <iostream>
 
-VehicleControlSim::VehicleControlSim()
+VehicleActuatorSim::VehicleActuatorSim()
 {
-    std::cout << "VehicleControlSim: Constructor" << std::endl;
+    std::cout << "VehicleActuatorSim: Constructor" << std::endl;
 }
 
-VehicleControlSim::~VehicleControlSim()
+VehicleActuatorSim::~VehicleActuatorSim()
 {
-    std::cout << "VehicleControlSim: Destructor" << std::endl;
+    std::cout << "VehicleActuatorSim: Destructor" << std::endl;
 }

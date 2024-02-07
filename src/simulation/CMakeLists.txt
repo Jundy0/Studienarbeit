@@ -10,8 +10,8 @@ include_directories(
 )
 
 set(CLASS_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/lidarSim.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/vehicleControlSim.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/lidarSensorSim.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/vehicleActuatorSim.cpp"
 )
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/CMakeLists.txt")

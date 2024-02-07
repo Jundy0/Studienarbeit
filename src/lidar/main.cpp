@@ -11,15 +11,15 @@
 
 int main()
 {
-    ILidar *lidar = new A1Lidar(SERIALPORT, BAUDRATE, GPIO_PWM);
+    ILidarSensor *lidarSensor = new A1LidarSensor(SERIALPORT, BAUDRATE, GPIO_PWM);
 
-    lidar->startScan();
+    lidarSensor->startScan();
 
-    point_t *points = (point_t *)malloc(sizeof(point_t) * COUNT);
+    lidar_point_t *points = (lidar_point_t *)malloc(sizeof(lidar_point_t) * COUNT);
 
-    lidar->getScanData(points, COUNT);
+    lidarSensor->getScanData(points, COUNT);
 
-    lidar->stopScan();
+    lidarSensor->stopScan();
 
     for (int i = 0; i < COUNT; i++)
     {
@@ -31,5 +31,5 @@ int main()
 
     free(points);
 
-    delete lidar;
+    delete lidarSensor;
 }

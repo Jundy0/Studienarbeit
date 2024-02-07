@@ -1,20 +1,20 @@
 #ifndef __A1LIDAR_H__
 #define __A1LIDAR_H__
 
-#include "lidar.h"
+#include "lidarSensor.h"
 
 #include "rplidar.h"
 
-class A1Lidar : public ILidar
+class A1LidarSensor : public ILidarSensor
 {
 public:
-    A1Lidar(std::string serialPort, int baudRate, int pwmPin);
-    ~A1Lidar();
+    A1LidarSensor(std::string serialPort, int baudRate, int pwmPin);
+    ~A1LidarSensor();
 
     void setPWM(int dutyCycle);
     void startScan();
     void stopScan();
-    void getScanData(point_t *data, size_t count);
+    void getScanData(lidar_point_t *data, size_t count);
 
 private:
     rp::standalone::rplidar::RPlidarDriver *drv;

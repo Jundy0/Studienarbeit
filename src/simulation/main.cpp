@@ -1,20 +1,20 @@
 #include <iostream>
 
-#include "lidarSim.h"
-#include "vehicleControlSim.h"
-#include "evasionControl.h"
+#include "lidarSensorSim.h"
+#include "vehicleActuatorSim.h"
+#include "selfdrivingVehicle.h"
 
 int main()
 {
     std::cout << "Test" << std::endl;
-    LidarSIM lidarSim = LidarSIM();
+    LidarSensorSim lidarSensorSim = LidarSensorSim();
 
-    lidarSim.setPWM(3);
-    lidarSim.startScan();
-    lidarSim.stopScan();
-    lidarSim.getScanData((point_t *)0, 1000);
+    lidarSensorSim.setPWM(3);
+    lidarSensorSim.startScan();
+    lidarSensorSim.stopScan();
+    lidarSensorSim.getScanData((lidar_point_t *)0, 1000);
 
-    VehicleControlSim vehicleControlSim = VehicleControlSim();
+    VehicleActuatorSim vehicleActuatorSim = VehicleActuatorSim();
 
-    EvasionControl evasionControl = EvasionControl(&lidarSim, &vehicleControlSim);
+    SelfdrivingVehicle selfdrivingVehicle = SelfdrivingVehicle(&lidarSensorSim, &vehicleActuatorSim);
 }

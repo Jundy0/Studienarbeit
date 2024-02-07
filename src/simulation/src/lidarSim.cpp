@@ -1,33 +1,33 @@
-#include "lidarSim.h"
+#include "lidarSensorSim.h"
 
 #include <iostream>
 
-LidarSIM::LidarSIM()
+LidarSensorSim::LidarSensorSim()
 {
-    std::cout << "LidarSIM: Constructor" << std::endl;
+    std::cout << "LidarSensorSim: Constructor" << std::endl;
 }
 
-LidarSIM::~LidarSIM()
+LidarSensorSim::~LidarSensorSim()
 {
-    std::cout << "LidarSIM: Destructor" << std::endl;
+    std::cout << "LidarSensorSim: Destructor" << std::endl;
 }
 
-void LidarSIM::setPWM(int dutyCycle)
+void LidarSensorSim::setPWM(int dutyCycle)
 {
-    std::cout << "LidarSIM: setPWM: " << dutyCycle << std::endl;
+    std::cout << "LidarSensorSim: setPWM: " << dutyCycle << std::endl;
 }
 
-void LidarSIM::startScan()
+void LidarSensorSim::startScan()
 {
-    std::cout << "LidarSIM: startScan" << std::endl;
+    std::cout << "LidarSensorSim: startScan" << std::endl;
 }
 
-void LidarSIM::stopScan()
+void LidarSensorSim::stopScan()
 {
-    std::cout << "LidarSIM: stopScan" << std::endl;
+    std::cout << "LidarSensorSim: stopScan" << std::endl;
 }
 
-void LidarSIM::getScanData(point_t *data, size_t count)
+void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
 {
-    std::cout << "LidarSIM: getScanData: " << count << std::endl;
+    std::cout << "LidarSensorSim: getScanData: " << count << std::endl;
 }

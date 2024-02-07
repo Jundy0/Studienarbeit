@@ -31,7 +31,7 @@ set(SDK_FILES
 )
 
 set(CLASS_FILES
-"${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidar.cpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidarSensor.cpp"
 )
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/CMakeLists.txt")
