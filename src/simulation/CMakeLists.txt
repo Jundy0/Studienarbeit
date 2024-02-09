@@ -15,13 +15,12 @@ set(CLASS_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/simulationManager.cpp"
 )
 
-find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
+find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
+include_directories(${SFML_INCLUDE_DIR})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/CMakeLists.txt")
 
 add_executable(main main.cpp ${CLASS_FILES} ${CORE_CLASS_FILES})
 
-target_link_libraries(main ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})
+target_link_libraries(main PRIVATE sfml-graphics sfml-window sfml-system)

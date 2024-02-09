@@ -19,5 +19,6 @@ int main(int argc, char **argv)
 
     SelfdrivingVehicle selfdrivingVehicle = SelfdrivingVehicle(&lidarSensorSim, &vehicleActuatorSim);
 
-    SimulationManager simulationManager = SimulationManager(argc, argv);
+    SimulationManager simulationManager;
+    simulationManager.run();
 }

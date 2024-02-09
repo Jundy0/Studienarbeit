@@ -1,18 +1,31 @@
 #ifndef __SIMULATION_MANAGER_H__
 #define __SIMULATION_MANAGER_H__
 
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/Network.hpp>
+
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 800
+
 class SimulationManager
 {
 public:
-    SimulationManager(int argc, char **argv);
+    SimulationManager();
     ~SimulationManager();
 
-private:
-    static SimulationManager *simulationManager;
+    void run();
 
-    static void display();
-    static void mouse(int button, int state, int x, int y);
-    static void keyboard(unsigned char key, int x, int y);
+private:
+    sf::RenderWindow *window;
+    sf::Event ev;
+
+    void update();
+    void render();
+
+    void pollEvent();
 };
 
 #endif // __SIMULATION_MANAGER_H__

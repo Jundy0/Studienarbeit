@@ -1,54 +1,56 @@
 #include "simulationManager.h"
 
-#include <GL/glut.h>
 #include <iostream>
 
-SimulationManager *SimulationManager::simulationManager = nullptr;
-
-SimulationManager::SimulationManager(int argc, char **argv)
+SimulationManager::SimulationManager()
 {
-    simulationManager = this;
-
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-
-    glutInitWindowPosition(80, 80);
-    glutInitWindowSize(600, 200);
-    glutCreateWindow("Self-driving Car Simulation");
-
-    glutDisplayFunc(this->display);
-    glutMouseFunc(this->mouse);
-    glutKeyboardFunc(this->keyboard);
-
-    glutMainLoop();
+    this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
 }
 
 SimulationManager::~SimulationManager()
 {
+    delete this->window;
 }
 
-void SimulationManager::display()
+void SimulationManager::run()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    this->window->setFramerateLimit(60);
 
-    glBegin(GL_POLYGON);
-    glColor3f(1, 0, 0);
-    glVertex3f(-0.6, -0.75, 0.5);
-    glColor3f(0, 1, 0);
-    glVertex3f(0.6, -0.75, 0);
-    glColor3f(0, 0, 1);
-    glVertex3f(0, 0.75, 0);
-    glEnd();
-
-    glFlush();
+    while (this->window->isOpen())
+    {
+        this->update();
+        this->render();
+    }
 }
 
-void SimulationManager::mouse(int button, int state, int x, int y)
+void SimulationManager::update()
 {
-    std::cout << "mouse clicked on " << x << ", " << y << "; button: " << button << std::endl;
+    this->pollEvent();
+
+    // Update and Animations
 }
 
-void SimulationManager::keyboard(unsigned char key, int x, int y)
+void SimulationManager::render()
 {
-    std::cout << "key pressed " << (int)key << ": " << key << std::endl;
+    window->clear(sf::Color(255, 0, 0, 255));
+
+    // Draw Stuff
+
+    window->display();
+}
+
+void SimulationManager::pollEvent()
+{
+    while (this->window->pollEvent(this->ev))
+    {
+        switch (this->ev.type)
+        {
+        case sf::Event::Closed:
+            this->window->close();
+            break;
+        case sf::Event::KeyPressed:
+            std::cout << this->ev.key.code << std::endl;
+            break;
+        }
+    }
 }
