@@ -12,6 +12,7 @@ include_directories(
 set(CLASS_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/lidarSensorSim.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/vehicleActuatorSim.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/simulationManager.cpp"
 )
 
 find_package(OpenGL REQUIRED)
