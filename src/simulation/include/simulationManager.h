@@ -8,9 +8,11 @@ public:
     ~SimulationManager();
 
 private:
-    void display();
-    void mouse(int button, int state, int x, int y);
-    void keyboard(unsigned char key, int x, int y);
+    static SimulationManager *simulationManager;
+
+    static void display();
+    static void mouse(int button, int state, int x, int y);
+    static void keyboard(unsigned char key, int x, int y);
 };
 
 #endif // __SIMULATION_MANAGER_H__
