@@ -5,6 +5,7 @@
 SimulationManager::SimulationManager()
 {
     this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
+    this->vehicle = Vehicle(5.f, 5.f);
 }
 
 SimulationManager::~SimulationManager()
@@ -27,14 +28,18 @@ void SimulationManager::update()
 {
     this->pollEvent();
 
+    this->vehicle.update();
+
     // Update and Animations
 }
 
 void SimulationManager::render()
 {
-    window->clear(sf::Color(255, 0, 0, 255));
+    window->clear(sf::Color::Cyan);
 
     // Draw Stuff
+
+    window->draw(this->vehicle.getShape());
 
     window->display();
 }
@@ -49,7 +54,21 @@ void SimulationManager::pollEvent()
             this->window->close();
             break;
         case sf::Event::KeyPressed:
-            std::cout << this->ev.key.code << std::endl;
+            switch (this->ev.key.code)
+            {
+            case sf::Keyboard::Key::A:
+                this->vehicle.moveLeft();
+                break;
+            case sf::Keyboard::Key::D:
+                this->vehicle.moveRight();
+                break;
+            case sf::Keyboard::Key::W:
+                this->vehicle.moveUp();
+                break;
+            case sf::Keyboard::Key::S:
+                this->vehicle.moveDown();
+                break;
+            }
             break;
         }
     }
