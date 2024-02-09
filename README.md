@@ -61,7 +61,13 @@ cmake .. -G "Unix Makefiles"
 make
 ```
 
-# Simulation (Running on Windows):
+# Simulation (opengl and glut has to be installed):
+
+## Install opengl and glut:
+
+```bash
+sudo apt-get install libglew-dev
+```
 
 ## Build:
 
