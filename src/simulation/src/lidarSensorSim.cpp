@@ -2,8 +2,10 @@
 
 #include <iostream>
 
-LidarSensorSim::LidarSensorSim()
+LidarSensorSim::LidarSensorSim(Vehicle *vehicle, std::vector<Obstacle> &obstacles)
 {
+    this->vehicle = vehicle;
+    this->obstacles = &obstacles;
     std::cout << "LidarSensorSim: Constructor" << std::endl;
 }
 

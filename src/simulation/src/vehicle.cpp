@@ -1,9 +1,5 @@
 #include "vehicle.h"
 
-Vehicle::Vehicle() : Vehicle(5.f, 5.f)
-{
-}
-
 Vehicle::Vehicle(float startX, float startY)
 {
     this->position.x = startX;

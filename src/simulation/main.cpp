@@ -5,19 +5,18 @@
 #include "selfdrivingVehicle.h"
 #include "simulationManager.h"
 
-int main(int argc, char **argv)
+int main()
 {
-    std::cout << "Test" << std::endl;
-    LidarSensorSim lidarSensorSim = LidarSensorSim();
+    // LidarSensorSim lidarSensorSim = LidarSensorSim();
 
-    lidarSensorSim.setPWM(3);
-    lidarSensorSim.startScan();
-    lidarSensorSim.stopScan();
-    lidarSensorSim.getScanData((lidar_point_t *)0, 1000);
+    // lidarSensorSim.setPWM(3);
+    // lidarSensorSim.startScan();
+    // lidarSensorSim.stopScan();
+    // lidarSensorSim.getScanData((lidar_point_t *)0, 1000);
 
-    VehicleActuatorSim vehicleActuatorSim = VehicleActuatorSim();
+    // VehicleActuatorSim vehicleActuatorSim = VehicleActuatorSim();
 
-    SelfdrivingVehicle selfdrivingVehicle = SelfdrivingVehicle(&lidarSensorSim, &vehicleActuatorSim);
+    // SelfdrivingVehicle selfdrivingVehicle = SelfdrivingVehicle(&lidarSensorSim, &vehicleActuatorSim);
 
     SimulationManager simulationManager;
     simulationManager.run();

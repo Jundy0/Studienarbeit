@@ -6,7 +6,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+
+#include <vector>
+
 #include "vehicle.h"
+#include "obstacle.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
@@ -22,7 +26,9 @@ public:
 private:
     sf::RenderWindow *window;
     sf::Event ev;
-    Vehicle vehicle;
+
+    Vehicle *vehicle;
+    std::vector<Obstacle> obstacles;
 
     void update();
     void render();

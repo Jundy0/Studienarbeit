@@ -8,7 +8,6 @@
 class Vehicle
 {
 public:
-    Vehicle();
     Vehicle(float startX, float startY);
     ~Vehicle();
 

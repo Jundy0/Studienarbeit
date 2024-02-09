@@ -51,7 +51,9 @@
     "stdexcept": "cpp",
     "streambuf": "cpp",
     "cinttypes": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "ctime": "cpp",
+    "set": "cpp"
   },
   "latex-workshop.latex.recipes": [
     {
