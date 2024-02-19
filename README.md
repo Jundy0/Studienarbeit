@@ -61,12 +61,12 @@ cmake .. -G "Unix Makefiles"
 make
 ```
 
-# Simulation (opengl and glut has to be installed):
+# Simulation (sfml has to be installed):
 
-## Install opengl and glut:
+## Install sfml:
 
 ```bash
-sudo apt-get install libglew-dev
+sudo apt-get install libsfml-dev
 ```
 
 ## Build:
