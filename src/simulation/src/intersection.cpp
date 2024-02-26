@@ -2,20 +2,19 @@
 
 #include <cmath>
 
-bool intersectsObstacles(const sf::Vector2f &rayOrigin, float rayAngle, std::vector<Obstacle> &obstacles, sf::FloatRect &windowRect, std::vector<sf::Vector2f> &intersectionPoints)
+bool intersectsObstacles(const sf::Vector2f &rayOrigin, float rayAngle, std::vector<Obstacle> *obstacles, const sf::FloatRect &windowRect, std::vector<sf::Vector2f> &intersectionPoints)
 {
     sf::Vector2f rayDirection(std::cos(rayAngle), std::sin(rayAngle));
 
-    for (auto &obstacle : obstacles)
+    for (auto &obstacle : *obstacles)
     {
         intersectsRect(rayOrigin, rayDirection, obstacle.getPosition(), intersectionPoints);
     }
 
     intersectsRect(rayOrigin, rayDirection, windowRect, intersectionPoints);
 
-    std::sort(intersectionPoints.begin(), intersectionPoints.end(), [&](const sf::Vector2f& a, const sf::Vector2f& b) {
-        return distanceSquared(rayOrigin, a) < distanceSquared(rayOrigin, b);
-    });
+    std::sort(intersectionPoints.begin(), intersectionPoints.end(), [&](const sf::Vector2f &a, const sf::Vector2f &b)
+              { return distanceSquared(rayOrigin, a) < distanceSquared(rayOrigin, b); });
 
     return !intersectionPoints.empty();
 }
@@ -64,7 +63,8 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
     return false;
 }
 
-float distanceSquared(const sf::Vector2f& p1, const sf::Vector2f& p2) {
+float distanceSquared(const sf::Vector2f &p1, const sf::Vector2f &p2)
+{
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
     return dx * dx + dy * dy;

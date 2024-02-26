@@ -11,6 +11,7 @@
 
 #include "vehicle.h"
 #include "obstacle.h"
+#include "lidarSensor.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
@@ -29,6 +30,9 @@ private:
 
     Vehicle *vehicle;
     std::vector<Obstacle> obstacles;
+
+    ILidarSensor *lidarSensor;
+    lidar_point_t *data;
 
     void update();
     void render();

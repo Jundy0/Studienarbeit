@@ -1,4 +1,5 @@
 #include "simulationManager.h"
+#include "lidarSensorSim.h"
 
 #include <iostream>
 
@@ -12,12 +13,18 @@ SimulationManager::SimulationManager()
 
     this->obstacles.push_back(obstacle);
     this->obstacles.push_back(obstacle2);
+
+    this->lidarSensor = new LidarSensorSim(this->vehicle, this->obstacles);
+
+    lidar_point_t *data = (lidar_point_t *)malloc(sizeof(lidar_point_t) * 100);
 }
 
 SimulationManager::~SimulationManager()
 {
     delete this->window;
     delete this->vehicle;
+
+    free(data);
 }
 
 void SimulationManager::run()
@@ -45,6 +52,13 @@ void SimulationManager::update()
             std::cout << "Error: Vehicle crashed into an obstacle!" << std::endl;
         }
     }
+
+    this->lidarSensor->getScanData(this->data, 100);
+
+    for (size_t i = 0; i < 100; i++)
+    {
+        // std::cout << data[i].angle << "; " << data[i].radius << std::endl;
+    }
 }
 
 void SimulationManager::render()
@@ -57,6 +71,15 @@ void SimulationManager::render()
     }
 
     window->draw(this->vehicle->getShape());
+
+    sf::CircleShape circle = sf::CircleShape();
+
+    for (size_t i = 0; i < 100; i++)
+    {
+        // std::cout << data[i].angle << "; " << data[i].radius << std::endl;
+        circle.setPosition(sf::Vector2f(this->data[i].x, this->data[i].y));
+        window->draw(circle);
+    }
 
     window->display();
 }

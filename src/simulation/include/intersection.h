@@ -8,13 +8,13 @@
 #include "obstacle.h"
 
 /// @brief Gets the intersections of a Ray with the Obstacles and the Bounds of the Window.
-/// @param rayOrigin The Origin of the Ray. 
+/// @param rayOrigin The Origin of the Ray.
 /// @param rayAngle The Angle of the Ray in Radiant.
 /// @param obstacles A List of Obstacles.
 /// @param windowRect The Bounds of the Window as a Reactangle.
-/// @param intersectionPoints A List of Points where the Ray intersected with an Obstacle or the Bounds of the Window. 
+/// @param intersectionPoints A List of Points where the Ray intersected with an Obstacle or the Bounds of the Window.
 /// @return True, if an Intersection was found.
-bool intersectsObstacles(const sf::Vector2f &rayOrigin, float rayAngle, const std::vector<Obstacle> &obstacles, sf::FloatRect &windowRect, std::vector<sf::Vector2f> &intersectionPoints);
+bool intersectsObstacles(const sf::Vector2f &rayOrigin, float rayAngle, std::vector<Obstacle> *obstacles, const sf::FloatRect &windowRect, std::vector<sf::Vector2f> &intersectionPoints);
 
 /// @brief Gets the intersections of a Ray with a Reactangle.
 /// @param rayOrigin The Origin of the Ray.
@@ -38,6 +38,6 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
 /// @param p1 The first Point.
 /// @param p2 The second Point.
 /// @return The squared Distance between the two Points.
-float distanceSquared(const sf::Vector2f& p1, const sf::Vector2f& p2);
+float distanceSquared(const sf::Vector2f &p1, const sf::Vector2f &p2);
 
 #endif // __INTERSECTION_H__
