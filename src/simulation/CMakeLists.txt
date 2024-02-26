@@ -15,6 +15,7 @@ set(CLASS_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/simulationManager.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/vehicle.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/obstacle.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/intersection.cpp"
 )
 
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
