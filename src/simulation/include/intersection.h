@@ -33,4 +33,11 @@ bool intersectsRect(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirect
 /// @return True, if an Intersection was found.
 bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection, const sf::Vector2f &p1, const sf::Vector2f &p2, std::vector<sf::Vector2f> &intersectionPoints);
 
+/// @brief Calculate the squared Distance between two Points.
+/// @remarks The squared Distance is used for Performance, since this Function is only used to compare two Distances.
+/// @param p1 The first Point.
+/// @param p2 The second Point.
+/// @return The squared Distance between the two Points.
+float distanceSquared(const sf::Vector2f& p1, const sf::Vector2f& p2);
+
 #endif // __INTERSECTION_H__

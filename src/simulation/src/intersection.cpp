@@ -13,9 +13,11 @@ bool intersectsObstacles(const sf::Vector2f &rayOrigin, float rayAngle, std::vec
 
     intersectsRect(rayOrigin, rayDirection, windowRect, intersectionPoints);
 
-    // TODO: sort intersectionPoints by distance to rayOrigin
+    std::sort(intersectionPoints.begin(), intersectionPoints.end(), [&](const sf::Vector2f& a, const sf::Vector2f& b) {
+        return distanceSquared(rayOrigin, a) < distanceSquared(rayOrigin, b);
+    });
 
-    return true;
+    return !intersectionPoints.empty();
 }
 
 bool intersectsRect(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection, const sf::FloatRect &rect, std::vector<sf::Vector2f> &intersectionPoints)
@@ -52,13 +54,18 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
     {
         // Calculate the intersection point using linear interpolation
         float t = cross / (cross - cross2);
-        
-        sf::Vector2f intersectionPoint = sf::Vector2f();
-        intersectionPoint = rayOrigin + t * rayDirection;
+
+        const sf::Vector2f intersectionPoint = sf::Vector2f(rayOrigin + t * rayDirection);
         intersectionPoints.push_back(intersectionPoint);
 
         return true;
     }
 
     return false;
+}
+
+float distanceSquared(const sf::Vector2f& p1, const sf::Vector2f& p2) {
+    float dx = p2.x - p1.x;
+    float dy = p2.y - p1.y;
+    return dx * dx + dy * dy;
 }
