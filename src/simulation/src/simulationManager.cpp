@@ -16,7 +16,7 @@ SimulationManager::SimulationManager()
 
     this->lidarSensor = new LidarSensorSim(this->vehicle, this->obstacles);
 
-    lidar_point_t *data = (lidar_point_t *)malloc(sizeof(lidar_point_t) * 100);
+    this->data = (lidar_point_t *)malloc(sizeof(lidar_point_t) * 100);
 }
 
 SimulationManager::~SimulationManager()
@@ -73,10 +73,11 @@ void SimulationManager::render()
     window->draw(this->vehicle->getShape());
 
     sf::CircleShape circle = sf::CircleShape();
+    circle.setFillColor(sf::Color::Red);
 
     for (size_t i = 0; i < 100; i++)
     {
-        // std::cout << data[i].angle << "; " << data[i].radius << std::endl;
+        std::cout << data[i].angle << "; " << data[i].x << "; " << data[i].y << std::endl;
         circle.setPosition(sf::Vector2f(this->data[i].x, this->data[i].y));
         window->draw(circle);
     }
