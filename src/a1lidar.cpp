@@ -66,7 +66,7 @@ void A1Lidar::getScanData(point_t *data, size_t count)
     rplidar_response_measurement_node_hq_t scanData[count];
     u_result res = drv->grabScanDataHq(scanData, count);
 
-    if (res == RESULT_OK)
+    if (res == RESULT_OK && count > 0)
     {
         printf("Grabbed scan data\n");
     }

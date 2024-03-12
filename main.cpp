@@ -6,6 +6,8 @@
 #include "rplidar.h"
 #include "a1lidar.h"
 
+#include <iostream>
+#include <fstream>
 
 #define COUNT 16000
 #define BAUDRATE 115200
@@ -17,6 +19,9 @@ int main()
     auto f = matplot::figure(true);
     std::vector<double> theta;
     std::vector<double> rho;
+    
+    std::ofstream log;
+    log.open("log.txt", std::ios_base::app);
 
     IA1Lidar *lidar = new A1Lidar(SERIALPORT, BAUDRATE, GPIO_PWM);
 
@@ -30,17 +35,20 @@ int main()
 
     for (int i = 0; i < COUNT; i++)
     {
-        if (points[i].quality > 1 && points[i].radius < 2)
-        {
-            theta.push_back(points[i].angle);
+        if (points[i].quality > 1)
+  	{
+	    log << points[i].angle << "," << points[i].radius << std::endl;
+	    theta.push_back(points[i].angle);
             rho.push_back(points[i].radius);
         }
     }
 
     free(points);
+    
+    log.close();
 
     delete lidar;
 
     matplot::polarscatter(theta, rho, 1,"filled");
-    f->save("img/plot.jpg");
+    f->save("./img/plot.jpg");
 }
