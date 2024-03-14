@@ -7,5 +7,6 @@
         "ostream": "cpp",
         "vector": "cpp",
         "fstream": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": true
 }
