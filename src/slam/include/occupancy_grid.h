@@ -32,5 +32,5 @@ class OccupancyGrid {
         double mapWidth;
         double mapHeight;
         // Defining an l vector to store the log odds values of each cell
-        static vector< vector<double> > cells;
+        std::vector< std::vector<double> > cells;
 };
