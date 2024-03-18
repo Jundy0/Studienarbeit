@@ -44,6 +44,7 @@ void OccupancyGrid::visualize() {
     const string BLACK_COLOR = "\033[40m";
     const string GREEN_COLOR = "\033[42m";
     const string WHITE_COLOR = "\033[47m";
+    const string DEFAULT_COLOR = "\033[0m";
 
     cout << WHITE_COLOR;
 
@@ -56,7 +57,7 @@ void OccupancyGrid::visualize() {
             else
                 cout << " ";
         }
-        cout << endl;
+        cout << DEFAULT_COLOR << endl;
     }
 }
 
