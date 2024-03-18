@@ -1,4 +1,11 @@
-#include <matplot/matplot.h>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
+
+#include <math.h>
+#include <vector>
+
 #include "../include/occupancy_grid.h"
 
 using namespace std;
@@ -13,9 +20,6 @@ OccupancyGrid::OccupancyGrid() {
     // Grid dimensions
     gridWidth = 100;
     gridHeight = 100;
-    // Map dimensions
-    mapWidth = 10000;
-    mapHeight = 10000;
     // Defining an l vector to store the log odds values of each cell
     cells.resize(gridWidth, vector<double>(gridHeight, 0.0));
 };
@@ -41,24 +45,25 @@ void OccupancyGrid::updateCells(string filePath) {
 }
 
 void OccupancyGrid::visualize() {
-    const string BLACK_COLOR = "\033[40m";
-    const string GREEN_COLOR = "\033[42m";
-    const string WHITE_COLOR = "\033[47m";
     const string DEFAULT_COLOR = "\033[0m";
+    const string DARK_GREY_COLOR = "\033[48;5;234m";
+    const string LIGHT_GREY_COLOR = "\033[48;5;248";
+    const string WHITE_COLOR = "\033[48;5;255m";
 
-    cout << WHITE_COLOR;
+    cout << LIGHT_GREY_COLOR;
 
     for (int i = 0; i < gridWidth; i++) {
         for (int j = 0; j < gridHeight; j++) {
             if (cells[i][j] >= locc)
-                cout << BLACK_COLOR << " " << WHITE_COLOR;
+                cout << DARK_GREY_COLOR << " " << LIGHT_GREY_COLOR;
             else if (cells[i][j] <= lfree)
-                cout << GREEN_COLOR << " " << WHITE_COLOR;
+                cout << WHITE_COLOR << " " << LIGHT_GREY_COLOR;
             else
-                cout << " ";
+                cout << LIGHT_GREY_COLOR << " ";
         }
-        cout << DEFAULT_COLOR << endl;
+        cout << LIGHT_GREY_COLOR << endl;
     }
+    cout << DEFAULT_COLOR << endl;
 }
 
 vector< vector<double> > OccupancyGrid::getDataFromFile(string filePath) {
