@@ -47,7 +47,7 @@ void OccupancyGrid::updateCells(string filePath) {
 void OccupancyGrid::visualize() {
     const string DEFAULT_COLOR = "\033[0m";
     const string DARK_GREY_COLOR = "\033[48;5;234m";
-    const string LIGHT_GREY_COLOR = "\033[48;5;248";
+    const string LIGHT_GREY_COLOR = "\033[48;5;248m";
     const string WHITE_COLOR = "\033[48;5;255m";
 
     cout << LIGHT_GREY_COLOR;
@@ -61,7 +61,7 @@ void OccupancyGrid::visualize() {
             else
                 cout << LIGHT_GREY_COLOR << " ";
         }
-        cout << LIGHT_GREY_COLOR << endl;
+        cout << DEFAULT_COLOR << endl;
     }
     cout << DEFAULT_COLOR << endl;
 }

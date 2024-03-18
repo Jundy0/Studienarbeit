@@ -51,4 +51,5 @@ Latex/*.synctex.gz
 Latex/*.toc
 
 # SLAM
+src/slam/.vscode
 /src/slam/.vscode
