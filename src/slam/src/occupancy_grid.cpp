@@ -57,8 +57,10 @@ void OccupancyGrid::visualize() {
             else
                 cout << " ";
         }
-        cout << DEFAULT_COLOR << endl;
+        cout << endl;
     }
+
+    cout << DEFAULT_COLOR << endl;
 }
 
 vector< vector<double> > OccupancyGrid::getDataFromFile(string filePath) {
