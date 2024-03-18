@@ -2,59 +2,75 @@
 #include "../include/occupancy_grid.h"
 
 using namespace std;
+
 OccupancyGrid::OccupancyGrid() {
     // Sensor characteristic: Min and Max ranges of the beams
     Zmax = 5000;
     Zmin = 170;
     // Defining free cells(lfree), occupied cells(locc), unknown cells(l0) log odds values
-    l0 = 0;
-    locc = 0.4;
-    lfree = -0.4;
+    locc = 0.5;
+    lfree = -0.5;
     // Grid dimensions
     gridWidth = 100;
     gridHeight = 100;
     // Map dimensions
     mapWidth = 10000;
     mapHeight = 10000;
-    // Defining an l std::vector to store the log odds values of each cell
-    cells.resize(mapWidth/gridWidth, std::vector<double>(mapHeight/gridHeight));
+    // Defining an l vector to store the log odds values of each cell
+    cells.resize(gridWidth, vector<double>(gridHeight, 0.0));
 };
 
 void OccupancyGrid::updateCells(string filePath) {
-    std::vector< std::vector< pair<int, int> > > allPoints = getPoints(filePath);
+    vector< vector< pair<int, int> > > allPoints = getPoints(filePath);
 
-    std::vector< pair<int, int> > occPoints = allPoints[0];
-    std::vector< pair<int, int> > freePoints = allPoints[1];
+    vector< pair<int, int> > occPoints = allPoints[0];
+    vector< pair<int, int> > freePoints = allPoints[1];
 
-    for (int i = 0; i < (sizeof(occPoints)/sizeof(occPoints[0])); i++) {
+    for (int i = 0; i < occPoints.size(); i++) {
         int x = occPoints[i].first;
         int y = occPoints[i].second;
         if (cells[x][y] < 1) cells[x][y] += 0.1;
     }
 
-    for (int i = 0; i < (sizeof(freePoints)/sizeof(freePoints[0])); i++) {
+    for (int i = 0; i < freePoints.size(); i++) {
         int x = freePoints[i].first;
         int y = freePoints[i].second;
-        if (cells[x][y] > -1) cells[x][y] -= 0.1;
+        if (cells[x][y] > -1) cells[x][y] -= 0.03;
     }
 
 }
 
 void OccupancyGrid::visualize() {
+    const string BLACK_COLOR = "\033[40m";
+    const string GREEN_COLOR = "\033[42m";
+    const string WHITE_COLOR = "\033[47m";
 
+    cout << WHITE_COLOR;
+
+    for (int i = 0; i < gridWidth; i++) {
+        for (int j = 0; j < gridHeight; j++) {
+            if (cells[i][j] >= locc)
+                cout << BLACK_COLOR << " " << WHITE_COLOR;
+            else if (cells[i][j] <= lfree)
+                cout << GREEN_COLOR << " " << WHITE_COLOR;
+            else
+                cout << " ";
+        }
+        cout << endl;
+    }
 }
 
-std::vector< std::vector<double> > OccupancyGrid::getDataFromFile(string filePath) {
+vector< vector<double> > OccupancyGrid::getDataFromFile(string filePath) {
     ifstream file(filePath);
     if(!file.is_open()) throw std::runtime_error("Could not open file");
     
     string line, word;
-    std::vector< std::vector<double> > result;
+    vector< vector<double> > result;
     
     
     while (getline(file, line)) {
         
-        std::vector<double> values;
+        vector<double> values;
         stringstream ss(line);
 
         while (getline(ss, word, ',')) {
@@ -67,65 +83,88 @@ std::vector< std::vector<double> > OccupancyGrid::getDataFromFile(string filePat
     return result;
 }
 
-std::vector< std::vector< pair<int, int> > > OccupancyGrid::getPoints(string filePath) {
+vector< vector< pair<int, int> > > OccupancyGrid::getPoints(string filePath) {
     //Robot position
-    pair<int, int> robPos = {50, 50};
+    pair<int, int> robPos = {50, 50}; // Hardcode needs changing
     
-    std::vector< pair<int, int> > occPoints;
-    std::vector< pair<int, int> > freePoints;
+    vector< pair<int, int> > occPoints;
+    vector< pair<int, int> > freePoints;
     
-    std::vector< std::vector<double> > data = getDataFromFile(filePath);
+    vector< vector<double> > data = getDataFromFile(filePath);
     
-    for (int i = 0; i < (data.size()/data[0].size()); i++) {
-        std::vector<double> polarPoint = data[i];
-        pair<int, int> cartPoint = polarToCartesian(polarPoint);
+    for (int i = 0; i < data.size(); i++) {
+        vector<double> polarPoint = data[i];
+        pair<int, int> cartPoint = polarToCartesian(polarPoint, robPos);
         occPoints.push_back(cartPoint);
         
-        std::vector< pair<int, int> > bresenhamPoints = bresenham(robPos.first, robPos.second, cartPoint.first, cartPoint.second);
-        for (int j = 0; j < (sizeof(bresenhamPoints)/sizeof(bresenhamPoints[0])); j++) {
+        vector< pair<int, int> > bresenhamPoints = bresenham(robPos.first, robPos.second, cartPoint.first, cartPoint.second);
+        for (int j = 0; j < bresenhamPoints.size(); j++) {
             freePoints.push_back(bresenhamPoints[j]);
         }
     }
 
-    std::vector< std::vector< pair<int, int> > > result;
+    vector< vector< pair<int, int> > > result;
     result.push_back(occPoints);
     result.push_back(freePoints);
 
     return result;
 }
 
-std::vector< pair<int, int> > OccupancyGrid::bresenham(int x1, int y1, int x2, int y2) {
-    int m_new = 2 * (y2 - y1); 
-    int slope_error_new = m_new - (x2 - x1);
+vector< pair<int, int> > OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y) {
+    vector< pair<int, int> > points;
+    int x1 = robPosX, y1 = robPosY;
+    int x2 = x, y2 = y;
     
-    std::vector< pair<int, int> > points;
+    // Move endpoint towards robot to exclude lidar point
+    if (x1 > x2)
+        x2++;
+    else
+        x2--;
+
+    if (y1 > y2)
+        y2++;
+    else
+        y2--;
     
-    for (int x = x1, y = y1; x <= x2; x++) {
-        pair<int, int> point = {x, y};
-        points.push_back(point);
 
-        // Add slope to increment angle formed 
-        slope_error_new += m_new; 
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+    int sx = (x1 < x2) ? 1 : -1;
+    int sy = (y1 < y2) ? 1 : -1;
+    int err = dx - dy;
 
-        // Slope error reached limit, time to 
-        // increment y and update slope error. 
-        if (slope_error_new >= 0) { 
-            y++; 
-            slope_error_new -= 2 * (x2 - x1); 
-        } 
+    while (true) {
+        if (x1 == x2 && y1 == y2) 
+            break;
+        
+        int e2 = 2 * err;
+        
+        if (e2 > -dy) {
+            err -= dy;
+            x1 += sx;
+        }
+        
+        if (e2 < dx) {
+            err += dx;
+            y1 += sy;
+        }
+
+        points.push_back({x1, y1});
     }
 
+    
+    
     return points;
 }
 
-pair<int, int> OccupancyGrid::polarToCartesian(std::vector<double> polarPoint) {
+pair<int, int> OccupancyGrid::polarToCartesian(vector<double> polarPoint, pair<int, int> robPos) {
     pair<int, int> cartPoint;
     
     double theta = polarPoint[0];
-    double r = polarPoint[1]*100;
+    double r = polarPoint[1] * 10 * 100; // Meter to Centimeter plus fitst digit after comma  
 
-    cartPoint.first = round(r * cos(theta))+50;
-    cartPoint.second = round(r * sin(theta))+50;
+    cartPoint.first = round(r * cos(theta) / 10) + robPos.first;
+    cartPoint.second = round(r * sin(theta) / 10) + robPos.second;
 
     return cartPoint;
 };
