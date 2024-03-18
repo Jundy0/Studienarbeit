@@ -12,11 +12,6 @@ class OccupancyGrid {
         void updateCells(string filePath);
         void visualize();
 
-        vector< vector<double> > getDataFromFile(string filePath);
-        vector< vector< pair<int, int> > > getPoints(string filePath);
-        vector< pair<int, int> > bresenham(int x1, int y1, int x2, int y2);
-        pair<int, int> polarToCartesian(vector<double> polarPoint);
-
     private:
         // Sensor characteristic: Min and Max ranges of the beams
         double Zmax;
@@ -33,4 +28,9 @@ class OccupancyGrid {
         double mapHeight;
         // Defining an l vector to store the log odds values of each cell
         std::vector< std::vector<double> > cells;
+
+        vector< vector<double> > getDataFromFile(string filePath);
+        vector< vector< pair<int, int> > > getPoints(string filePath);
+        vector< pair<int, int> > bresenham(int x1, int y1, int x2, int y2);
+        pair<int, int> polarToCartesian(vector<double> polarPoint, pair<int, int>);
 };

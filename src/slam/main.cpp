@@ -5,7 +5,8 @@ using namespace std;
 int main()
 {
     OccupancyGrid grid;
-    grid.updateCells("./log.csv");
+    grid.updateCells("../log.csv");
+    grid.visualize();
     
     return 0;
 }
