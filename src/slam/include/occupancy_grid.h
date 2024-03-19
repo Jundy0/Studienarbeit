@@ -1,7 +1,9 @@
 #include <iostream>
+#include <sstream>
+#include <fstream>
 #include <string>
-#include <math.h>
-#include <vector>
+
+#include <../lib/eigen/Eigen/Dense>
 
 using namespace std;
 
@@ -9,28 +11,19 @@ class OccupancyGrid {
     
     public:
         OccupancyGrid();
-        void updateCells(string filePath);
+        void updateProbMap(string filePath);
         void visualize();
 
     private:
-        // Sensor characteristic: Min and Max ranges of the beams
-        double Zmax;
-        double Zmin;
-        // Defining free cells(lfree), occupied cells(locc), unknown cells(l0) log odds values
-        double l0;
-        double locc;
-        double lfree;
-        // Grid dimensions
-        double gridWidth;
-        double gridHeight;
-        // Map dimensions
-        double mapWidth;
-        double mapHeight;
-        // Defining an l vector to store the log odds values of each cell
-        std::vector< std::vector<double> > cells;
+        double probOcc;
+        double probFree;
+        int gridWidth;
+        int gridHeight;
 
-        vector< vector<double> > getDataFromFile(string filePath);
-        vector< vector< pair<int, int> > > getPoints(string filePath);
-        vector< pair<int, int> > bresenham(int x1, int y1, int x2, int y2);
-        pair<int, int> polarToCartesian(vector<double> polarPoint, pair<int, int>);
+        Eigen::MatrixXd probMap;
+
+        Eigen::MatrixX2d OccupancyGrid::getDataFromFile(string filePath);
+        pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(string filePath);
+        Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y);
+        Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2i robPos);
 };
