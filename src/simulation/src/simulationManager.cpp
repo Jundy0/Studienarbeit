@@ -3,6 +3,9 @@
 
 #include <iostream>
 
+#define COUNT 360
+#define RADIUS 5
+
 SimulationManager::SimulationManager()
 {
     this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
@@ -16,7 +19,7 @@ SimulationManager::SimulationManager()
 
     this->lidarSensor = new LidarSensorSim(this->vehicle, this->obstacles);
 
-    this->data = (lidar_point_t *)malloc(sizeof(lidar_point_t) * 100);
+    this->data = (lidar_point_t *)malloc(sizeof(lidar_point_t) * COUNT);
 }
 
 SimulationManager::~SimulationManager()
@@ -24,7 +27,7 @@ SimulationManager::~SimulationManager()
     delete this->window;
     delete this->vehicle;
 
-    free(data);
+    free(this->data);
 }
 
 void SimulationManager::run()
@@ -53,9 +56,9 @@ void SimulationManager::update()
         }
     }
 
-    this->lidarSensor->getScanData(this->data, 100);
+    this->lidarSensor->getScanData(this->data, COUNT);
 
-    for (size_t i = 0; i < 100; i++)
+    for (size_t i = 0; i < COUNT; i++)
     {
         // std::cout << data[i].angle << "; " << data[i].radius << std::endl;
     }
@@ -72,13 +75,13 @@ void SimulationManager::render()
 
     window->draw(this->vehicle->getShape());
 
-    sf::CircleShape circle = sf::CircleShape();
+    sf::CircleShape circle = sf::CircleShape(RADIUS);
     circle.setFillColor(sf::Color::Red);
 
-    for (size_t i = 0; i < 100; i++)
+    for (size_t i = 0; i < COUNT; i++)
     {
         std::cout << data[i].angle << "; " << data[i].x << "; " << data[i].y << std::endl;
-        circle.setPosition(sf::Vector2f(this->data[i].x, this->data[i].y));
+        circle.setPosition(sf::Vector2f(this->data[i].x - RADIUS, this->data[i].y - RADIUS));
         window->draw(circle);
     }
 

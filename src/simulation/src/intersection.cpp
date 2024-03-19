@@ -4,6 +4,8 @@
 
 bool intersectsObstacles(const sf::Vector2f &rayOrigin, float rayAngle, std::vector<Obstacle> *obstacles, const sf::FloatRect &windowRect, std::vector<sf::Vector2f> &intersectionPoints)
 {
+    intersectionPoints.clear();
+
     sf::Vector2f rayDirection(std::cos(rayAngle), std::sin(rayAngle));
 
     for (auto &obstacle : *obstacles)
