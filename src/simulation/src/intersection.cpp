@@ -45,18 +45,20 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
 {
     sf::Vector2f v1 = p1 - rayOrigin;
     sf::Vector2f v2 = p2 - rayOrigin;
+    sf::Vector2f v12 = v2 - v1;
 
-    // Cross product to determine if the points are on the same side of the ray
-    float cross = v1.x * rayDirection.y - v1.y * rayDirection.x;
-    float cross2 = v2.x * rayDirection.y - v2.y * rayDirection.x;
+    const float cross = crossProduct(rayDirection, v12);
 
-    // If the signs are different, it means the points are on different sides of the ray
-    if ((cross < 0 && cross2 > 0) || (cross > 0 && cross2 < 0))
+    if (cross == 0)
     {
-        // Calculate the intersection point using linear interpolation
-        float t = cross / (cross - cross2);
+        return false; // ray and edge are parallel
+    }
 
-        const sf::Vector2f intersectionPoint = sf::Vector2f(rayOrigin + t * rayDirection);
+    const float t = (v1.y * rayDirection.x + v1.x * rayDirection.y) / cross;
+
+    if (t >= 0 && t <= 1)
+    {
+        const sf::Vector2f intersectionPoint = v1 + rayOrigin + t * v12;
         intersectionPoints.push_back(intersectionPoint);
 
         return true;
@@ -65,9 +67,14 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
     return false;
 }
 
-float distanceSquared(const sf::Vector2f &p1, const sf::Vector2f &p2)
+inline float distanceSquared(const sf::Vector2f &p1, const sf::Vector2f &p2)
 {
     float dx = p2.x - p1.x;
     float dy = p2.y - p1.y;
     return dx * dx + dy * dy;
+}
+
+inline float crossProduct(const sf::Vector2f &v1, const sf::Vector2f &v2)
+{
+    return v1.x * v2.y - v1.y * v2.x;
 }

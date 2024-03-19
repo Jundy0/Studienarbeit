@@ -48,6 +48,12 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
 
         intersectsObstacles(vehiclePosition, radians, this->obstacles, windowRect, intersectionPoints);
 
+        if (intersectionPoints.size() == 0)
+        {
+            std::cout << "aaaaaa" << std::endl;
+            continue;
+        }
+
         data[i].radius = -1;
         data[i].angle = i;
         data[i].quality = 100.f;
