@@ -78,11 +78,26 @@ void SimulationManager::render()
     sf::CircleShape circle = sf::CircleShape(RADIUS);
     circle.setFillColor(sf::Color::Red);
 
+    const float posX = this->vehicle->getPosition().left;
+    const float posY = this->vehicle->getPosition().top;
+
+    const sf::Vector2f vehiclePosition = sf::Vector2f(posX, posY);
+
     for (size_t i = 0; i < COUNT; i++)
     {
+        const sf::Vector2f intersectionPoint = sf::Vector2f(this->data[i].x - RADIUS, this->data[i].y - RADIUS);
+
         std::cout << data[i].angle << "; " << data[i].x << "; " << data[i].y << std::endl;
-        circle.setPosition(sf::Vector2f(this->data[i].x - RADIUS, this->data[i].y - RADIUS));
+        circle.setPosition(intersectionPoint);
         window->draw(circle);
+
+        sf::Vertex line[] =
+            {
+                sf::Vertex(vehiclePosition),
+                sf::Vertex(intersectionPoint),
+            };
+
+        window->draw(line, 2, sf::Lines);
     }
 
     window->display();
