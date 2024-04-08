@@ -35,6 +35,8 @@
 .idea/
 build/
 
+.vscode/
+
 # LaTeX
 Latex/*.out
 Latex/*-blx.bib
@@ -51,6 +53,5 @@ Latex/*.synctex.gz
 Latex/*.toc
 
 # SLAM
-src/slam/.vscode
-/src/slam/.vscode
-/src/slam/.vscode
+src/slam/.vscode/
+src/slam/lib/
