@@ -54,9 +54,10 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
         return false; // ray and edge are parallel
     }
 
-    const float t = (v1.y * rayDirection.x + v1.x * rayDirection.y) / cross;
+    const float t = (v1.y * rayDirection.x + v1.x * rayDirection.y) / cross; // Parameter for Edge
+    const float s = (v1.x + t * v12.x) / rayDirection.x;                     // Parameter for Ray
 
-    if (t >= 0 && t <= 1)
+    if (t >= 0 && t <= 1 && s >= 0) // Is between points and in positive direction of Ray
     {
         const sf::Vector2f intersectionPoint = v1 + rayOrigin + t * v12;
         intersectionPoints.push_back(intersectionPoint);

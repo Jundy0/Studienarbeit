@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define COUNT 360
+#define COUNT 20
 #define RADIUS 5
 
 SimulationManager::SimulationManager()
