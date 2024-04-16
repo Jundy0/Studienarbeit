@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <cstring>
 
 #include "intersection.h"
 
@@ -34,6 +35,8 @@ void LidarSensorSim::stopScan()
 
 void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
 {
+    memset(data, 0, count * sizeof(lidar_point_t)); // clear data array
+
     const float posX = this->vehicle->getPosition().left;
     const float posY = this->vehicle->getPosition().top;
 
