@@ -1,0 +1,12 @@
+{
+    "cSpell.words": [
+        "Kalman"
+    ],
+    "cSpell.enabled": false,
+    "files.associations": {
+        "ostream": "cpp",
+        "vector": "cpp",
+        "fstream": "cpp"
+    },
+    "cmake.configureOnOpen": true
+}

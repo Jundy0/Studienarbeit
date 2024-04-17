@@ -4,3 +4,6 @@
 [submodule "src/icp"]
 	path = src/icp
 	url = https://github.com/zjudmd1015/icp.git
+[submodule "src/slam/lib/eigen"]
+	path = src/slam/lib/eigen
+	url = https://gitlab.com/libeigen/eigen.git
