@@ -38,6 +38,12 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
 /// @param p1 The first Point.
 /// @param p2 The second Point.
 /// @return The squared Distance between the two Points.
-float distanceSquared(const sf::Vector2f &p1, const sf::Vector2f &p2);
+inline float distanceSquared(const sf::Vector2f &p1, const sf::Vector2f &p2);
+
+/// @brief Calculate the cross product of two Vectors.
+/// @param v1 The first Vector.
+/// @param v2 The second Vector.
+/// @return The cross product of the two Vectirs
+inline float crossProduct(const sf::Vector2f &v1, const sf::Vector2f &v2);
 
 #endif // __INTERSECTION_H__
