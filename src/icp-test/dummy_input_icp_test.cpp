@@ -1,18 +1,23 @@
-#include <iostream>
-#include <vector>
-#include <cmath>
-
-
-#include "../icp/Eigen/Dense"
-#include "../icp/icp.h"
-#include "./load_vectors.cpp"
+#include "./dummy_input_icp_test.h"
 
 // Function to convert polar coordinates to Cartesian coordinates using Eigen library
 Eigen::MatrixXd polar_to_cartesian(const std::vector<double>& distances, const std::vector<double>& angles) {
-    Eigen::MatrixXd cartesian_coords(3, distances.size());
+    Eigen::MatrixXd initial_coordinates(3, distances.size());
     for (int i = 0; i < distances.size(); i++) {
         double x = distances[i] * cos(angles[i] * M_PI / 180);
         double y = distances[i] * sin(angles[i] * M_PI / 180);
+        initial_coordinates.col(i) << x, y, 0.0; // Setting x, y, z = 0
+    }
+    std::cout << initial_coordinates.rows() << "\n" << initial_coordinates.cols() << std::endl;
+    return initial_coordinates.transpose();
+}
+
+Eigen::MatrixXd polar_to_cartesian_from_matrix(Eigen::MatrixX2d points)
+{
+    Eigen::MatrixXd cartesian_coords(3, points.rows());
+    for (int i = 0; i < points.rows(); i++) {
+        double x = points.row(i)[0]* cos(points.row(i)[1] * M_PI / 180);
+        double y = points.row(i)[0] * sin(points.row(i)[1] * M_PI / 180);
         cartesian_coords.col(i) << x, y, 0.0; // Setting x, y, z = 0
     }
     std::cout << cartesian_coords.rows() << "\n" << cartesian_coords.cols() << std::endl;
@@ -52,10 +57,7 @@ Eigen::MatrixXd translate_rotate_matrix(const Eigen::MatrixXd& cartesian_coords,
     return rotated_translated_matrix;
 }
 
-struct TransformationComponents {
-    Eigen::Vector3d translation_vector;
-    double rotation_angle_deg; // Rotation angle in degrees
-};
+
 
 TransformationComponents extractTransformation(const Eigen::Matrix4d& T) {
     TransformationComponents components;
@@ -71,30 +73,31 @@ TransformationComponents extractTransformation(const Eigen::Matrix4d& T) {
     return components;
 }
 
+Eigen::MatrixX2d load_points_from_file()
+{
+    return getDataFromFile();
+}
 
-int main() {
-    // Example usage
-    std::vector<double> distances, angles; // Example distances
+Eigen::MatrixXd get_matrix_from_points(Eigen::MatrixX2d points = load_points_from_file())
+{
+    return polar_to_cartesian_from_matrix(points);
+}
 
-
-    readPolarCoordinates(distances, angles);
-    // Convert polar coordinates to Cartesian coordinates
-    Eigen::MatrixXd cartesian_coords = polar_to_cartesian(distances, angles);
-    // Perform translation and rotation
-    std::vector<double> translation_vector = {8.0, 1.0, 0.0}; // Example translation
+Eigen::MatrixXd apply_transformation(Eigen::MatrixXd start_matrix)
+{
+    std::vector<double> translation_vector = {4.0, 1.0, 0.0}; // Example translation
     double rotation_angle = 20.0; // Example rotation angle
-    Eigen::MatrixXd rotated_translated_matrix = translate_rotate_matrix(cartesian_coords, translation_vector, rotation_angle);
-    // Output the rotated and translated matrix
-    std::cout << rotated_translated_matrix.rows() << "\n" << rotated_translated_matrix.cols() << std::endl;
-    std::cout << cartesian_coords.rows() << "\n" << cartesian_coords.cols() << std::endl;
-    ICP_OUT result = icp(cartesian_coords, rotated_translated_matrix, 50, 0.000000001);
+    translate_rotate_matrix(start_matrix, translation_vector, rotation_angle);
+}
 
-    std::cout << "Distances" << std::endl;
-    for (int i = 0; i < result.distances.size(); i++) {
-            std::cout << result.distances[i] << " ";
-        }
+void call_icp()
+{
+    // Convert polar coordinates to Cartesian coordinates
+    Eigen::MatrixXd initial_coordinates = get_matrix_from_points();
+    // Perform translation and rotation
+    Eigen::MatrixXd rotated_translated_matrix = apply_transformation(initial_coordinates);
+    ICP_OUT result = icp(initial_coordinates, rotated_translated_matrix, 50, 0.000000001);
 
-    std::cout << std::endl;
     std::cout << "Transformation Matrix" << std::endl;
     std::cout << result.trans << std::endl;
 
@@ -105,5 +108,9 @@ int main() {
     TransformationComponents trans_comps = extractTransformation(result.trans);
     std::cout << trans_comps.translation_vector << std::endl;
     std::cout<< trans_comps.rotation_angle_deg << std::endl;
+}
+
+int main() {
+    call_icp();
     return 0;
 }

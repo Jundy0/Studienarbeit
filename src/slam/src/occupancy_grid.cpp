@@ -83,10 +83,9 @@ Eigen::MatrixX2d OccupancyGrid::getDataFromFile(string filePath) {
            values.push_back(stod(word)); 
         }
 
-        result.conservativeResize(result.rows()+1,Eigen::NoChange());
+        result.conservativeResize(result.rows()+1,Eigen::NoChange);
         result.row(result.rows()-1) = Eigen::RowVector2d{values[0], values[1]};
     }
-    
     return result;
 }
 
@@ -98,16 +97,18 @@ std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(string fi
     Eigen::Matrix<int, -1, 2, Eigen::RowMajor> freePoints;
     
     Eigen::Matrix<double, -1, 2, Eigen::RowMajor> data = getDataFromFile(filePath);
+
+    
     
     for (int i = 0; i < data.rows(); i++) {
         Eigen::RowVector2d polarPoint = data.block<1,2>(i,0);
         Eigen::RowVector2i cartPoint = polarToCartesian(polarPoint, robPos);
-        occPoints.conservativeResize(occPoints.rows()+1,Eigen::NoChange());
+        occPoints.conservativeResize(occPoints.rows()+1,Eigen::NoChange);
         occPoints.row(occPoints.rows()-1) = cartPoint;
         
         Eigen::MatrixX2i bresenhamPoints = bresenham(robPos[0], robPos[1], cartPoint[0], cartPoint[1]);
         for (int j = 0; j < bresenhamPoints.rows(); j++) {
-            freePoints.conservativeResize(freePoints.rows()+1,Eigen::NoChange());
+            freePoints.conservativeResize(freePoints.rows()+1,Eigen::NoChange);
             freePoints.row(freePoints.rows()-1) = bresenhamPoints.block<1,2>(j,0);
         }
     }
@@ -154,7 +155,7 @@ Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y
             y1 += sy;
         }
 
-        points.conservativeResize(points.rows()+1,Eigen::NoChange());
+        points.conservativeResize(points.rows()+1,Eigen::NoChange);
         points.row(points.rows()-1) = Eigen::RowVector2i{x1, y1};
     }
     return points;

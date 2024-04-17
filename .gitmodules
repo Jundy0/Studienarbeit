@@ -7,3 +7,6 @@
 [submodule "src/slam/lib/eigen"]
 	path = src/slam/lib/eigen
 	url = https://gitlab.com/libeigen/eigen.git
+[submodule "eigen"]
+	path = eigen
+	url = https://github.com/libigl/eigen.git
