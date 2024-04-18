@@ -6,12 +6,15 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CLASS_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/icp_handler.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/load_vectors.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/occupancy_grid.cpp"
 )
 
 include_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/include"
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/eigen/Eigen"
+	"${CMAKE_CURRENT_SOURCE_DIR}/lib/icp"
 )
 
 # Add the main executable
