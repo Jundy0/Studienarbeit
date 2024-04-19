@@ -4,8 +4,8 @@
 #include <cmath>
 
 #include "../lib/icp/icp.h"
-#include "../src/load_vectors.cpp"
-#include "../lib/eigen/Eigen/Dense"
+#include "../lib/icp/Eigen/Dense"
+#include "../include/load_vectors.h"
 
 struct TransformationComponents
 {
@@ -25,7 +25,8 @@ public:
 private:
     Eigen::MatrixXd polar_to_cartesian(const std::vector<double> &, const std::vector<double> &);
     Eigen::MatrixXd translate_rotate_matrix(const Eigen::MatrixXd &, const std::vector<double> &, double);
-    static Eigen::MatrixX2d load_points_from_file();
     Eigen::MatrixXd get_matrix_from_points(Eigen::MatrixX2d);
     Eigen::MatrixXd apply_transformation(Eigen::MatrixXd);
 };
+
+Eigen::MatrixX2d load_points_from_file();

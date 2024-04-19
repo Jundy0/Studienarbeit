@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.5)
 
 project(Studienarbeit)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CLASS_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/icp_handler.cpp"
-	"${CMAKE_CURRENT_SOURCE_DIR}/load_vectors.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/load_vectors.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/occupancy_grid.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/lib/icp/icp.cpp"
 )
 
 include_directories(

@@ -1,7 +1,8 @@
 #define _USE_MATH_DEFINES
 
-#include "../include/icp_handler.h"
 #include <math.h>
+
+#include "../include/icp_handler.h"
 
 IcpHandler::IcpHandler()
 {
@@ -92,11 +93,6 @@ Eigen::MatrixXd IcpHandler::apply_transformation(Eigen::MatrixXd start_matrix)
     translate_rotate_matrix(start_matrix, translation_vector, rotation_angle);
 }
 
-static Eigen::MatrixX2d IcpHandler::load_points_from_file()
-{
-    return getDataFromFile();
-}
-
 Eigen::MatrixXd IcpHandler::get_matrix_from_points(Eigen::MatrixX2d points = load_points_from_file())
 {
     return polar_to_cartesian_from_matrix(points);
@@ -121,3 +117,8 @@ void IcpHandler::dummy_icp()
     std::cout << trans_comps.translation_vector << std::endl;
     std::cout << trans_comps.rotation_angle_deg << std::endl;
 };
+
+Eigen::MatrixX2d load_points_from_file()
+{
+    return getFileData();
+}

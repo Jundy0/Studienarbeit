@@ -5,7 +5,8 @@
 #include <string>
 #include <sstream>
 
-#include "../lib/eigen/Eigen/Dense"
+#include "../lib/icp/Eigen/Dense"
+#include "../include/load_vectors.h"
 
 void readPolarCoordinates(std::vector<double> &distances, std::vector<double> &angles)
 {
@@ -53,7 +54,7 @@ void readPolarCoordinates(std::vector<double> &distances, std::vector<double> &a
     }
 }
 
-Eigen::MatrixX2d getDataFromFile()
+Eigen::MatrixX2d getFileData()
 {
     std::ifstream file("../data/coordiantes.csv");
     if (!file.is_open())
