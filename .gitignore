@@ -54,3 +54,4 @@ Latex/*.toc
 
 # SLAM
 src/slam/.vscode/
+/src/slam/lib
