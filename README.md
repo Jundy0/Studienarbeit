@@ -95,6 +95,12 @@ cd build
 cmake .. -G "Unix Makefiles"
 ```
 
+For Debugging use 
+
+```bash
+cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+```
+
 5. Build the project
 
 ```bash
