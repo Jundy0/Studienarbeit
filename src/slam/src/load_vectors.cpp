@@ -11,7 +11,7 @@
 void readPolarCoordinates(std::vector<double> &distances, std::vector<double> &angles)
 {
     double trainsample;
-    std::ifstream file("./coordiantes.csv");
+    std::ifstream file("../slam/data/coordiantes.csv");
     if (file.is_open())
     {
         std::string line;
@@ -56,7 +56,7 @@ void readPolarCoordinates(std::vector<double> &distances, std::vector<double> &a
 
 Eigen::MatrixX2d getFileData()
 {
-    std::ifstream file("../data/coordiantes.csv");
+    std::ifstream file("../slam/data/coordiantes.csv");
     if (!file.is_open())
         throw std::runtime_error("Could not open file");
 
