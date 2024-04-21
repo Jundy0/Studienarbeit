@@ -87,7 +87,7 @@ Eigen::MatrixXd apply_transformation(Eigen::MatrixXd start_matrix)
 {
     std::vector<double> translation_vector = {4.0, 1.0, 0.0}; // Example translation
     double rotation_angle = 20.0; // Example rotation angle
-    translate_rotate_matrix(start_matrix, translation_vector, rotation_angle);
+    return translate_rotate_matrix(start_matrix, translation_vector, rotation_angle);
 }
 
 void call_icp()

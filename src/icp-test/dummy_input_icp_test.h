@@ -2,8 +2,8 @@
 #include <vector>
 #include <cmath>
 
-#include "../icp/Eigen/Dense"
-#include "../icp/icp.h"
+#include "../slam/lib/icp/Eigen/Dense"
+#include "../slam/lib/icp/icp.h"
 #include "./load_vectors.cpp"
 
 struct TransformationComponents {

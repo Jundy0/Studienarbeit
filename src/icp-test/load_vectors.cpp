@@ -4,12 +4,12 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "../icp/Eigen/Dense"
+#include "../slam/lib/icp/Eigen/Dense"
 
 void readPolarCoordinates(std::vector<double> &distances, std::vector<double> &angles)
 {
     double trainsample;
-    std::ifstream file("./coordiantes.csv");
+    std::ifstream file("../slam/data/coordiantes.csv");
 if (file.is_open()) 
 {
     std::string line;
@@ -55,7 +55,7 @@ std::cout << "trouble loading file" << std::endl;
 }
 
 Eigen::MatrixX2d getDataFromFile() {
-    std::ifstream file("./coordiantes.csv");
+    std::ifstream file("../slam/data/coordiantes.csv");
     if(!file.is_open()) throw std::runtime_error("Could not open file");
     
     std::string line, word;
