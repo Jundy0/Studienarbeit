@@ -20,8 +20,8 @@ OccupancyGrid::OccupancyGrid() {
     probMap = Eigen::MatrixXd::Zero(gridWidth, gridHeight);
 };
 
-void OccupancyGrid::updateProbMap(string filePath) {
-    std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> allPoints = getPoints(filePath);
+void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle) {
+    std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> allPoints = getPoints(scan, robPos, robRotAngle);
 
     Eigen::MatrixX2i* occPoints = &allPoints.first;
     Eigen::MatrixX2i* freePoints = &allPoints.second;
@@ -67,42 +67,18 @@ void OccupancyGrid::visualize() {
     cout << DEFAULT_COLOR << endl;
 }
 
-Eigen::MatrixX2d OccupancyGrid::getDataFromFile(string filePath) {
-    ifstream file(filePath);
-    if(!file.is_open()) throw std::runtime_error("Could not open file");
-    
-    string line, word;
-    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> result;
-    
-    while (getline(file, line)) {
-        
-        std::vector<double> values;
-        stringstream ss(line);
-
-        while (getline(ss, word, ',')) {
-           values.push_back(stod(word)); 
-        }
-
-        result.conservativeResize(result.rows()+1,Eigen::NoChange);
-        result.row(result.rows()-1) = Eigen::RowVector2d{values[0], values[1]};
-    }
-    return result;
-}
-
-std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(string filePath) {
-    //Robot position
-    Eigen::RowVector2i robPos = {50, 50}; // Hardcode needs changing
+std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle) {
     
     Eigen::Matrix<int, -1, 2, Eigen::RowMajor> occPoints;
     Eigen::Matrix<int, -1, 2, Eigen::RowMajor> freePoints;
     
-    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> data = getDataFromFile(filePath);
+    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> data = scan;
 
     
     
     for (int i = 0; i < data.rows(); i++) {
         Eigen::RowVector2d polarPoint = data.block<1,2>(i,0);
-        Eigen::RowVector2i cartPoint = polarToCartesian(polarPoint, robPos);
+        Eigen::RowVector2i cartPoint = polarToCartesian(polarPoint, robPos, robRotAngle);
         occPoints.conservativeResize(occPoints.rows()+1,Eigen::NoChange);
         occPoints.row(occPoints.rows()-1) = cartPoint;
         
@@ -161,10 +137,10 @@ Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y
     return points;
 }
 
-Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2i robPos) {
+Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2i robPos, double robRotAngle) {
     Eigen::RowVector2i cartPoint;
     
-    double theta = polarPoint[0];
+    double theta = polarPoint[0] + robRotAngle;
     double r = polarPoint[1] * 10 * 100; // Meter to Centimeter plus fitst digit after comma  
 
     cartPoint[0] = round(r * cos(theta) / 10) + robPos[0];
