@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "../lib/icp/icp.h"
-#include "../lib/icp/Eigen/Dense"
+#include "../lib/eigen/Eigen/Dense"
 
 struct TransformationComponents
 {

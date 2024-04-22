@@ -45,7 +45,7 @@ Eigen::MatrixXd IcpHandler::polar_to_cartesian_from_matrix(Eigen::MatrixX2d poin
 
 TransformationComponents IcpHandler::execute_icp(Eigen::MatrixXd initial_matrix, Eigen::MatrixXd transformed_matrix)
 {
-    ICP_OUT result = icp(initial_matrix, transformed_matrix, 50, 0.000000001);
+    ICP_OUT result = icp(initial_matrix, transformed_matrix, 50, 0);
 
     std::cout << "Transformation Matrix" << std::endl;
     std::cout << result.trans << std::endl;
@@ -65,4 +65,9 @@ TransformationComponents IcpHandler::call_icp(Eigen::MatrixX2d scan_one, Eigen::
     Eigen::MatrixXd initial_mattrix = get_matrix_from_points(scan_one);
     Eigen::MatrixXd transformed_matirx = get_matrix_from_points(scan_two);
     return execute_icp(initial_mattrix,transformed_matirx);
+}
+
+Eigen::MatrixXd IcpHandler::get_matrix_from_points(Eigen::MatrixX2d points)
+{
+    return polar_to_cartesian_from_matrix(points);
 }

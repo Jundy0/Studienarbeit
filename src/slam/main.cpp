@@ -12,8 +12,8 @@ int main()
 {
     Particle particle;
 
-    Eigen::MatrixX2d firstScan = getDataFromFile("./data/log_1.txt");
-    Eigen::MatrixX2d secondScan = getDataFromFile("./data/log_2.txt");
+    Eigen::MatrixX2d firstScan = getDataFromFile("../data/log_1.txt");
+    Eigen::MatrixX2d secondScan = getDataFromFile("../data/log_2.txt");
 
     particle.update(firstScan, secondScan);
 

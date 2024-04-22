@@ -6,7 +6,8 @@
     "files.associations": {
         "ostream": "cpp",
         "vector": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "eigen": "cpp"
     },
     "cmake.configureOnOpen": true
 }
