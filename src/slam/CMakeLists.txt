@@ -9,6 +9,7 @@ set(CLASS_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/icp_handler.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/load_vectors.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/src/occupancy_grid.cpp"
+	"${CMAKE_CURRENT_SOURCE_DIR}/src/particle.cpp"
 	"${CMAKE_CURRENT_SOURCE_DIR}/lib/icp/icp.cpp"
 )
 

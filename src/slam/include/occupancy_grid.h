@@ -12,7 +12,7 @@ class OccupancyGrid
 
 public:
     OccupancyGrid();
-    void updateProbMap(string filePath);
+    void updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle);
     void visualize();
 
 private:
@@ -23,8 +23,7 @@ private:
 
     Eigen::MatrixXd probMap;
 
-    Eigen::MatrixX2d getDataFromFile(string filePath);
-    pair<Eigen::MatrixX2i, Eigen::MatrixX2i> getPoints(string filePath);
+    pair<Eigen::MatrixX2i, Eigen::MatrixX2i> getPoints(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle);
     Eigen::MatrixX2i bresenham(int robPosX, int robPosY, int x, int y);
-    Eigen::RowVector2i polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2i robPos);
+    Eigen::RowVector2i polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2i robPos, double robRotAngle);
 };
