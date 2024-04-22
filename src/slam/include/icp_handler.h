@@ -9,8 +9,8 @@
 
 struct TransformationComponents
 {
-    Eigen::Vector3d translation_vector;
-    double rotation_angle_deg; // Rotation angle in degrees
+    Eigen::RowVector2i translation_vector;
+    double rotation_angle; // Rotation angle in degrees
 };
 
 class IcpHandler
@@ -18,11 +18,12 @@ class IcpHandler
 public:
     IcpHandler();
     TransformationComponents extractTransformation(const Eigen::Matrix4d &);
-    TransformationComponents call_icp(Eigen::MatrixXd, Eigen::MatrixXd);
+    TransformationComponents call_icp(Eigen::Matrix2d, Eigen::Matrix2d);
     Eigen::MatrixXd polar_to_cartesian_from_matrix(Eigen::MatrixX2d);
     void dummy_icp();
 
 private:
+    TransformationComponents execute_icp(Eigen::MatrixXd , Eigen::MatrixXd );
     Eigen::MatrixXd polar_to_cartesian(const std::vector<double> &, const std::vector<double> &);
     Eigen::MatrixXd translate_rotate_matrix(const Eigen::MatrixXd &, const std::vector<double> &, double);
     Eigen::MatrixXd get_matrix_from_points(Eigen::MatrixX2d);
