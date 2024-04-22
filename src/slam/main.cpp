@@ -6,17 +6,19 @@
 
 using namespace std;
 
+Eigen::MatrixX2d getDataFromFile(string filePath);
+
 int main()
 {
     Particle particle;
 
     Eigen::MatrixX2d firstScan = getDataFromFile("./data/log_1.txt");
-    Eigen::MatrixX2d secondScan = getDataFromFile("./data/log_2.txt");;
+    Eigen::MatrixX2d secondScan = getDataFromFile("./data/log_2.txt");
 
     particle.update(firstScan, secondScan);
 
     return 0;
-}
+};
 
 Eigen::MatrixX2d getDataFromFile(string filePath) {
     ifstream file(filePath);
@@ -31,11 +33,11 @@ Eigen::MatrixX2d getDataFromFile(string filePath) {
         stringstream ss(line);
 
         while (getline(ss, word, ',')) {
-           values.push_back(stod(word)); 
+        values.push_back(stod(word)); 
         }
 
         result.conservativeResize(result.rows()+1,Eigen::NoChange);
         result.row(result.rows()-1) = Eigen::RowVector2d{values[0], values[1]};
     }
     return result;
-}
+};

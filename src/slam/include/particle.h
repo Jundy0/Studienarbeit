@@ -1,7 +1,7 @@
 #include "../lib/eigen/Eigen/Dense"
 
-#include "occupancy_grid.h"
 #include "icp_handler.h"
+#include "occupancy_grid.h"
 
 
 class Particle
