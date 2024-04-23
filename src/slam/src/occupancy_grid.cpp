@@ -3,7 +3,7 @@
 #include <fstream>
 #include <string>
 
-#include <../lib/eigen/Eigen/Dense>
+#include "../lib/eigen/Eigen/Dense"
 
 #include "../include/occupancy_grid.h"
 
@@ -14,8 +14,8 @@ OccupancyGrid::OccupancyGrid() {
     probOcc = 0.5;
     probFree = -0.5;
     // Grid dimensions
-    gridWidth = 100;
-    gridHeight = 100;
+    gridWidth = 150;
+    gridHeight = 150;
     // Defining a matrix used to store probability values
     probMap = Eigen::MatrixXd::Zero(gridWidth, gridHeight);
 };
@@ -31,7 +31,7 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
         int y = occPoints->coeff(i, 1);
 
         if (probMap(x, y) < 1)
-            probMap(x, y) += 0.1;
+            probMap(x, y) += 0.3;
         
     }
 
@@ -40,7 +40,7 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
         int y = freePoints->coeff(i, 1);
 
         if (probMap(x, y) > -1)
-            probMap(x, y) -= 0.03;
+            probMap(x, y) -= 0.15;
     }
 
 }
@@ -141,10 +141,17 @@ Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint
     Eigen::RowVector2i cartPoint;
     
     double theta = polarPoint[0] + robRotAngle;
-    double r = polarPoint[1] * 10 * 100; // Meter to Centimeter plus fitst digit after comma  
+    double r = polarPoint[1] * 10 * 100; // Meter to Centimeter plus first digit after comma
 
     cartPoint[0] = round(r * cos(theta) / 10) + robPos[0];
     cartPoint[1] = round(r * sin(theta) / 10) + robPos[1];
 
+    if (cartPoint[0] >= gridWidth || cartPoint[1] >= gridHeight) {
+        cartPoint = robPos;
+    }
+    if (cartPoint[0] < 0 || cartPoint[1] < 0) {
+        cartPoint = robPos;
+    }
+  
     return cartPoint;
 };

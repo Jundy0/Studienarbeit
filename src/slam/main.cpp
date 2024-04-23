@@ -12,10 +12,16 @@ int main()
 {
     Particle particle;
 
-    Eigen::MatrixX2d firstScan = getDataFromFile("../data/log_1.txt");
-    Eigen::MatrixX2d secondScan = getDataFromFile("../data/log_2.txt");
+    Eigen::MatrixX2d scan1 = getDataFromFile("../data/log_1.txt");
+    Eigen::MatrixX2d scan2 = getDataFromFile("../data/log_2.txt");
+    Eigen::MatrixX2d scan3 = getDataFromFile("../data/log_3.txt");
+    Eigen::MatrixX2d scan4 = getDataFromFile("../data/log_4.txt");
+    Eigen::MatrixX2d scan5 = getDataFromFile("../data/log_5.txt");
 
-    particle.update(firstScan, secondScan);
+    particle.update(scan1, scan2);
+    particle.update(scan2, scan3);
+    particle.update(scan3, scan4);
+    particle.update(scan4, scan5);
 
     return 0;
 };
