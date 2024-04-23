@@ -6,7 +6,11 @@ bool intersectsObstacles(const sf::Vector2f &rayOrigin, float rayAngle, std::vec
 {
     intersectionPoints.clear();
 
-    sf::Vector2f rayDirection(std::cos(rayAngle), std::sin(rayAngle));
+    // Round to prevent strange numbers after sin/cos
+    float xDirection = std::round(std::cos(rayAngle) * 10000) / 10000;
+    float yDirection = std::round(std::sin(rayAngle) * 10000) / 10000;
+
+    sf::Vector2f rayDirection(xDirection, yDirection);
 
     for (auto &obstacle : *obstacles)
     {
@@ -30,15 +34,11 @@ bool intersectsRect(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirect
     sf::Vector2f p4(rect.left, rect.top + rect.height);
 
     // Check for intersection with each edge
-    if (intersects(rayOrigin, rayDirection, p1, p2, intersectionPoints) ||
-        intersects(rayOrigin, rayDirection, p2, p3, intersectionPoints) ||
-        intersects(rayOrigin, rayDirection, p3, p4, intersectionPoints) ||
-        intersects(rayOrigin, rayDirection, p4, p1, intersectionPoints))
-    {
-        return true;
-    }
-
-    return false;
+    bool intersects1 = intersects(rayOrigin, rayDirection, p1, p2, intersectionPoints);
+    bool intersects2 = intersects(rayOrigin, rayDirection, p2, p3, intersectionPoints);
+    bool intersects3 = intersects(rayOrigin, rayDirection, p4, p3, intersectionPoints);
+    bool intersects4 = intersects(rayOrigin, rayDirection, p1, p4, intersectionPoints);
+    return intersects1 || intersects2 || intersects3 || intersects4;
 }
 
 bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection, const sf::Vector2f &p1, const sf::Vector2f &p2, std::vector<sf::Vector2f> &intersectionPoints)
@@ -54,8 +54,32 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
         return false; // ray and edge are parallel
     }
 
-    const float t = (v1.y * rayDirection.x + v1.x * rayDirection.y) / cross; // Parameter for Edge
-    const float s = (v1.x + t * v12.x) / rayDirection.x;                     // Parameter for Ray
+    float t; // Parameter for Edge
+    float s; // Parameter for Ray
+    if (rayDirection.x != 0)
+    {
+        if (v12.x != 0)
+        {
+            t = (v1.x * rayDirection.y - v1.y * rayDirection.x) / (v12.x * rayDirection.y - v12.y * rayDirection.x);
+        }
+        else
+        {
+            t = (v1.x * rayDirection.y - v1.y * rayDirection.x) / (v12.y * rayDirection.x - v12.x * rayDirection.y);
+        }
+        s = (v1.x + t * v12.x) / rayDirection.x;
+    }
+    else
+    {
+        if (v12.x != 0)
+        {
+            t = (v1.y * rayDirection.x - v1.x * rayDirection.y) / (v12.x * rayDirection.y - v12.y * rayDirection.x);
+        }
+        else
+        {
+            t = (v1.y * rayDirection.x - v1.x * rayDirection.y) / (v12.y * rayDirection.x - v12.x * rayDirection.y);
+        }
+        s = (v1.y + t * v12.y) / rayDirection.y;
+    }
 
     if (t >= 0 && t <= 1 && s >= 0) // Is between points and in positive direction of Ray
     {

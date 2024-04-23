@@ -8,7 +8,7 @@
       "program": "${workspaceFolder}/src/simulation/build/main",
       "args": [],
       "stopAtEntry": false,
-      "cwd": "${fileDirname}",
+      "cwd": "${workspaceFolder}/src/simulation/build",
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
@@ -31,7 +31,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/src/simulation/build/main",
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}/src/simulation",
+      "cwd": "${workspaceFolder}/src/simulation/build",
       "console": "externalTerminal"
     }
   ]

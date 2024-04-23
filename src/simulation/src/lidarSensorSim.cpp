@@ -47,7 +47,7 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
 
     for (size_t i = 0; i < count; i++)
     {
-        float radians = i * 18 * M_PI / 180.0;
+        float radians = i * (360 / count) * M_PI / 180.0;
 
         intersectsObstacles(vehiclePosition, radians, this->obstacles, windowRect, intersectionPoints);
 

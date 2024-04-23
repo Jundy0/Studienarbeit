@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define COUNT 20
+#define COUNT 8
 #define RADIUS 5
 
 SimulationManager::SimulationManager()
@@ -85,10 +85,11 @@ void SimulationManager::render()
 
     for (size_t i = 0; i < COUNT; i++)
     {
-        const sf::Vector2f intersectionPoint = sf::Vector2f(this->data[i].x - RADIUS, this->data[i].y - RADIUS);
+        const sf::Vector2f intersectionPoint = sf::Vector2f(this->data[i].x, this->data[i].y);
+        const sf::Vector2f circlePoint = intersectionPoint - sf::Vector2f(RADIUS, RADIUS); // adapt circle, so that the center is at the intersection Point
 
         std::cout << data[i].angle << "; " << data[i].x << "; " << data[i].y << std::endl;
-        circle.setPosition(intersectionPoint);
+        circle.setPosition(circlePoint);
         window->draw(circle);
 
         sf::Vertex line[] =
