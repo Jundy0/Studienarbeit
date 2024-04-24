@@ -38,8 +38,6 @@ Eigen::MatrixXd IcpHandler::polar_to_cartesian_from_matrix(Eigen::MatrixX2d poin
         double y = points.row(i)[1] * sin(points.row(i)[0]);
         cartesian_coords.col(i) << x, y, 0.0; // Setting x, y, z = 0
     }
-    std::cout << cartesian_coords.rows() << "\n"
-              << cartesian_coords.cols() << std::endl;
     return cartesian_coords.transpose();
 }
 

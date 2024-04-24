@@ -12,16 +12,16 @@ int main()
 {
     Particle particle;
 
-    Eigen::MatrixX2d scan1 = getDataFromFile("../data/log_1.txt");
-    Eigen::MatrixX2d scan2 = getDataFromFile("../data/log_2.txt");
-    Eigen::MatrixX2d scan3 = getDataFromFile("../data/log_3.txt");
-    Eigen::MatrixX2d scan4 = getDataFromFile("../data/log_4.txt");
-    Eigen::MatrixX2d scan5 = getDataFromFile("../data/log_5.txt");
+    Eigen::MatrixX2d scan01 = getDataFromFile("../data/scan0001.csv");
+    Eigen::MatrixX2d scan02 = getDataFromFile("../data/scan0002.csv");
+    Eigen::MatrixX2d scan03 = getDataFromFile("../data/scan0003.csv");
+    Eigen::MatrixX2d scan04 = getDataFromFile("../data/scan0004.csv");
+    Eigen::MatrixX2d scan05 = getDataFromFile("../data/scan0005.csv");
 
-    particle.update(scan1, scan2);
-    particle.update(scan2, scan3);
-    particle.update(scan3, scan4);
-    particle.update(scan4, scan5);
+    particle.update(scan01, scan02);
+    particle.update(scan02, scan03);
+    particle.update(scan03, scan04);
+    particle.update(scan04, scan05);
 
     return 0;
 };
@@ -43,7 +43,7 @@ Eigen::MatrixX2d getDataFromFile(string filePath) {
         }
 
         result.conservativeResize(result.rows()+1,Eigen::NoChange);
-        result.row(result.rows()-1) = Eigen::RowVector2d{values[0], values[1] / 10};
+        result.row(result.rows()-1) = Eigen::RowVector2d{values[0], values[1]};
     }
     return result;
 };

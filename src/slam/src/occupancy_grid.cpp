@@ -20,7 +20,7 @@ OccupancyGrid::OccupancyGrid() {
     mapWidth = 1500;
     mapHeight = 1500;
     // Defining a matrix used to store probability values
-    probMap = Eigen::MatrixXd::Zero(gridWidth, gridHeight);
+    probMap = Eigen::MatrixXd::Zero(gridHeight, gridWidth);
 };
 
 void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle) {
@@ -33,8 +33,8 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
         int x = occPoints->coeff(i, 0) / 10; // Millimeter to Centimeter for grid
         int y = occPoints->coeff(i, 1) / 10;
 
-        if (probMap(x, y) < 1)
-            probMap(x, y) += 0.4;
+        if (probMap((gridHeight-1) - y, x) < 1)
+            probMap((gridHeight-1) - y, x) += 0.4;
         
     }
 
@@ -42,8 +42,8 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
         int x = freePoints->coeff(i, 0) / 10;
         int y = freePoints->coeff(i, 1) / 10;
 
-        if (probMap(x, y) > -1)
-            probMap(x, y) -= 0.2;
+        if (probMap((gridHeight-1) - y, x) > -1)
+            probMap((gridHeight-1) - y, x) -= 0.2;
     }
 
 }
@@ -56,11 +56,11 @@ void OccupancyGrid::visualize() {
 
     cout << LIGHT_GREY_COLOR;
 
-    for (int i = 0; i < gridWidth; i++) {
-        for (int j = 0; j < gridHeight; j++) {
-            if (probMap(i,j) >= probOcc)
+    for (int y = gridHeight-1; y >= 0; y--) {
+        for (int x = 0; x < gridWidth; x++) {
+            if (probMap(y, x) >= probOcc)
                 cout << DARK_GREY_COLOR << " " << LIGHT_GREY_COLOR;
-            else if (probMap(i,j) <= probFree)
+            else if (probMap(y, x) <= probFree)
                 cout << WHITE_COLOR << " " << LIGHT_GREY_COLOR;
             else
                 cout << LIGHT_GREY_COLOR << " ";
