@@ -38,6 +38,7 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
     memset(data, 0, count * sizeof(lidar_point_t)); // clear data array
 
     const sf::FloatRect vehicleRect = this->vehicle->getPosition();
+    const float vehicleRotation = this->vehicle->getRotation() * M_PI / 180.f;
 
     const float posX = vehicleRect.left + vehicleRect.width / 2;
     const float posY = vehicleRect.top + vehicleRect.height / 2;
@@ -49,9 +50,9 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
 
     for (size_t i = 0; i < count; i++)
     {
-        const float radians = i * (360.f / count) * M_PI / 180.0;
+        const float radians = i * (360.f / count) * M_PI / 180.f;
 
-        intersectsObstacles(vehiclePosition, radians, this->obstacles, windowRect, intersectionPoints);
+        intersectsObstacles(vehiclePosition, radians + vehicleRotation, this->obstacles, windowRect, intersectionPoints);
 
         if (intersectionPoints.size() == 0)
         {

@@ -13,6 +13,7 @@ public:
 
     sf::FloatRect getPosition();
     sf::Sprite getSprite(bool collision = false);
+    float getRotation();
 
     void moveForward();
     void moveBack();

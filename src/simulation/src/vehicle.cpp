@@ -30,6 +30,11 @@ sf::Sprite Vehicle::getSprite(bool collision)
     return this->vehicleSprite;
 }
 
+float Vehicle::getRotation()
+{
+    return this->rotation;
+}
+
 void Vehicle::moveForward()
 {
     const float radiant = this->rotation * M_PI / 180.f;
