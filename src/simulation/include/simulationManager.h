@@ -30,6 +30,7 @@ private:
 
     Vehicle *vehicle;
     std::vector<Obstacle> obstacles;
+    sf::Vector2f destination;
 
     ILidarSensor *lidarSensor;
     lidar_point_t *data;

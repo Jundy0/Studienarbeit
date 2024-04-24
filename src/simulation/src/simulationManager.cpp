@@ -34,6 +34,7 @@ SimulationManager::~SimulationManager()
 {
     delete this->window;
     delete this->vehicle;
+    delete this->lidarSensor;
 
     free(this->data);
 }
@@ -110,6 +111,10 @@ void SimulationManager::render()
         window->draw(line, 2, sf::Lines);
     }
 
+    circle.setFillColor(sf::Color::Magenta);
+    circle.setPosition(this->destination - sf::Vector2f(RADIUS, RADIUS));
+    window->draw(circle);
+
     window->draw(this->vehicle->getSprite(collision));
 
     window->display();
@@ -143,6 +148,13 @@ void SimulationManager::pollEvent()
                 this->saveScanAsCsv();
                 break;
             }
+            break;
+        case sf::Event::KeyReleased:
+            break;
+        case sf::Event::MouseButtonPressed:
+            this->destination = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
+            break;
+        case sf::Event::MouseButtonReleased:
             break;
         }
     }
