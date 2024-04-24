@@ -33,6 +33,7 @@ private:
 
     ILidarSensor *lidarSensor;
     lidar_point_t *data;
+    bool collision = false;
 
     void update();
     void render();

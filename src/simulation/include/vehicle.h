@@ -12,7 +12,7 @@ public:
     ~Vehicle();
 
     sf::FloatRect getPosition();
-    sf::RectangleShape getShape();
+    sf::RectangleShape getShape(bool collision = false);
 
     void moveLeft();
     void moveRight();

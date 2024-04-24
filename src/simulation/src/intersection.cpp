@@ -58,25 +58,25 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
     float s; // Parameter for Ray
     if (rayDirection.x != 0)
     {
-        if (v12.x != 0)
+        if (v12.y == 0)
         {
-            t = (v1.x * rayDirection.y - v1.y * rayDirection.x) / (v12.x * rayDirection.y - v12.y * rayDirection.x);
+            t = crossProduct(v1, rayDirection) / crossProduct(v12, rayDirection);
         }
         else
         {
-            t = (v1.x * rayDirection.y - v1.y * rayDirection.x) / (v12.y * rayDirection.x - v12.x * rayDirection.y);
+            t = crossProduct(v1, rayDirection) / crossProduct(rayDirection, v12);
         }
         s = (v1.x + t * v12.x) / rayDirection.x;
     }
     else
     {
-        if (v12.x != 0)
+        if (v12.y == 0)
         {
-            t = (v1.y * rayDirection.x - v1.x * rayDirection.y) / (v12.x * rayDirection.y - v12.y * rayDirection.x);
+            t = crossProduct(rayDirection, v1) / crossProduct(v12, rayDirection);
         }
         else
         {
-            t = (v1.y * rayDirection.x - v1.x * rayDirection.y) / (v12.y * rayDirection.x - v12.x * rayDirection.y);
+            t = crossProduct(rayDirection, v1) / crossProduct(rayDirection, v12);
         }
         s = (v1.y + t * v12.y) / rayDirection.y;
     }

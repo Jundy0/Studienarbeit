@@ -7,7 +7,6 @@ Vehicle::Vehicle(float startX, float startY)
 
     this->vehicleShape.setSize(sf::Vector2f(50, 50));
     this->vehicleShape.setPosition(this->position);
-    this->vehicleShape.setFillColor(sf::Color::Blue);
 }
 
 Vehicle::~Vehicle()
@@ -19,8 +18,9 @@ sf::FloatRect Vehicle::getPosition()
     return this->vehicleShape.getGlobalBounds();
 }
 
-sf::RectangleShape Vehicle::getShape()
+sf::RectangleShape Vehicle::getShape(bool collision)
 {
+    this->vehicleShape.setFillColor(collision ? sf::Color::Red : sf::Color::Blue);
     return this->vehicleShape;
 }
 void Vehicle::moveLeft()

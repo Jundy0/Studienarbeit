@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define COUNT 8
+#define COUNT 4
 #define RADIUS 5
 
 SimulationManager::SimulationManager()
@@ -43,6 +43,7 @@ void SimulationManager::run()
 
 void SimulationManager::update()
 {
+    this->collision = false;
     this->pollEvent();
 
     this->vehicle->update();
@@ -52,6 +53,7 @@ void SimulationManager::update()
     {
         if (obstacle.getPosition().intersects(this->vehicle->getPosition()))
         {
+            this->collision = true;
             std::cout << "Error: Vehicle crashed into an obstacle!" << std::endl;
         }
     }
@@ -73,13 +75,15 @@ void SimulationManager::render()
         window->draw(obstacle.getShape());
     }
 
-    window->draw(this->vehicle->getShape());
+    window->draw(this->vehicle->getShape(collision));
 
     sf::CircleShape circle = sf::CircleShape(RADIUS);
     circle.setFillColor(sf::Color::Red);
 
-    const float posX = this->vehicle->getPosition().left;
-    const float posY = this->vehicle->getPosition().top;
+    const sf::FloatRect vehicleRect = this->vehicle->getPosition();
+
+    const float posX = vehicleRect.left + vehicleRect.width / 2;
+    const float posY = vehicleRect.top + vehicleRect.height / 2;
 
     const sf::Vector2f vehiclePosition = sf::Vector2f(posX, posY);
 
