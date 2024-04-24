@@ -39,6 +39,9 @@ private:
     void render();
 
     void pollEvent();
+
+    void saveScanAsCsv();
+    int fileCount = 1;
 };
 
 #endif // __SIMULATION_MANAGER_H__

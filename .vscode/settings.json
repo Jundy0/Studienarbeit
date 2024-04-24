@@ -55,7 +55,8 @@
     "ctime": "cpp",
     "set": "cpp",
     "cstring": "cpp",
-    "numbers": "cpp"
+    "numbers": "cpp",
+    "iomanip": "cpp"
   },
   "latex-workshop.latex.recipes": [
     {

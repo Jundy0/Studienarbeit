@@ -1,7 +1,7 @@
 #include "lidarSensorSim.h"
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <cstring>
 
 #include "intersection.h"
@@ -49,7 +49,7 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
 
     for (size_t i = 0; i < count; i++)
     {
-        float radians = i * (360 / count) * M_PI / 180.0 + M_PI / 4;
+        const float radians = i * (360.f / count) * M_PI / 180.0;
 
         intersectsObstacles(vehiclePosition, radians, this->obstacles, windowRect, intersectionPoints);
 
@@ -59,8 +59,8 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
             continue;
         }
 
-        data[i].radius = -1;
-        data[i].angle = i;
+        data[i].radius = std::sqrt(std::pow(posX - intersectionPoints[0].x, 2) + std::pow(posY - intersectionPoints[0].y, 2));
+        data[i].angle = radians;
         data[i].quality = 100.f;
         data[i].valid = true;
         data[i].x = intersectionPoints[0].x;

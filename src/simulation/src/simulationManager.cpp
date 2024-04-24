@@ -2,20 +2,28 @@
 #include "lidarSensorSim.h"
 
 #include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <sstream>
+#include <filesystem>
 
-#define COUNT 360
+#define COUNT 720
 #define RADIUS 5
 
 SimulationManager::SimulationManager()
 {
     this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
-    this->vehicle = new Vehicle(5.f, 5.f);
+    this->vehicle = new Vehicle(400.f, 400.f);
 
-    Obstacle obstacle = Obstacle(100.f, 100.f, 50.f, 50.f);
+    Obstacle obstacle1 = Obstacle(100.f, 100.f, 50.f, 50.f);
     Obstacle obstacle2 = Obstacle(190.f, 170.f, 100.f, 50.f);
+    Obstacle obstacle3 = Obstacle(500.f, 200.f, 100.f, 200.f);
+    Obstacle obstacle4 = Obstacle(300.f, 600.f, 300.f, 50.f);
 
-    this->obstacles.push_back(obstacle);
+    this->obstacles.push_back(obstacle1);
     this->obstacles.push_back(obstacle2);
+    this->obstacles.push_back(obstacle3);
+    this->obstacles.push_back(obstacle4);
 
     this->lidarSensor = new LidarSensorSim(this->vehicle, this->obstacles);
 
@@ -68,7 +76,7 @@ void SimulationManager::update()
 
 void SimulationManager::render()
 {
-    window->clear(sf::Color::Cyan);
+    window->clear(sf::Color::Yellow);
 
     for (auto &obstacle : this->obstacles)
     {
@@ -104,6 +112,12 @@ void SimulationManager::render()
 
     window->draw(this->vehicle->getShape(collision));
 
+    // Circle for orientation
+    sf::CircleShape orientation = sf::CircleShape(RADIUS);
+    orientation.setFillColor(sf::Color::Red);
+    orientation.setPosition(sf::Vector2f(vehicleRect.left + vehicleRect.width - RADIUS, vehicleRect.top + vehicleRect.height / 2 - RADIUS));
+    window->draw(orientation);
+
     window->display();
 }
 
@@ -131,8 +145,37 @@ void SimulationManager::pollEvent()
             case sf::Keyboard::Key::S:
                 this->vehicle->moveDown();
                 break;
+            case sf::Keyboard::Key::P:
+                this->saveScanAsCsv();
+                break;
             }
             break;
         }
     }
+}
+
+void SimulationManager::saveScanAsCsv()
+{
+    // Create Directory for scans, if not exists
+    std::string directoryName = "scans";
+    if (!std::filesystem::exists(directoryName))
+    {
+        std::filesystem::create_directory(directoryName);
+    }
+
+    std::ofstream csvFile;
+    std::stringstream counterString;
+    counterString << std::setw(4) << std::setfill('0') << this->fileCount;
+    std::string fileName = directoryName + "/scan" + counterString.str() + ".csv";
+
+    csvFile.open(fileName.c_str());
+
+    for (int i = 0; i < COUNT; i++)
+    {
+        csvFile << this->data[i].angle << "," << this->data[i].radius << std::endl;
+    }
+
+    csvFile.close();
+
+    this->fileCount++;
 }
