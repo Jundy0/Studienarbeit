@@ -11,11 +11,14 @@ using namespace std;
 
 OccupancyGrid::OccupancyGrid() {
     // Defining threshold
-    probOcc = 0.5;
-    probFree = -0.5;
+    probOcc = 0.4;
+    probFree = -0.2;
     // Grid dimensions
     gridWidth = 150;
     gridHeight = 150;
+    // Map dimensions
+    mapWidth = 1500;
+    mapHeight = 1500;
     // Defining a matrix used to store probability values
     probMap = Eigen::MatrixXd::Zero(gridWidth, gridHeight);
 };
@@ -27,20 +30,20 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
     Eigen::MatrixX2i* freePoints = &allPoints.second;
 
     for (int i = 0; i < occPoints->rows(); i++) {
-        int x = occPoints->coeff(i, 0);
-        int y = occPoints->coeff(i, 1);
+        int x = occPoints->coeff(i, 0) / 10; // Millimeter to Centimeter for grid
+        int y = occPoints->coeff(i, 1) / 10;
 
         if (probMap(x, y) < 1)
-            probMap(x, y) += 0.3;
+            probMap(x, y) += 0.4;
         
     }
 
     for (int i = 0; i < freePoints->rows(); i++) {
-        int x = freePoints->coeff(i, 0);
-        int y = freePoints->coeff(i, 1);
+        int x = freePoints->coeff(i, 0) / 10;
+        int y = freePoints->coeff(i, 1) / 10;
 
         if (probMap(x, y) > -1)
-            probMap(x, y) -= 0.15;
+            probMap(x, y) -= 0.2;
     }
 
 }
@@ -74,28 +77,25 @@ std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(Eigen::Ma
     
     Eigen::Matrix<double, -1, 2, Eigen::RowMajor> data = scan;
 
-    
-    
     for (int i = 0; i < data.rows(); i++) {
         Eigen::RowVector2d polarPoint = data.block<1,2>(i,0);
         Eigen::RowVector2i cartPoint = polarToCartesian(polarPoint, robPos, robRotAngle);
         occPoints.conservativeResize(occPoints.rows()+1,Eigen::NoChange);
         occPoints.row(occPoints.rows()-1) = cartPoint;
-        
+
         Eigen::MatrixX2i bresenhamPoints = bresenham(robPos[0], robPos[1], cartPoint[0], cartPoint[1]);
         for (int j = 0; j < bresenhamPoints.rows(); j++) {
             freePoints.conservativeResize(freePoints.rows()+1,Eigen::NoChange);
             freePoints.row(freePoints.rows()-1) = bresenhamPoints.block<1,2>(j,0);
         }
     }
-
     return std::make_pair(occPoints, freePoints);
 }
 
 Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y) {
     Eigen::Matrix<int, -1, 2, Eigen::RowMajor> points;
-    int x1 = robPosX, y1 = robPosY;
-    int x2 = x, y2 = y;
+    int x1 = robPosX / 10, y1 = robPosY / 10;
+    int x2 = x / 10, y2 = y / 10;
     
     // Move endpoint towards robot to exclude lidar point
     if (x1 > x2)
@@ -132,7 +132,7 @@ Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y
         }
 
         points.conservativeResize(points.rows()+1,Eigen::NoChange);
-        points.row(points.rows()-1) = Eigen::RowVector2i{x1, y1};
+        points.row(points.rows()-1) = Eigen::RowVector2i{x1 * 10, y1 * 10};
     }
     return points;
 }
@@ -141,12 +141,12 @@ Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint
     Eigen::RowVector2i cartPoint;
     
     double theta = polarPoint[0] + robRotAngle;
-    double r = polarPoint[1] * 10 * 100; // Meter to Centimeter plus first digit after comma
+    double r = polarPoint[1];
 
-    cartPoint[0] = round(r * cos(theta) / 10) + robPos[0];
-    cartPoint[1] = round(r * sin(theta) / 10) + robPos[1];
+    cartPoint[0] = round(r * cos(theta)) + robPos[0]; // Convert to Cartesian, add RobPos and round to int
+    cartPoint[1] = round(r * sin(theta)) + robPos[1]; 
 
-    if (cartPoint[0] >= gridWidth || cartPoint[1] >= gridHeight) {
+    if (cartPoint[0] >= mapWidth || cartPoint[1] >= mapHeight) {
         cartPoint = robPos;
     }
     if (cartPoint[0] < 0 || cartPoint[1] < 0) {

@@ -20,6 +20,8 @@ private:
     double probFree;
     int gridWidth;
     int gridHeight;
+    int mapWidth;
+    int mapHeight;
 
     Eigen::MatrixXd probMap;
 

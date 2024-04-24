@@ -12,7 +12,7 @@ IcpHandler::IcpHandler()
 TransformationComponents IcpHandler::extractTransformation(const Eigen::Matrix4d &transformationMatrix) {
     TransformationComponents components;
 
-    // Extract translation vector with only x and y as int
+    // Extract translation vector with only x and y as double
     components.translation_vector << static_cast<int>(transformationMatrix(0, 3)),
                                      static_cast<int>(transformationMatrix(1, 3));
 
@@ -34,8 +34,8 @@ Eigen::MatrixXd IcpHandler::polar_to_cartesian_from_matrix(Eigen::MatrixX2d poin
     Eigen::MatrixXd cartesian_coords(3, points.rows());
     for (int i = 0; i < points.rows(); i++)
     {
-        double x = points.row(i)[0] * cos(points.row(i)[1] * M_PI / 180);
-        double y = points.row(i)[0] * sin(points.row(i)[1] * M_PI / 180);
+        double x = points.row(i)[1] * cos(points.row(i)[0]);
+        double y = points.row(i)[1] * sin(points.row(i)[0]);
         cartesian_coords.col(i) << x, y, 0.0; // Setting x, y, z = 0
     }
     std::cout << cartesian_coords.rows() << "\n"
@@ -45,7 +45,7 @@ Eigen::MatrixXd IcpHandler::polar_to_cartesian_from_matrix(Eigen::MatrixX2d poin
 
 TransformationComponents IcpHandler::execute_icp(Eigen::MatrixXd initial_matrix, Eigen::MatrixXd transformed_matrix)
 {
-    ICP_OUT result = icp(initial_matrix, transformed_matrix, 20, 0);
+    ICP_OUT result = icp(initial_matrix, transformed_matrix, 50, 0.001);
 
     std::cout << "Transformation Matrix" << std::endl;
     std::cout << result.trans << std::endl;

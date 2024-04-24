@@ -69,7 +69,7 @@ typedef struct{
 }  ICP_OUT;
 */
 
-ICP_OUT icp(const Eigen::MatrixXd &A, const Eigen::MatrixXd &B, int max_iterations, int tolerance){
+ICP_OUT icp(const Eigen::MatrixXd &A, const Eigen::MatrixXd &B, int max_iterations, double tolerance){
     int row = A.rows();
     Eigen::MatrixXd src = Eigen::MatrixXd::Ones(3+1,row);
     Eigen::MatrixXd src3d = Eigen::MatrixXd::Ones(3,row);

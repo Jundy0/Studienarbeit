@@ -3,10 +3,10 @@
 
 
 Particle::Particle() {
-    occupancyGrid;
-    icpHandler;
+    OccupancyGrid occupancyGrid;
+    IcpHandler icpHandler;
 
-    position = {75, 75};
+    position = {750, 750};
     rotationAngle = 0;
 }
 
@@ -18,8 +18,8 @@ void Particle::update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan) {
 
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan) {
     TransformationComponents transComp = icpHandler.call_icp(firstScan, secondScan);
-    position = position + transComp.translation_vector;
-    rotationAngle += transComp.rotation_angle;
+    position += transComp.translation_vector; // Meter to Centimeter
+    rotationAngle -= transComp.rotation_angle;
 }
 
 void Particle::updateGridMap(Eigen::MatrixX2d scan) {

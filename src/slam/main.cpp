@@ -43,7 +43,7 @@ Eigen::MatrixX2d getDataFromFile(string filePath) {
         }
 
         result.conservativeResize(result.rows()+1,Eigen::NoChange);
-        result.row(result.rows()-1) = Eigen::RowVector2d{values[0], values[1]};
+        result.row(result.rows()-1) = Eigen::RowVector2d{values[0], values[1] * 1000}; // Meter to Millimeter
     }
     return result;
 };
