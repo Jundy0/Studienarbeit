@@ -55,7 +55,7 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
 
         if (intersectionPoints.size() == 0)
         {
-            std::cout << "aaaaaa" << std::endl;
+            std::cout << "Error: Ray did not intersect with obstacle or Window" << std::endl;
             continue;
         }
 

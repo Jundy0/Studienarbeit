@@ -54,32 +54,8 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
         return false; // ray and edge are parallel
     }
 
-    float t; // Parameter for Edge
-    float s; // Parameter for Ray
-    if (rayDirection.x != 0)
-    {
-        if (v12.y == 0)
-        {
-            t = crossProduct(v1, rayDirection) / crossProduct(v12, rayDirection);
-        }
-        else
-        {
-            t = crossProduct(v1, rayDirection) / crossProduct(rayDirection, v12);
-        }
-        s = (v1.x + t * v12.x) / rayDirection.x;
-    }
-    else
-    {
-        if (v12.y == 0)
-        {
-            t = crossProduct(rayDirection, v1) / crossProduct(v12, rayDirection);
-        }
-        else
-        {
-            t = crossProduct(rayDirection, v1) / crossProduct(rayDirection, v12);
-        }
-        s = (v1.y + t * v12.y) / rayDirection.y;
-    }
+    const float t = crossProduct(v1, rayDirection) / cross;                                                              // Parameter for Edge
+    const float s = rayDirection.x != 0 ? ((v1.x + t * v12.x) / rayDirection.x) : ((v1.y + t * v12.y) / rayDirection.y); // Parameter for Ray
 
     if (t >= 0 && t <= 1 && s >= 0) // Is between points and in positive direction of Ray
     {

@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define COUNT 4
+#define COUNT 360
 #define RADIUS 5
 
 SimulationManager::SimulationManager()
@@ -75,8 +75,6 @@ void SimulationManager::render()
         window->draw(obstacle.getShape());
     }
 
-    window->draw(this->vehicle->getShape(collision));
-
     sf::CircleShape circle = sf::CircleShape(RADIUS);
     circle.setFillColor(sf::Color::Red);
 
@@ -92,7 +90,6 @@ void SimulationManager::render()
         const sf::Vector2f intersectionPoint = sf::Vector2f(this->data[i].x, this->data[i].y);
         const sf::Vector2f circlePoint = intersectionPoint - sf::Vector2f(RADIUS, RADIUS); // adapt circle, so that the center is at the intersection Point
 
-        std::cout << data[i].angle << "; " << data[i].x << "; " << data[i].y << std::endl;
         circle.setPosition(circlePoint);
         window->draw(circle);
 
@@ -104,6 +101,8 @@ void SimulationManager::render()
 
         window->draw(line, 2, sf::Lines);
     }
+
+    window->draw(this->vehicle->getShape(collision));
 
     window->display();
 }
