@@ -1,12 +1,19 @@
 #include "vehicle.h"
 
+#include <cmath>
+
 Vehicle::Vehicle(float startX, float startY)
 {
     this->position.x = startX;
     this->position.y = startY;
 
-    this->vehicleShape.setSize(sf::Vector2f(50, 50));
-    this->vehicleShape.setPosition(this->position);
+    this->vehicleTexture = sf::Texture();
+    this->vehicleTexture.loadFromFile("../res/vehicle.png");
+
+    this->vehicleSprite = sf::Sprite(this->vehicleTexture);
+    this->vehicleSprite.setPosition(this->position);
+    const sf::FloatRect pos = this->vehicleSprite.getGlobalBounds();
+    this->vehicleSprite.setOrigin(pos.width / 2, pos.height / 2);
 }
 
 Vehicle::~Vehicle()
@@ -15,32 +22,50 @@ Vehicle::~Vehicle()
 
 sf::FloatRect Vehicle::getPosition()
 {
-    return this->vehicleShape.getGlobalBounds();
+    return this->vehicleSprite.getGlobalBounds();
 }
 
-sf::RectangleShape Vehicle::getShape(bool collision)
+sf::Sprite Vehicle::getSprite(bool collision)
 {
-    this->vehicleShape.setFillColor(collision ? sf::Color::Red : sf::Color::Blue);
-    return this->vehicleShape;
+    return this->vehicleSprite;
 }
-void Vehicle::moveLeft()
+
+void Vehicle::moveForward()
 {
-    this->position.x -= SPEED;
+    const float radiant = this->rotation * M_PI / 180.f;
+    sf::Vector2f movement = sf::Vector2f(std::cos(radiant), std::sin(radiant)) * SPEED;
+    this->position += movement;
 }
-void Vehicle::moveRight()
+
+void Vehicle::moveBack()
 {
-    this->position.x += SPEED;
+    const float radiant = this->rotation * M_PI / 180.f;
+    sf::Vector2f movement = sf::Vector2f(std::cos(radiant), std::sin(radiant)) * SPEED;
+    this->position -= movement;
 }
-void Vehicle::moveUp()
+
+void Vehicle::turnLeft()
 {
-    this->position.y -= SPEED;
+    this->rotation -= SPEED;
+
+    if (this->rotation < -360.f) // Reset Rotion to prevent overflow
+    {
+        this->rotation += 360.f;
+    }
 }
-void Vehicle::moveDown()
+
+void Vehicle::turnRight()
 {
-    this->position.y += SPEED;
+    this->rotation += SPEED;
+
+    if (this->rotation > 360.f) // Reset Rotion to prevent overflow
+    {
+        this->rotation -= 360.f;
+    }
 }
 
 void Vehicle::update()
 {
-    this->vehicleShape.setPosition(position);
+    this->vehicleSprite.setPosition(this->position);
+    this->vehicleSprite.setRotation(this->rotation);
 }

@@ -12,19 +12,21 @@ public:
     ~Vehicle();
 
     sf::FloatRect getPosition();
-    sf::RectangleShape getShape(bool collision = false);
+    sf::Sprite getSprite(bool collision = false);
 
-    void moveLeft();
-    void moveRight();
-    void moveUp();
-    void moveDown();
+    void moveForward();
+    void moveBack();
+    void turnLeft();
+    void turnRight();
 
     void update();
 
 private:
     sf::Vector2f position;
+    float rotation = 0.f;
 
-    sf::RectangleShape vehicleShape;
+    sf::Sprite vehicleSprite;
+    sf::Texture vehicleTexture;
 };
 
 #endif // __VEHICLE_H__

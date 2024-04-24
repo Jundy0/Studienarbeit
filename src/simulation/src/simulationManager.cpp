@@ -110,13 +110,7 @@ void SimulationManager::render()
         window->draw(line, 2, sf::Lines);
     }
 
-    window->draw(this->vehicle->getShape(collision));
-
-    // Circle for orientation
-    sf::CircleShape orientation = sf::CircleShape(RADIUS);
-    orientation.setFillColor(sf::Color::Red);
-    orientation.setPosition(sf::Vector2f(vehicleRect.left + vehicleRect.width - RADIUS, vehicleRect.top + vehicleRect.height / 2 - RADIUS));
-    window->draw(orientation);
+    window->draw(this->vehicle->getSprite(collision));
 
     window->display();
 }
@@ -133,17 +127,17 @@ void SimulationManager::pollEvent()
         case sf::Event::KeyPressed:
             switch (this->ev.key.code)
             {
-            case sf::Keyboard::Key::A:
-                this->vehicle->moveLeft();
-                break;
-            case sf::Keyboard::Key::D:
-                this->vehicle->moveRight();
-                break;
             case sf::Keyboard::Key::W:
-                this->vehicle->moveUp();
+                this->vehicle->moveForward();
                 break;
             case sf::Keyboard::Key::S:
-                this->vehicle->moveDown();
+                this->vehicle->moveBack();
+                break;
+            case sf::Keyboard::Key::A:
+                this->vehicle->turnLeft();
+                break;
+            case sf::Keyboard::Key::D:
+                this->vehicle->turnRight();
                 break;
             case sf::Keyboard::Key::P:
                 this->saveScanAsCsv();
@@ -168,7 +162,7 @@ void SimulationManager::saveScanAsCsv()
     counterString << std::setw(4) << std::setfill('0') << this->fileCount;
     std::string fileName = directoryName + "/scan" + counterString.str() + ".csv";
 
-    csvFile.open(fileName.c_str());
+    csvFile.open(fileName);
 
     for (int i = 0; i < COUNT; i++)
     {
