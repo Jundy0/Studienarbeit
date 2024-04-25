@@ -1,6 +1,6 @@
+#include <cmath>
+
 #include "../include/particle.h"
-
-
 
 Particle::Particle() {
     OccupancyGrid occupancyGrid;

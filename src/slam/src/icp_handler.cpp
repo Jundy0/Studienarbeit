@@ -20,12 +20,10 @@ TransformationComponents IcpHandler::extractTransformation(const Eigen::Matrix4d
     // Assuming the rotation is around the Z-axis
  double theta_rad = std::atan2(transformationMatrix(1, 0), transformationMatrix(0, 0)); // atan2(sin, cos)
     components.rotation_angle = theta_rad; // Store in radians
-    if (components.rotation_angle < 0)
-        components.rotation_angle+= 2 * M_PI; // Convert negative angles to positive
 
     // Convert the rotation angle to degrees for display purposes
     double rotation_angle_deg = components.rotation_angle * (180.0 / M_PI);
-    std::cout << "initial rotation angle " << rotation_angle_deg << " degrees" << std::endl;
+    std::cout << "Rotation angle: " << rotation_angle_deg << " degrees" << std::endl;
     return components;
 }
 
@@ -43,18 +41,22 @@ Eigen::MatrixXd IcpHandler::polar_to_cartesian_from_matrix(Eigen::MatrixX2d poin
 
 TransformationComponents IcpHandler::execute_icp(Eigen::MatrixXd initial_matrix, Eigen::MatrixXd transformed_matrix)
 {
-    ICP_OUT result = icp(initial_matrix, transformed_matrix, 20, 1);
+    ICP_OUT result = icp(initial_matrix, transformed_matrix, 20, 0.5);
 
-    std::cout << "Transformation Matrix" << std::endl;
-    std::cout << result.trans << std::endl;
+    // std::cout << "Transformation Matrix" << std::endl;
+    // std::cout << result.trans << std::endl;
 
-    std::cout << "Iter:" << std::endl;
-    std::cout << result.iter << std::endl;
+    // std::cout << "Iter:" << std::endl;
+    // std::cout << result.iter << std::endl;
 
-    std::cout << "extracted:" << std::endl;
+    std::cout << "Extracted:" << std::endl;
     TransformationComponents trans_comps = extractTransformation(result.trans);
-    std::cout << trans_comps.translation_vector << std::endl;
-    std::cout << trans_comps.rotation_angle << std::endl;
+
+    std::cout << "X: " << trans_comps.translation_vector[0] << " "
+              << "Y: " << trans_comps.translation_vector[1] 
+              << std::endl;
+
+    std::cout << "Angle in rad: " << trans_comps.rotation_angle << std::endl;
     return trans_comps;
 }
 

@@ -54,3 +54,5 @@ Latex/*.toc
 
 # SLAM
 src/slam/.vscode/
+/src/slam/data/
+/src/slam/data_rot_with_mv/
