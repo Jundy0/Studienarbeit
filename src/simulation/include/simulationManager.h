@@ -16,6 +16,12 @@
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
 
+enum Mode
+{
+    placeObstacle = 1,
+    placeDestination = 2,
+};
+
 class SimulationManager
 {
 public:
@@ -28,8 +34,14 @@ private:
     sf::RenderWindow *window;
     sf::Event ev;
 
+    Mode mode = Mode::placeObstacle;
+
     Vehicle *vehicle;
     std::vector<Obstacle> obstacles;
+    bool placingObstacle = false;
+    sf::Vector2f newObstacleP1;
+    sf::Vector2f newObstacleP2;
+
     sf::Vector2f destination;
 
     ILidarSensor *lidarSensor;

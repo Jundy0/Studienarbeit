@@ -12,8 +12,7 @@ Obstacle::Obstacle(float startX, float startY, float length, float height)
         this->obstacleTexture.setRepeated(true);
     }
 
-    this->obstacleSprite = sf::Sprite(this->obstacleTexture, sf::IntRect());
-    this->obstacleSprite.setTextureRect(sf::IntRect(0, 0, length, height));
+    this->obstacleSprite = sf::Sprite(this->obstacleTexture, sf::IntRect(0, 0, length, height));
     this->obstacleSprite.setPosition(this->position);
 
     this->obstacleCount++;

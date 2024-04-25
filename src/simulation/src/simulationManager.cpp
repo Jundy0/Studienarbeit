@@ -147,14 +147,45 @@ void SimulationManager::pollEvent()
             case sf::Keyboard::Key::P:
                 this->saveScanAsCsv();
                 break;
+            case sf::Keyboard::Key::Space:
+                this->mode = this->mode == Mode::placeObstacle ? Mode::placeDestination : Mode::placeObstacle;
             }
             break;
         case sf::Event::KeyReleased:
             break;
         case sf::Event::MouseButtonPressed:
-            this->destination = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
+            switch (this->mode)
+            {
+            case Mode::placeObstacle:
+                this->placingObstacle = true;
+                this->newObstacleP1 = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
+                break;
+            case Mode::placeDestination:
+                this->destination = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
+                break;
+            }
             break;
         case sf::Event::MouseButtonReleased:
+            switch (this->mode)
+            {
+            case Mode::placeObstacle:
+                if (this->placingObstacle)
+                {
+                    this->newObstacleP2 = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
+
+                    const float startX = this->newObstacleP1.x <= this->newObstacleP2.x ? this->newObstacleP1.x : this->newObstacleP2.x;
+                    const float startY = this->newObstacleP1.y <= this->newObstacleP2.y ? this->newObstacleP1.y : this->newObstacleP2.y;
+                    const float length = std::abs(this->newObstacleP2.x - this->newObstacleP1.x);
+                    const float height = std::abs(this->newObstacleP2.y - this->newObstacleP1.y);
+
+                    this->obstacles.push_back(Obstacle(startX, startY, length, height));
+
+                    this->placingObstacle = false;
+                    this->newObstacleP1 = sf::Vector2f();
+                    this->newObstacleP2 = sf::Vector2f();
+                }
+                break;
+            }
             break;
         }
     }
