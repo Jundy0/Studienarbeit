@@ -81,7 +81,7 @@ void SimulationManager::render()
 
     for (auto &obstacle : this->obstacles)
     {
-        window->draw(obstacle.getShape());
+        window->draw(obstacle.getSprite());
     }
 
     sf::CircleShape circle = sf::CircleShape(RADIUS);

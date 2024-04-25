@@ -10,12 +10,15 @@ public:
     ~Obstacle();
 
     sf::FloatRect getPosition();
-    sf::RectangleShape getShape();
+    sf::Sprite getSprite();
 
 private:
     sf::Vector2f position;
 
-    sf::RectangleShape obstacleShape;
+    sf::Sprite obstacleSprite;
+
+    static sf::Texture obstacleTexture;
+    static size_t obstacleCount;
 };
 
 #endif // __OBSTACLE_H__
