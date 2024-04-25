@@ -56,7 +56,10 @@
     "set": "cpp",
     "cstring": "cpp",
     "numbers": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "chrono": "cpp",
+    "codecvt": "cpp",
+    "ratio": "cpp"
   },
   "latex-workshop.latex.recipes": [
     {

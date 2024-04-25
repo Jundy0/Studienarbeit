@@ -12,6 +12,7 @@
 #include "vehicle.h"
 #include "obstacle.h"
 #include "lidarSensor.h"
+#include <vehicleActuator.h>
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
@@ -49,6 +50,7 @@ private:
     sf::Vector2f destination;
 
     ILidarSensor *lidarSensor;
+    IVehicleActuator *vehicleActuator;
     lidar_point_t *data;
     bool collision = false;
 

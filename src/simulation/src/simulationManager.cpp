@@ -1,5 +1,6 @@
 #include "simulationManager.h"
 #include "lidarSensorSim.h"
+#include "vehicleActuatorSim.h"
 
 #include <iostream>
 #include <fstream>
@@ -31,6 +32,7 @@ SimulationManager::SimulationManager()
     this->obstacles.push_back(obstacle4);
 
     this->lidarSensor = new LidarSensorSim(this->vehicle, this->obstacles);
+    this->vehicleActuator = new VehicleActuatorSim(this->vehicle);
 
     this->data = (lidar_point_t *)malloc(sizeof(lidar_point_t) * COUNT);
 }
@@ -71,7 +73,7 @@ void SimulationManager::update()
     this->collision = false;
     this->pollEvent();
 
-    this->vehicle->update();
+    this->vehicleActuator->update();
 
     // Check for collisions
     for (auto &obstacle : this->obstacles)
@@ -176,16 +178,16 @@ void SimulationManager::pollEvent()
             switch (this->ev.key.code)
             {
             case sf::Keyboard::Key::W:
-                this->vehicle->moveForward();
+                this->vehicleActuator->setForeward(1.0);
                 break;
             case sf::Keyboard::Key::S:
-                this->vehicle->moveBack();
+                this->vehicleActuator->setBackward(1.0);
                 break;
             case sf::Keyboard::Key::A:
-                this->vehicle->turnLeft();
+                this->vehicleActuator->setLeft(1.0);
                 break;
             case sf::Keyboard::Key::D:
-                this->vehicle->turnRight();
+                this->vehicleActuator->setRight(1.0);
                 break;
             case sf::Keyboard::Key::P:
                 this->saveScanAsCsv();
@@ -195,6 +197,21 @@ void SimulationManager::pollEvent()
             }
             break;
         case sf::Event::KeyReleased:
+            switch (this->ev.key.code)
+            {
+            case sf::Keyboard::Key::W:
+                this->vehicleActuator->setForeward(.0);
+                break;
+            case sf::Keyboard::Key::S:
+                this->vehicleActuator->setBackward(.0);
+                break;
+            case sf::Keyboard::Key::A:
+                this->vehicleActuator->setLeft(.0);
+                break;
+            case sf::Keyboard::Key::D:
+                this->vehicleActuator->setRight(.0);
+                break;
+            }
             break;
         case sf::Event::MouseButtonPressed:
             switch (this->mode)
