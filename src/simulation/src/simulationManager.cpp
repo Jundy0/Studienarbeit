@@ -111,9 +111,19 @@ void SimulationManager::render()
         window->draw(line, 2, sf::Lines);
     }
 
-    circle.setFillColor(sf::Color::Magenta);
-    circle.setPosition(this->destination - sf::Vector2f(RADIUS, RADIUS));
-    window->draw(circle);
+    if (this->destination != sf::Vector2f(0, 0)) // Default value for Destaination Point
+    {
+        circle.setFillColor(sf::Color::Magenta);
+        circle.setPosition(this->destination - sf::Vector2f(RADIUS, RADIUS));
+        window->draw(circle);
+    }
+
+    if (this->placingObstacle) // Helper point for Placing new Obstacle
+    {
+        circle.setFillColor(sf::Color::Green);
+        circle.setPosition(this->newObstacleP1 - sf::Vector2f(RADIUS, RADIUS));
+        window->draw(circle);
+    }
 
     window->draw(this->vehicle->getSprite(collision));
 
@@ -161,7 +171,20 @@ void SimulationManager::pollEvent()
                 this->newObstacleP1 = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
                 break;
             case Mode::placeDestination:
-                this->destination = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
+                sf::Vector2f newDestination = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
+                // Check if new Destination is in obstacle
+                bool contains = false;
+                for (auto &obstacle : this->obstacles)
+                {
+                    if (obstacle.getPosition().contains(newDestination))
+                    {
+                        contains = true;
+                    }
+                }
+                if (!contains)
+                {
+                    this->destination = newDestination;
+                }
                 break;
             }
             break;
@@ -180,7 +203,8 @@ void SimulationManager::pollEvent()
 
                     Obstacle newObstacle = Obstacle(startX, startY, length, height);
 
-                    if (!newObstacle.getPosition().intersects(this->vehicle->getPosition()))
+                    sf::FloatRect newObstacleRect = newObstacle.getPosition();
+                    if (!newObstacleRect.intersects(this->vehicle->getPosition()) && !newObstacleRect.contains(this->destination)) // New Obstacle collide with vehicle or destination Point
                     {
                         this->obstacles.push_back(newObstacle);
                     }
