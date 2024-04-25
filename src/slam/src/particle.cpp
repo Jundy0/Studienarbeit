@@ -12,16 +12,16 @@ Particle::Particle() {
 
 void Particle::update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan) {
     updateGridMap(firstScan);
-    occupancyGrid.visualize();
     updatePosition(firstScan, secondScan);
 }
 
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan) {
     TransformationComponents transComp = icpHandler.call_icp(firstScan, secondScan);
     position -= transComp.translation_vector; // Meter to Centimeter
-    rotationAngle += transComp.rotation_angle;
+    rotationAngle -= transComp.rotation_angle;
 }
 
 void Particle::updateGridMap(Eigen::MatrixX2d scan) {
     occupancyGrid.updateProbMap(scan, position, rotationAngle);
+    occupancyGrid.visualize();
 }
