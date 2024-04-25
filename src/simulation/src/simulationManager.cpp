@@ -178,7 +178,12 @@ void SimulationManager::pollEvent()
                     const float length = std::abs(this->newObstacleP2.x - this->newObstacleP1.x);
                     const float height = std::abs(this->newObstacleP2.y - this->newObstacleP1.y);
 
-                    this->obstacles.push_back(Obstacle(startX, startY, length, height));
+                    Obstacle newObstacle = Obstacle(startX, startY, length, height);
+
+                    if (!newObstacle.getPosition().intersects(this->vehicle->getPosition()))
+                    {
+                        this->obstacles.push_back(newObstacle);
+                    }
 
                     this->placingObstacle = false;
                     this->newObstacleP1 = sf::Vector2f();
