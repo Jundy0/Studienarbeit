@@ -3,13 +3,13 @@
 #include "icp_handler.h"
 #include "occupancy_grid.h"
 
-
 class Particle
 {
 
 public:
     Particle();
     void update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
+    void visualizeGridMap();
 
 private:
     OccupancyGrid occupancyGrid;
