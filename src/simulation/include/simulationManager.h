@@ -33,6 +33,9 @@ public:
 private:
     sf::RenderWindow *window;
     sf::RenderWindow *window2;
+    sf::Image window2Image;
+    sf::Texture window2Texture;
+    sf::Sprite window2Sprite;
     sf::Event ev;
 
     Mode mode = Mode::placeObstacle;

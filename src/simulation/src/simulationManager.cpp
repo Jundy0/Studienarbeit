@@ -14,6 +14,10 @@ SimulationManager::SimulationManager()
 {
     this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
     this->window2 = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation 2", sf::Style::Titlebar | sf::Style::Close);
+    this->window2Image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color::Transparent);
+    this->window2Texture.loadFromImage(this->window2Image);
+    this->window2Sprite.setTexture(this->window2Texture, true);
+
     this->vehicle = new Vehicle(400.f, 400.f);
 
     Obstacle obstacle1 = Obstacle(100.f, 100.f, 50.f, 50.f);
@@ -138,24 +142,23 @@ void SimulationManager::render()
 
     // windows 2
     window2->clear(sf::Color::Yellow);
-    circle.setFillColor(sf::Color::Red);
+
+    // for (size_t i = 0; i < WINDOW_WIDTH; i++)
+    // {
+    //     for (size_t j = 0; j < WINDOW_HEIGHT; j++)
+    //     {
+    //         window2Image.setPixel(i, j, sf::Color::Transparent);
+    //     }
+    // }
 
     for (size_t i = 0; i < COUNT; i++)
     {
-        const sf::Vector2f intersectionPoint = sf::Vector2f(this->data[i].x, this->data[i].y);
-        const sf::Vector2f circlePoint = intersectionPoint - sf::Vector2f(RADIUS, RADIUS); // adapt circle, so that the center is at the intersection Point
-
-        circle.setPosition(circlePoint);
-        window2->draw(circle);
-
-        sf::Vertex line[] =
-            {
-                sf::Vertex(vehiclePosition),
-                sf::Vertex(intersectionPoint),
-            };
-
-        window2->draw(line, 2, sf::Lines);
+        window2Image.setPixel(this->data[i].x, this->data[i].y, sf::Color::Red);
     }
+
+    window2Texture.loadFromImage(window2Image);
+
+    window2->draw(this->window2Sprite);
 
     window2->display();
 }
