@@ -12,7 +12,8 @@
 #include "vehicle.h"
 #include "obstacle.h"
 #include "lidarSensor.h"
-#include <vehicleActuator.h>
+#include "vehicleActuator.h"
+#include "selfdrivingVehicle.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 800
@@ -51,7 +52,7 @@ private:
 
     ILidarSensor *lidarSensor;
     IVehicleActuator *vehicleActuator;
-    lidar_point_t *data;
+    SelfdrivingVehicle *selfdrivingVehicle;
     bool collision = false;
 
     void update();

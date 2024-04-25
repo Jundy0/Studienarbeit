@@ -7,8 +7,17 @@
 class SelfdrivingVehicle
 {
 public:
-    SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuator *vehicleControl);
+    SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator);
     ~SelfdrivingVehicle();
+    const lidar_point_t *getLidarDataPtr();
+
+    void update();
+
+private:
+    ILidarSensor *lidarSensor;
+    IVehicleActuator *vehicleActuator;
+
+    lidar_point_t *lidarData;
 };
 
 #endif //__SELFDRIVING_VEHICLE_H__

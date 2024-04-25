@@ -33,8 +33,7 @@ SimulationManager::SimulationManager()
 
     this->lidarSensor = new LidarSensorSim(this->vehicle, this->obstacles);
     this->vehicleActuator = new VehicleActuatorSim(this->vehicle);
-
-    this->data = (lidar_point_t *)malloc(sizeof(lidar_point_t) * COUNT);
+    this->selfdrivingVehicle = new SelfdrivingVehicle(this->lidarSensor, this->vehicleActuator);
 }
 
 SimulationManager::~SimulationManager()
@@ -43,8 +42,6 @@ SimulationManager::~SimulationManager()
     delete this->window2;
     delete this->vehicle;
     delete this->lidarSensor;
-
-    free(this->data);
 }
 
 void SimulationManager::run()
@@ -73,7 +70,7 @@ void SimulationManager::update()
     this->collision = false;
     this->pollEvent();
 
-    this->vehicleActuator->update();
+    this->selfdrivingVehicle->update();
 
     // Check for collisions
     for (auto &obstacle : this->obstacles)
@@ -84,8 +81,6 @@ void SimulationManager::update()
             std::cout << "Error: Vehicle crashed into an obstacle!" << std::endl;
         }
     }
-
-    this->lidarSensor->getScanData(this->data, COUNT);
 }
 
 void SimulationManager::render()
@@ -107,9 +102,11 @@ void SimulationManager::render()
 
     const sf::Vector2f vehiclePosition = sf::Vector2f(posX, posY);
 
+    const lidar_point_t *lidarData = this->selfdrivingVehicle->getLidarDataPtr();
+
     for (size_t i = 0; i < COUNT; i++)
     {
-        const sf::Vector2f intersectionPoint = sf::Vector2f(this->data[i].x, this->data[i].y);
+        const sf::Vector2f intersectionPoint = sf::Vector2f(lidarData[i].x, lidarData[i].y);
         const sf::Vector2f circlePoint = intersectionPoint - sf::Vector2f(RADIUS, RADIUS); // adapt circle, so that the center is at the intersection Point
 
         circle.setPosition(circlePoint);
@@ -155,7 +152,7 @@ void SimulationManager::render()
 
     for (size_t i = 0; i < COUNT; i++)
     {
-        window2Image.setPixel(this->data[i].x, this->data[i].y, sf::Color::Red);
+        window2Image.setPixel(lidarData[i].x, lidarData[i].y, sf::Color::Red);
     }
 
     window2Texture.loadFromImage(window2Image);
@@ -297,9 +294,11 @@ void SimulationManager::saveScanAsCsv()
 
     csvFile.open(fileName);
 
+    const lidar_point_t *lidarData = this->selfdrivingVehicle->getLidarDataPtr();
+
     for (int i = 0; i < COUNT; i++)
     {
-        csvFile << this->data[i].angle << "," << this->data[i].radius << std::endl;
+        csvFile << lidarData[i].angle << "," << lidarData[i].radius << std::endl;
     }
 
     csvFile.close();
