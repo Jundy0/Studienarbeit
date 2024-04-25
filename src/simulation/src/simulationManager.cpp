@@ -13,6 +13,7 @@
 SimulationManager::SimulationManager()
 {
     this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
+    this->window2 = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation 2", sf::Style::Titlebar | sf::Style::Close);
     this->vehicle = new Vehicle(400.f, 400.f);
 
     Obstacle obstacle1 = Obstacle(100.f, 100.f, 50.f, 50.f);
@@ -33,6 +34,7 @@ SimulationManager::SimulationManager()
 SimulationManager::~SimulationManager()
 {
     delete this->window;
+    delete this->window2;
     delete this->vehicle;
     delete this->lidarSensor;
 
@@ -43,10 +45,20 @@ void SimulationManager::run()
 {
     this->window->setFramerateLimit(60);
 
-    while (this->window->isOpen())
+    while (this->window->isOpen() && this->window2->isOpen())
     {
         this->update();
         this->render();
+    }
+
+    if (this->window->isOpen())
+    {
+        this->window->close();
+    }
+
+    if (this->window2->isOpen())
+    {
+        this->window2->close();
     }
 }
 
@@ -68,11 +80,6 @@ void SimulationManager::update()
     }
 
     this->lidarSensor->getScanData(this->data, COUNT);
-
-    for (size_t i = 0; i < COUNT; i++)
-    {
-        // std::cout << data[i].angle << "; " << data[i].radius << std::endl;
-    }
 }
 
 void SimulationManager::render()
@@ -128,6 +135,29 @@ void SimulationManager::render()
     window->draw(this->vehicle->getSprite(collision));
 
     window->display();
+
+    // windows 2
+    window2->clear(sf::Color::Yellow);
+    circle.setFillColor(sf::Color::Red);
+
+    for (size_t i = 0; i < COUNT; i++)
+    {
+        const sf::Vector2f intersectionPoint = sf::Vector2f(this->data[i].x, this->data[i].y);
+        const sf::Vector2f circlePoint = intersectionPoint - sf::Vector2f(RADIUS, RADIUS); // adapt circle, so that the center is at the intersection Point
+
+        circle.setPosition(circlePoint);
+        window2->draw(circle);
+
+        sf::Vertex line[] =
+            {
+                sf::Vertex(vehiclePosition),
+                sf::Vertex(intersectionPoint),
+            };
+
+        window2->draw(line, 2, sf::Lines);
+    }
+
+    window2->display();
 }
 
 void SimulationManager::pollEvent()
@@ -215,6 +245,17 @@ void SimulationManager::pollEvent()
                 }
                 break;
             }
+            break;
+        }
+    }
+
+    // window 2
+    while (this->window2->pollEvent(this->ev))
+    {
+        switch (this->ev.type)
+        {
+        case sf::Event::Closed:
+            this->window2->close();
             break;
         }
     }
