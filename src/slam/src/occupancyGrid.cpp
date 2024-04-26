@@ -3,11 +3,9 @@
 #include <fstream>
 #include <string>
 
-#include "../lib/eigen/Eigen/Dense"
+#include "Eigen/Dense"
 
-#include "../include/occupancy_grid.h"
-
-using namespace std;
+#include "occupancyGrid.h"
 
 OccupancyGrid::OccupancyGrid()
 {
@@ -52,32 +50,31 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
 
 void OccupancyGrid::visualize()
 {
-    const string DEFAULT_COLOR = "\033[0m";
-    const string DARK_GREY_COLOR = "\033[48;5;234m";
-    const string LIGHT_GREY_COLOR = "\033[48;5;248m";
-    const string WHITE_COLOR = "\033[48;5;255m";
+    const std::string DEFAULT_COLOR = "\033[0m";
+    const std::string DARK_GREY_COLOR = "\033[48;5;234m";
+    const std::string LIGHT_GREY_COLOR = "\033[48;5;248m";
+    const std::string WHITE_COLOR = "\033[48;5;255m";
 
-    cout << LIGHT_GREY_COLOR;
+    std::cout << LIGHT_GREY_COLOR;
 
     for (int y = gridHeight - 1; y >= 0; y--)
     {
         for (int x = 0; x < gridWidth; x++)
         {
             if (probMap(y, x) >= probOcc)
-                cout << DARK_GREY_COLOR << " " << LIGHT_GREY_COLOR;
+                std::cout << DARK_GREY_COLOR << " " << LIGHT_GREY_COLOR;
             else if (probMap(y, x) <= probFree)
-                cout << WHITE_COLOR << " " << LIGHT_GREY_COLOR;
+                std::cout << WHITE_COLOR << " " << LIGHT_GREY_COLOR;
             else
-                cout << LIGHT_GREY_COLOR << " ";
+                std::cout << LIGHT_GREY_COLOR << " ";
         }
-        cout << DEFAULT_COLOR << endl;
+        std::cout << DEFAULT_COLOR << std::endl;
     }
-    cout << DEFAULT_COLOR << endl;
+    std::cout << DEFAULT_COLOR << std::endl;
 }
 
 std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle)
 {
-
     Eigen::Matrix<int, -1, 2, Eigen::RowMajor> occPoints;
     Eigen::Matrix<int, -1, 2, Eigen::RowMajor> freePoints;
 
@@ -168,4 +165,4 @@ Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint
     }
 
     return cartPoint;
-};
+}

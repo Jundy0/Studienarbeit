@@ -59,7 +59,17 @@
     "iomanip": "cpp",
     "chrono": "cpp",
     "codecvt": "cpp",
-    "ratio": "cpp"
+    "ratio": "cpp",
+    "dense": "cpp",
+    "complex": "cpp",
+    "condition_variable": "cpp",
+    "unordered_set": "cpp",
+    "hash_map": "cpp",
+    "future": "cpp",
+    "mutex": "cpp",
+    "semaphore": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp"
   },
   "latex-workshop.latex.recipes": [
     {

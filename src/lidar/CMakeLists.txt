@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(Studienarbeit)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(
@@ -34,8 +34,8 @@ set(CLASS_FILES
 "${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidarSensor.cpp"
 )
 
-include("${CMAKE_CURRENT_SOURCE_DIR}/../core/CMakeLists.txt")
+include("${CMAKE_CURRENT_SOURCE_DIR}/../core/coreInclude.cmake")
 
-add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES} ${CORE_CLASS_FILES})
+add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES} ${CORE_CLASS_FILES} ${SLAM_CLASS_FILES})
 
 target_link_libraries(main -pthread pigpio)

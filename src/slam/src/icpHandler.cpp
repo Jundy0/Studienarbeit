@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-#include "../include/icp_handler.h"
+#include "icpHandler.h"
 
 IcpHandler::IcpHandler()
 {
@@ -57,7 +57,8 @@ TransformationComponents IcpHandler::execute_icp(Eigen::MatrixXd initial_matrix,
 
     // Convert the rotation angle to degrees for display purposes
     double rotation_angle_deg = trans_comps.rotation_angle * (180.0 / M_PI);
-    std::cout << "Angle: " << rotation_angle_deg << "deg\n" << std::endl;
+    std::cout << "Angle: " << rotation_angle_deg << "deg\n"
+              << std::endl;
 
     return trans_comps;
 }
@@ -76,21 +77,22 @@ Eigen::MatrixX2d IcpHandler::get_matrix_from_points(Eigen::MatrixX2d points)
     return polar_to_cartesian_from_matrix(nPoints);
 }
 
-Eigen::MatrixX2d IcpHandler::get_n_closest_points(Eigen::MatrixX2d points, int n) 
+Eigen::MatrixX2d IcpHandler::get_n_closest_points(Eigen::MatrixX2d points, int n)
 {
     std::vector<Eigen::RowVector2d> pointVectors;
     Eigen::MatrixX2d sortedPoints(points.rows(), 2);
     Eigen::MatrixX2d nPoints(n, 2);
 
-    for (int i = 0; i < points.rows(); i++) 
+    for (int i = 0; i < points.rows(); i++)
     {
         pointVectors.push_back(points.row(i));
     }
 
-    std::sort(pointVectors.begin(), pointVectors.end(), 
-        [](Eigen::Vector2d const& t1, Eigen::Vector2d const& t2){ return t1(1) < t2(1); } );
+    std::sort(pointVectors.begin(), pointVectors.end(),
+              [](Eigen::Vector2d const &t1, Eigen::Vector2d const &t2)
+              { return t1(1) < t2(1); });
 
-    for (int i = 0; i < points.rows(); i++) 
+    for (int i = 0; i < points.rows(); i++)
     {
         sortedPoints.row(i) = pointVectors[i];
     }

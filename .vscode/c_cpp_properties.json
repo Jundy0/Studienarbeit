@@ -11,7 +11,10 @@
         "${workspaceFolder}/src/lidar/lib/rplidar_sdk/sdk/include",
         "${workspaceFolder}/src/lidar/lib/rplidar_sdk/sdk/src",
         "${workspaceFolder}/src/simulation/include",
-        "${workspaceFolder}/src/simulation/src"
+        "${workspaceFolder}/src/simulation/src",
+        "${workspaceFolder}/src/slam/include",
+        "${workspaceFolder}/src/slam/lib",
+        "${workspaceFolder}/src/slam/lib/eigen",
       ],
       "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
       "windowsSdkVersion": "10.0.19041.0",

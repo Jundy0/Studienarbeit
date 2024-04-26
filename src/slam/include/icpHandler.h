@@ -5,14 +5,14 @@
 #include <vector>
 #include <cmath>
 
-#include "../lib/icp/icp.h"
-#include "../lib/eigen/Eigen/Dense"
+#include "icp/icp.h"
+#include "Eigen/Dense"
 
-struct TransformationComponents
+typedef struct
 {
     Eigen::RowVector2i translation_vector;
     double rotation_angle; // Rotation angle in degrees
-};
+} TransformationComponents;
 
 class IcpHandler
 {
@@ -21,7 +21,7 @@ public:
     TransformationComponents call_icp(Eigen::MatrixX2d, Eigen::MatrixX2d);
 
 private:
-    TransformationComponents execute_icp(Eigen::MatrixXd , Eigen::MatrixXd );
+    TransformationComponents execute_icp(Eigen::MatrixXd, Eigen::MatrixXd);
     Eigen::MatrixX2d get_matrix_from_points(Eigen::MatrixX2d);
     Eigen::MatrixX2d polar_to_cartesian_from_matrix(Eigen::MatrixX2d);
     TransformationComponents extractTransformation(const Eigen::Matrix3d &);

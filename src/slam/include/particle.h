@@ -1,14 +1,13 @@
 #ifndef __PARTICLE_H__
 #define __PARTICLE_H__
 
-#include "../lib/eigen/Eigen/Dense"
+#include "Eigen/Dense"
 
-#include "icp_handler.h"
-#include "occupancy_grid.h"
+#include "icpHandler.h"
+#include "occupancyGrid.h"
 
 class Particle
 {
-
 public:
     Particle();
     void update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
