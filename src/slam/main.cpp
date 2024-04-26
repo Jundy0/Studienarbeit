@@ -22,6 +22,7 @@ int main()
     particle.update(scan02, scan03);
     particle.update(scan03, scan04);
     particle.update(scan04, scan05);
+    particle.visualizeGridMap();
 
     return 0;
 };
