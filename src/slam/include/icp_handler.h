@@ -1,3 +1,5 @@
+#ifndef __ICP_HANDLER_H__
+#define __ICP_HANDLER_H__
 
 #include <iostream>
 #include <vector>
@@ -25,3 +27,5 @@ private:
     TransformationComponents extractTransformation(const Eigen::Matrix3d &);
     Eigen::MatrixX2d get_n_closest_points(Eigen::MatrixX2d, int);
 };
+
+#endif // __ICP_HANDLER_H__

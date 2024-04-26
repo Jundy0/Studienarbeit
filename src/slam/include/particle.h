@@ -1,3 +1,6 @@
+#ifndef __PARTICLE_H__
+#define __PARTICLE_H__
+
 #include "../lib/eigen/Eigen/Dense"
 
 #include "icp_handler.h"
@@ -21,3 +24,5 @@ private:
     void updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
     void updateGridMap(Eigen::MatrixX2d scan);
 };
+
+#endif // __PARTICLE_H__

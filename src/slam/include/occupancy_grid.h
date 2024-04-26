@@ -1,3 +1,6 @@
+#ifndef __OCCUPANCY_GRID_H__
+#define __OCCUPANCY_GRID_H__
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
@@ -29,3 +32,5 @@ private:
     Eigen::MatrixX2i bresenham(int robPosX, int robPosY, int x, int y);
     Eigen::RowVector2i polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2i robPos, double robRotAngle);
 };
+
+#endif // __OCCUPANCY_GRID_H__
