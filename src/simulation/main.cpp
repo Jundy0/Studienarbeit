@@ -7,17 +7,6 @@
 
 int main()
 {
-    // LidarSensorSim lidarSensorSim = LidarSensorSim();
-
-    // lidarSensorSim.setPWM(3);
-    // lidarSensorSim.startScan();
-    // lidarSensorSim.stopScan();
-    // lidarSensorSim.getScanData((lidar_point_t *)0, 1000);
-
-    // VehicleActuatorSim vehicleActuatorSim = VehicleActuatorSim();
-
-    // SelfdrivingVehicle selfdrivingVehicle = SelfdrivingVehicle(&lidarSensorSim, &vehicleActuatorSim);
-
     SimulationManager simulationManager;
     simulationManager.run();
 }

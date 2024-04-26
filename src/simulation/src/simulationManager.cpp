@@ -9,7 +9,6 @@
 #include <filesystem>
 #include <cmath>
 
-#define COUNT 720
 #define RADIUS 5
 
 SimulationManager::SimulationManager()
@@ -108,7 +107,7 @@ void SimulationManager::render()
 
     const lidar_point_t *lidarData = this->selfdrivingVehicle->getLidarDataPtr();
 
-    for (size_t i = 0; i < COUNT; i++)
+    for (size_t i = 0; i < SCAN_COUNT; i++)
     {
         const sf::Vector2f intersectionPoint = sf::Vector2f(lidarData[i].x, lidarData[i].y);
         const sf::Vector2f circlePoint = intersectionPoint - sf::Vector2f(RADIUS, RADIUS); // adapt circle, so that the center is at the intersection Point
@@ -164,7 +163,7 @@ void SimulationManager::render()
     //     }
     // }
 
-    for (size_t i = 0; i < COUNT; i++)
+    for (size_t i = 0; i < SCAN_COUNT; i++)
     {
         window2Image.setPixel(lidarData[i].x, lidarData[i].y, sf::Color::Red);
     }
@@ -312,7 +311,7 @@ void SimulationManager::saveScanAsCsv()
 
     const lidar_point_t *lidarData = this->selfdrivingVehicle->getLidarDataPtr();
 
-    for (int i = 0; i < COUNT; i++)
+    for (int i = 0; i < SCAN_COUNT; i++)
     {
         csvFile << lidarData[i].angle << "," << lidarData[i].radius << std::endl;
     }
