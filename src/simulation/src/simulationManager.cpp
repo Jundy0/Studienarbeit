@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <sstream>
 #include <filesystem>
+#include <cmath>
 
 #define COUNT 720
 #define RADIUS 5
@@ -15,9 +16,12 @@ SimulationManager::SimulationManager()
 {
     this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
     this->window2 = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation 2", sf::Style::Titlebar | sf::Style::Close);
+    this->window->setFramerateLimit(60);
+    this->window2->setFramerateLimit(60);
     this->window2Image.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color::Transparent);
     this->window2Texture.loadFromImage(this->window2Image);
     this->window2Sprite.setTexture(this->window2Texture, true);
+    this->font.loadFromFile("../res/Arial.ttf");
 
     this->vehicle = new Vehicle(400.f, 400.f);
 
@@ -46,14 +50,14 @@ SimulationManager::~SimulationManager()
 
 void SimulationManager::run()
 {
-    this->window->setFramerateLimit(60);
-
+    // Main Loop
     while (this->window->isOpen() && this->window2->isOpen())
     {
         this->update();
         this->render();
     }
 
+    // Close both windows if only one was closed
     if (this->window->isOpen())
     {
         this->window->close();
@@ -137,6 +141,16 @@ void SimulationManager::render()
 
     window->draw(this->vehicle->getSprite(collision));
 
+    this->lastFrame = this->clock.restart().asSeconds();
+
+    const float fps = 1.f / this->lastFrame;
+    sf::Text fpsDisplay;
+    fpsDisplay.setString(std::to_string((int)std::round(fps)));
+    fpsDisplay.setFont(this->font);
+    fpsDisplay.setCharacterSize(30);
+    fpsDisplay.setFillColor(sf::Color::Red);
+    window->draw(fpsDisplay);
+
     window->display();
 
     // windows 2
@@ -158,6 +172,8 @@ void SimulationManager::render()
     window2Texture.loadFromImage(window2Image);
 
     window2->draw(this->window2Sprite);
+
+    window2->draw(fpsDisplay);
 
     window2->display();
 }

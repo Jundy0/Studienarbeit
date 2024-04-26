@@ -39,6 +39,9 @@ private:
     sf::Texture window2Texture;
     sf::Sprite window2Sprite;
     sf::Event ev;
+    sf::Clock clock;
+    sf::Font font;
+    float lastFrame;
 
     Mode mode = Mode::placeObstacle;
 

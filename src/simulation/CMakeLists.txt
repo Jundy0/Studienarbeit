@@ -18,7 +18,7 @@ set(CLASS_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/intersection.cpp"
 )
 
-find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
 
 include_directories(${SFML_INCLUDE_DIR})
 
