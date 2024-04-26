@@ -38,7 +38,7 @@ Eigen::MatrixX2d IcpHandler::polar_to_cartesian_from_matrix(Eigen::MatrixX2d poi
 
 TransformationComponents IcpHandler::execute_icp(Eigen::MatrixXd initial_matrix, Eigen::MatrixXd transformed_matrix)
 {
-    ICP_OUT result = icp(initial_matrix, transformed_matrix, 15, 0.1);
+    ICP_OUT result = icp(initial_matrix, transformed_matrix, 50, 0.001);
 
     // std::cout << "Transformation Matrix" << std::endl;
     // std::cout << result.trans << std::endl;
@@ -72,5 +72,30 @@ TransformationComponents IcpHandler::call_icp(Eigen::MatrixX2d scan_one, Eigen::
 
 Eigen::MatrixX2d IcpHandler::get_matrix_from_points(Eigen::MatrixX2d points)
 {
-    return polar_to_cartesian_from_matrix(points);
+    Eigen::MatrixX2d nPoints = get_n_closest_points(points, 100);
+    return polar_to_cartesian_from_matrix(nPoints);
+}
+
+Eigen::MatrixX2d IcpHandler::get_n_closest_points(Eigen::MatrixX2d points, int n) 
+{
+    std::vector<Eigen::RowVector2d> pointVectors;
+    Eigen::MatrixX2d sortedPoints(points.rows(), 2);
+    Eigen::MatrixX2d nPoints(n, 2);
+
+    for (int i = 0; i < points.rows(); i++) 
+    {
+        pointVectors.push_back(points.row(i));
+    }
+
+    std::sort(pointVectors.begin(), pointVectors.end(), 
+        [](Eigen::Vector2d const& t1, Eigen::Vector2d const& t2){ return t1(1) < t2(1); } );
+
+    for (int i = 0; i < points.rows(); i++) 
+    {
+        sortedPoints.row(i) = pointVectors[i];
+    }
+
+    nPoints = sortedPoints.block(0, 0, n, 2);
+
+    return nPoints;
 }
