@@ -26,14 +26,14 @@ TransformationComponents IcpHandler::extractTransformation(const Eigen::Matrix4d
 
 Eigen::MatrixXd IcpHandler::polar_to_cartesian_from_matrix(Eigen::MatrixX2d points)
 {
-    Eigen::MatrixXd cartesian_coords(3, points.rows());
+    Eigen::MatrixXd cartesian_coords(points.rows(), 3);
     for (int i = 0; i < points.rows(); i++)
     {
         double x = points.row(i)[1] * cos(points.row(i)[0]);
         double y = points.row(i)[1] * sin(points.row(i)[0]);
-        cartesian_coords.col(i) << x, y, 0.0; // Setting x, y, z = 0
+        cartesian_coords.row(i) << x, y, 0.0; // Setting x, y, z = 0
     }
-    return cartesian_coords.transpose();
+    return cartesian_coords;
 }
 
 TransformationComponents IcpHandler::execute_icp(Eigen::MatrixXd initial_matrix, Eigen::MatrixXd transformed_matrix)
@@ -57,7 +57,7 @@ TransformationComponents IcpHandler::execute_icp(Eigen::MatrixXd initial_matrix,
 
     // Convert the rotation angle to degrees for display purposes
     double rotation_angle_deg = trans_comps.rotation_angle * (180.0 / M_PI);
-    std::cout << "Angle: " << rotation_angle_deg << "°\n" << std::endl;
+    std::cout << "Angle: " << rotation_angle_deg << "deg\n" << std::endl;
 
     return trans_comps;
 }
