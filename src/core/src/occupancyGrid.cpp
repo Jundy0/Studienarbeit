@@ -13,11 +13,11 @@ OccupancyGrid::OccupancyGrid()
     probOcc = 0.4;
     probFree = -0.2;
     // Grid dimensions
-    gridWidth = 150;
-    gridHeight = 150;
+    gridWidth = 160;
+    gridHeight = 160;
     // Map dimensions
-    mapWidth = 1500;
-    mapHeight = 1500;
+    mapWidth = 1600;
+    mapHeight = 1600;
     // Defining a matrix used to store probability values
     probMap = Eigen::MatrixXd::Zero(gridHeight, gridWidth);
 };
@@ -71,6 +71,11 @@ void OccupancyGrid::visualize()
         std::cout << DEFAULT_COLOR << std::endl;
     }
     std::cout << DEFAULT_COLOR << std::endl;
+}
+
+Eigen::MatrixXd OccupancyGrid::getProbMap()
+{
+    return probMap;
 }
 
 std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle)

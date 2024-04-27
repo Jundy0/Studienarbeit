@@ -15,6 +15,7 @@ public:
     OccupancyGrid();
     void updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle);
     void visualize();
+    Eigen::MatrixXd getProbMap();
 
 private:
     double probOcc;

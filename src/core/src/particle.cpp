@@ -26,6 +26,16 @@ void Particle::update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
               << std::endl;
 }
 
+void Particle::visualizeGridMap()
+{
+    occupancyGrid.visualize();
+}
+
+Eigen::MatrixXd Particle::getGridMap()
+{
+    return occupancyGrid.getProbMap();
+}
+
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
 {
     TransformationComponents transComp = icpHandler.call_icp(firstScan, secondScan);
@@ -38,7 +48,4 @@ void Particle::updateGridMap(Eigen::MatrixX2d scan)
     occupancyGrid.updateProbMap(scan, position, rotationAngle);
 }
 
-void Particle::visualizeGridMap()
-{
-    occupancyGrid.visualize();
-}
+
