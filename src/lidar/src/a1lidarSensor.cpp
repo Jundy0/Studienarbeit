@@ -1,14 +1,14 @@
 #include "a1lidarSensor.h"
 
-#include <pigpio.h>
+//#include <pigpio.h>
 #include <math.h>
 #include <unistd.h>
 
 A1LidarSensor::A1LidarSensor(std::string serialPort, int baudRate, int pwmPin)
 {
     this->pwmPin = pwmPin;
-    gpioInitialise();
-    gpioSetMode(this->pwmPin, PI_OUTPUT);
+    //gpioInitialise();
+    //gpioSetMode(this->pwmPin, PI_OUTPUT);
 
     drv = rp::standalone::rplidar::RPlidarDriver::CreateDriver(rp::standalone::rplidar::DRIVER_TYPE_SERIALPORT);
 
@@ -33,7 +33,7 @@ A1LidarSensor::~A1LidarSensor()
 
 void A1LidarSensor::setPWM(int dutyCycle)
 {
-    gpioHardwarePWM(this->pwmPin, 100, dutyCycle);
+    //gpioHardwarePWM(this->pwmPin, 100, dutyCycle);
 }
 
 void A1LidarSensor::startScan()
