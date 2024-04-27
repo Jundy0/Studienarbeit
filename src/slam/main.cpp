@@ -10,11 +10,11 @@ int main()
 {
     Particle particle;
 
-    Eigen::MatrixX2d scan01 = getDataFromFile("../data/scan0001.csv");
-    Eigen::MatrixX2d scan02 = getDataFromFile("../data/scan0002.csv");
-    Eigen::MatrixX2d scan03 = getDataFromFile("../data/scan0003.csv");
-    Eigen::MatrixX2d scan04 = getDataFromFile("../data/scan0004.csv");
-    Eigen::MatrixX2d scan05 = getDataFromFile("../data/scan0005.csv");
+    Eigen::MatrixX2d scan01 = getDataFromFile("../scans/scan0001.csv");
+    Eigen::MatrixX2d scan02 = getDataFromFile("../scans/scan0002.csv");
+    Eigen::MatrixX2d scan03 = getDataFromFile("../scans/scan0003.csv");
+    Eigen::MatrixX2d scan04 = getDataFromFile("../scans/scan0004.csv");
+    Eigen::MatrixX2d scan05 = getDataFromFile("../scans/scan0005.csv");
 
     particle.update(scan01, scan02);
     particle.update(scan02, scan03);
