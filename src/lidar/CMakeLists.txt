@@ -12,30 +12,36 @@ include_directories(
 )
 
 set(SDK_FILES
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/rplidar_driver.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_async_transceiver.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_crc.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_lidar_driver.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_lidarprotocol_codec.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_serial_channel.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_tcp_channel.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_udp_channel.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/arch/linux/net_serial.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/arch/linux/net_socket.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/arch/linux/timer.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/dataunpacker.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/unpacker/handler_capsules.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/unpacker/handler_hqnode.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/unpacker/handler_normalnode.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/hal/thread.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/rplidar_driver.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_async_transceiver.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_crc.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_lidar_driver.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_lidarprotocol_codec.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_serial_channel.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_tcp_channel.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/sl_udp_channel.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/arch/linux/net_serial.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/arch/linux/net_socket.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/arch/linux/timer.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/dataunpacker.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/unpacker/handler_capsules.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/unpacker/handler_hqnode.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/dataunpacker/unpacker/handler_normalnode.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/lib/rplidar_sdk/sdk/src/hal/thread.cpp"
 )
 
 set(CLASS_FILES
-"${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidarSensor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/a1lidarSensor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/simulationManager.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/vehicle.cpp"
 )
+
+find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
+
+include_directories(${SFML_INCLUDE_DIR})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/coreInclude.cmake")
 
-add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES} ${CORE_CLASS_FILES} ${SLAM_CLASS_FILES})
+add_executable(main main.cpp ${CLASS_FILES} ${SDK_FILES} ${CORE_CLASS_FILES})
 
-target_link_libraries(main -pthread pigpio)
+target_link_libraries(main -pthread pigpio sfml-graphics sfml-window sfml-system)

@@ -5,6 +5,8 @@
 #include "rplidar.h"
 #include "a1lidarSensor.h"
 #include "particle.h"
+#include "simulationManager.h"
+
 #include "Eigen/Dense"
 
 #define COUNT 720
@@ -16,6 +18,7 @@ Eigen::MatrixX2d pointsToMatrix(lidar_point_t *points);
 void intHandler(int dummy);
 
 static volatile int keepRunning = 1;
+
 
 void intHandler(int dummy) 
 {
@@ -37,6 +40,7 @@ Eigen::MatrixX2d pointsToMatrix(lidar_point_t *points)
 int main()
 {
     Particle particle;
+    SimulationManager simManager;
     ILidarSensor *lidarSensor = new A1LidarSensor(SERIALPORT, BAUDRATE, GPIO_PWM);
 
     lidar_point_t *points = (lidar_point_t *)malloc(sizeof(lidar_point_t) * COUNT);
@@ -53,6 +57,8 @@ int main()
     lidarSensor->getScanData(points, COUNT);
     currentScan = pointsToMatrix(points);
 
+    Eigen::MatrixXd currentGridMap;
+
     while (keepRunning)
     {
         lastScan = currentScan;
@@ -61,13 +67,8 @@ int main()
         
         particle.update(lastScan, currentScan);
         
-        numberOfScans++;
-
-        if (numberOfScans % 5 == 0)
-        {
-            numberOfScans = 0;
-            particle.visualizeGridMap();
-        }
+        currentGridMap = particle.getGridMap();
+        simManager.render(currentGridMap, particle.getPosition(), particle.getRotation());
     }
 
     lidarSensor->stopScan();
