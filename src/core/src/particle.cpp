@@ -29,7 +29,7 @@ void Particle::update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
 {
     TransformationComponents transComp = icpHandler.call_icp(firstScan, secondScan);
-    position -= transComp.translation_vector; // Meter to Centimeter
+    position -= transComp.translation_vector;
     rotationAngle -= transComp.rotation_angle;
 }
 
