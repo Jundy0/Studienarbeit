@@ -33,6 +33,33 @@
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}/src/simulation/build",
       "console": "externalTerminal"
+    },
+    {
+      "name": "Debug Lidar Linux",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/lidar/build/main",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}/src/lidar/build",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "env": {
+        "DISPLAY": "localhost10:0"
+      },
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          "description": "Set Disassembly Flavor to Intel",
+          "text": "-gdb-set disassembly-flavor intel",
+          "ignoreFailures": true
+        }
+      ]
     }
   ]
 }

@@ -19,8 +19,7 @@ void intHandler(int dummy);
 
 static volatile int keepRunning = 1;
 
-
-void intHandler(int dummy) 
+void intHandler(int dummy)
 {
     keepRunning = 0;
 }
@@ -44,14 +43,12 @@ int main()
     ILidarSensor *lidarSensor = new A1LidarSensor(SERIALPORT, BAUDRATE, GPIO_PWM);
 
     lidar_point_t *points = (lidar_point_t *)malloc(sizeof(lidar_point_t) * COUNT);
-    
+
     Eigen::MatrixX2d currentScan(COUNT, 2);
     Eigen::MatrixX2d lastScan(COUNT, 2);
 
     signal(SIGINT, intHandler);
 
-    int numberOfScans = 0;
-    
     lidarSensor->startScan();
 
     lidarSensor->getScanData(points, COUNT);
@@ -64,10 +61,11 @@ int main()
         lastScan = currentScan;
         lidarSensor->getScanData(points, COUNT);
         currentScan = pointsToMatrix(points);
-        
+
         particle.update(lastScan, currentScan);
-        
+
         currentGridMap = particle.getGridMap();
+
         simManager.render(currentGridMap, particle.getPosition(), particle.getRotation());
     }
 

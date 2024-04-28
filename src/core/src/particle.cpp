@@ -8,7 +8,7 @@ Particle::Particle()
     OccupancyGrid occupancyGrid;
     IcpHandler icpHandler;
 
-    position = {750, 750};
+    position = {500, 500};
     rotationAngle = 0;
 }
 
@@ -57,5 +57,3 @@ void Particle::updateGridMap(Eigen::MatrixX2d scan)
 {
     occupancyGrid.updateProbMap(scan, position, rotationAngle);
 }
-
-

@@ -13,12 +13,6 @@
 
 #include "vehicle.h"
 
-#define WINDOW_WIDTH 1600
-#define WINDOW_HEIGHT 1600
-
-#define GRID_WIDTH 160
-#define GRID_HEIGHT 160
-
 class SimulationManager
 {
 public:

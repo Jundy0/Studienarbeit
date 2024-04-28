@@ -82,10 +82,15 @@ Eigen::MatrixX2d IcpHandler::get_n_closest_points(Eigen::MatrixX2d points, int n
     std::vector<Eigen::RowVector2d> pointVectors;
     Eigen::MatrixX2d sortedPoints(points.rows(), 2);
     Eigen::MatrixX2d nPoints(n, 2);
+    
+    int count = 0;
 
     for (int i = 0; i < points.rows(); i++)
     {
-        pointVectors.push_back(points.row(i));
+        if (points.row(i)[1] != 0)
+        {
+            pointVectors.push_back(points.row(i));
+        }
     }
 
     std::sort(pointVectors.begin(), pointVectors.end(),

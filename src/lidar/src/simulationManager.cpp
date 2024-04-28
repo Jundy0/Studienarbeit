@@ -8,6 +8,12 @@
 #include <filesystem>
 #include <cmath>
 
+#define WINDOW_WIDTH 1000
+#define WINDOW_HEIGHT 1000
+
+#define GRID_WIDTH 1000
+#define GRID_HEIGHT 1000
+
 #define COUNT 720
 #define RADIUS 5
 
@@ -23,7 +29,7 @@ SimulationManager::SimulationManager()
     this->windowSprite.setTexture(this->windowTexture, true);
     this->font.loadFromFile("../res/Arial.ttf");
 
-    this->vehicle = new Vehicle(800.f, 800.f);
+    this->vehicle = new Vehicle((float)WINDOW_WIDTH / 2, (float)WINDOW_HEIGHT / 2);
 }
 
 SimulationManager::~SimulationManager()
@@ -47,14 +53,14 @@ void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, 
     {
         for (int y = 0; y < WINDOW_HEIGHT; y++)
         {
-            gridX = round(x / 10);
-            gridY = round(y / 10);
+            gridX = round(x / WINDOW_WIDTH / GRID_WIDTH);
+            gridY = round(y / WINDOW_HEIGHT / GRID_HEIGHT);
 
-            if (gridMap(y, x) >= PROB_OCC)
+            if (gridMap(gridY, gridX) >= PROB_OCC)
             {
                 color = sf::Color::Black;
             }
-            else if (gridMap(y, x) <= PROB_FREE)
+            else if (gridMap(gridY, gridX) <= PROB_FREE)
             {
                 color = sf::Color::Black;
             }
