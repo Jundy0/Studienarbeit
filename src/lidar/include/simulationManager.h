@@ -25,7 +25,7 @@ public:
     SimulationManager();
     ~SimulationManager();
 
-    void render(Eigen::MatrixXd gridMap, Eigen::Vector2d robPos, double robRotation);
+    void render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, double robRotation);
 
 private:
     sf::RenderWindow *window;

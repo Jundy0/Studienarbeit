@@ -13,7 +13,7 @@ public:
     void update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
     void visualizeGridMap();
     double getRotation();
-    Eigen::Vector2d getPosition();
+    Eigen::Vector2i getPosition();
     Eigen::MatrixXd getGridMap();
 
 private:

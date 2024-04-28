@@ -32,7 +32,7 @@ SimulationManager::~SimulationManager()
     delete this->vehicle;
 }
 
-void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2d robPos, double robRotation)
+void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, double robRotation)
 {
     window->clear(sf::Color::Cyan);
 
@@ -47,18 +47,18 @@ void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2d robPos, 
     {
         for (int y = 0; y < WINDOW_HEIGHT; y++)
         {
-            gridX = round(x/10);
-            gridY = round(y/10);
+            gridX = round(x / 10);
+            gridY = round(y / 10);
 
             if (gridMap(y, x) >= PROB_OCC)
             {
                 color = sf::Color::Black;
-            } 
+            }
             else if (gridMap(y, x) <= PROB_FREE)
             {
                 color = sf::Color::Black;
-            } 
-            else 
+            }
+            else
             {
                 color = sf::Color::Cyan;
             }

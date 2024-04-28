@@ -41,7 +41,7 @@ double Particle::getRotation()
     return rotationAngle;
 }
 
-Eigen::Vector2d Particle::getPosition()
+Eigen::Vector2i Particle::getPosition()
 {
     return position;
 }
