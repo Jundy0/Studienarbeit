@@ -1,27 +1,11 @@
 \section{Testen der Simulation und der realen implementierung}
 In diesem Abschnitt geht es darum, wie Tests strukturiert und implementiert werden. Dabei geht es sowohl um Tests für die Simulation als auch um Tests für die reale Implementierung. \\
 Bei einem selbstfahrenden Fahrzeug hanelt es sich um ein echtzeitkritischen System, bei dem Fehler zu schwerwiegenden Konsequenzen führen können. Daher ist es wichtig, dass die Software des Fahrzeugs ausgiebig getestet wird. \\
-Funtioniert die Hindernisserkennung nicht innerhalb eines bestimmten Zeitraums, kann das Fahrzeug nicht rechtzeitig bremsen und es kann zu einem Unfall komment, 
+Funtioniert die Hindernisserkennung nicht innerhalb eines bestimmten Zeitraums, kann das Fahrzeug nicht rechtzeitig bremsen oder ausweichen und es kann zu einem Unfall komment, 
 der Schäden am Fahrzeuge selbst, anderen Gegensänden oder auch an Personen verursachen kann. \\
 Das Fahrzeug das im Rahmen dieser Arbeit entwickelt wird, ist zwar nicht für den Einsatz im realen Straßenverkehr vorgesehen und für diesen auch nicht zugelassen,
 dennoch sollten die Systeme so sicher wie möglich entwickelt werden. \\
 Um die abstrakte Formulierung 'so sicher wie möglich' zu konkretisieren ist es unumgänglich Metriken für die Performance der Software zu definieren.
-\subsection{Metriken und Anforderungen für die Performance der Software}
-Metriken dienen dem Zweck die Ergebnisse eines Prozesses zu quantifizieren \cite[S. 204]{nirpal2011brief}. Durch die Quantifizierung der Ergebnisse können diese miteinander verglichen und ausgewertet werden. \\
-Durch die Quantifizierung der Ergebnisse ist es objektive Qualitätskriterien zu definieren, die messbar machen, ob die Software die Anforderungen erfüllt. \\
-Um Metriken definieren zu können sind zunächst die Anforderungen bezügich der Performance zu definieren. \\
-Zu diesen Anforderungen gehören unter anderem:\\
-\begin{itemize}
-    \item Die Software muss in der Lage sein, Hindernisse zu erkennen und darauf zu reagieren.
-    \item Die Software muss in der Lage sein, die Position des Fahrzeugs zu bestimmen.
-    \item Die Software muss in der Lage sein, die Fahrtrichtung des Fahrzeugs zu erkennen.
-    \item Die Software muss in der Lage sein, die Geschwindigkeit des Fahrzeugs zu bestimmen.
-    \item Die Software muss in der Lage sein, die Fahrtrichtung des Fahrzeugs zu bestimmen.
-\end{itemize}
-Für das Testen und Erstellen von Metriken sind zusätzlich zu den Anforderungen auch die Bedingungen zu definieren, unter denen die Software funktionieren soll.\\
-Denn nur so können Metriken definiert werden, die die Funktionalitäten der Software validieren können. Ohne die Einschränkungen wäre die Entwicklung von Metriken nicht möglich, da es eine große Anzahl an Randfällen gäbe, 
-die gepürft werden müssten. Für diese Menge fehlen Zeit und Ressourcen, die es ermöglichen würden, die Bedingungen für diese Randfälle nachzustellen. \\
-Aber auch mit den Einschränkungen gibt es eine große Anzahl an Randfällen, die es zu prüfen gilt. \\
 \subsection{Grudlagen für das Testen von Software}
 Das Testen von Software hat mehrere Ziele. Zum einen soll das Testen sicherstellen, dass die Software die Anforderungen erfüllt. 
 Zum anderen soll das Testen dabei helfen Fehlerfälle, insbesondere Randfälle, identifizieren und beheben zu können. \\
@@ -35,17 +19,34 @@ Nur durch diese Ähnlichkeit ist es möglich, die Erkenntnisse der Simulation au
 wäre. \\
 Im Optimalfall sind die Testfälle identisch. Das wird aber in der Praxis nicht möglich sein, da die Simulation immer eine gewisse Abstraktion der Realität darstellt. Durch die Abstraktion können Details verloren gehen, oder so abgewandelt werden, dass auch die Testfälle für diese Situationen angepasst werden müssen.
 
-\subsection{Entwicklung von Testfällen}
-In der Entwicklung von Testfällen ist es wichtig, dass die Testfälle so strukturiert sind, dass sie einfach zu entwickeln und zu warten sind.
-Zusätzlich sollte die Komlexität der Testfälle so gestaffelt sein, dass sie von Beginn an in der Entwicklung der Software eingesetzt werden können.
-Zunächst gilt es die grundegenden Testfälle zu entwickeln. Danach können einfache Randfälle in die Tests integriert werden. Von dieser Basis ausgehend, können Testfälle, sowie die entprechenden Randfälle, für komplexere Funktionalitäten entwickelt werden. \\ 
-Dadurch ist es möglich die Tests wähend der gesamten Entwicklung der Software einzusetzen. \\
-\subsection{Testdriven Development}
-Eine Möglichkeit, die Entwicklung von Testfällen in die Entwicklung der Software zu integrieren, ist das Testdriven Development. 
-Beim Testdriven Development werden die Testfälle vor der eigentlichen Implementierung der Software entwickelt. Danach wird der Code so lange entwickelt, bis die Testfälle erfolgreich durchlaufen werden. 
-Dadurch wird sichergestellt, dass die Software die Anforderungen erfüllt. \\
-Ist diese Zwischenziel erreicht, kann der Code, wenn es notwendig ist, verbessert werden. Bestehen auch die Änderungen die Tests, kann mit dem nächsten Feature begonnen werden \cite[S. 97]{ttd}. Die Verbesserungen können die Verständlichkeit und die Performance des Codes betreffen. \\
-Durch die zuerst entwickelten Testfälle werden die Anforderungen und Ziele der Software von Beginn an klar definiert und festgehalten. Dadurch können andere Entwickler, die an der Software arbeiten, die Anforderungen und Ziele der Software nachvollziehen und verstehen. 
-Es entsthet auch ein klarer 'Fahrplan' in der Entwicklung, da nichts entwickelt wird, wofür es keine Tests gibt. \\
-Die Möglichkeit kontrolliert Änderungen vorzunehmen, ist ein weiterer Vorteil des Testdriven Development. Denn die definieren Tests stellen sicher, dass am Ende der Umstrukturierung die Software immer noch die Anforderungen erfüllt. \\
-Da die Tests zuerst entwickelt werden, ist es notwendig von Beginn an die notwendigen Metriken zu definieren. 
+
+
+\subsection{Metriken und Anforderungen für die Performance der Software}
+Metriken dienen dem Zweck die Ergebnisse eines Prozesses zu quantifizieren \cite[S. 204]{nirpal2011brief}. Durch die Quantifizierung der Ergebnisse können diese miteinander verglichen und ausgewertet werden. \\
+Durch Metriken kann die Funktionalität der Software objektiv gemessen werden. \\
+Um Metriken definieren zu können sind zunächst die Anforderungen bezügich der Performance zu definieren. \\
+\subsubsection{Anforderungen an die Software}
+
+Folgende Anforderungen sind allgemeingültig:\\
+\begin{itemize}
+    \item Die Software muss in der Lage sein, Hindernisse zu erkennen und darauf zu reagieren.
+    \item Die Software muss in der Lage sein, die Position des Fahrzeugs zu bestimmen.
+    \item Die Software muss in der Lage sein, die Fahrtrichtung des Fahrzeugs zu erkennen.
+    \item Die Software muss in der Lage sein, die Geschwindigkeit des Fahrzeugs zu bestimmen.
+\end{itemize}
+
+Folgende Anforderungen sind speziell für die Simulation:\\
+\begin{itemize}
+    \item Simulations-Anforderungen
+\end{itemize}
+Folgende Anforderungen sind speziell für die reale Anwendung:\\
+\begin{itemize}
+    \item Realitätsspezifische-Anforderungen
+\end{itemize}
+
+\subsubsection{Metriken für die Anforderungen}
+Hier werden die Metriken definiert
+
+\subsection{Testkonzept}
+Basierend auf den Metriken und Anforderungen kann ein Testkonzept erstllt werden, das befolgt wird um die Ergebnisse zu validieren.
+
