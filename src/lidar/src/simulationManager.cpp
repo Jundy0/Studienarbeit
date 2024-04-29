@@ -8,11 +8,14 @@
 #include <filesystem>
 #include <cmath>
 
-#define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 1000
+#define WINDOW_WIDTH 500
+#define WINDOW_HEIGHT 500
 
-#define GRID_WIDTH 1000
-#define GRID_HEIGHT 1000
+#define MAP_WIDTH 5000
+#define MAP_HEIGHT 5000
+
+#define GRID_WIDTH 500
+#define GRID_HEIGHT 500
 
 #define COUNT 720
 #define RADIUS 5
@@ -53,8 +56,8 @@ void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, 
     {
         for (int y = 0; y < WINDOW_HEIGHT; y++)
         {
-            gridX = round(x / (WINDOW_WIDTH / GRID_WIDTH));
-            gridY = GRID_HEIGHT - 1 - round(y / (WINDOW_HEIGHT / GRID_HEIGHT));
+            gridX = round(x / (MAP_WIDTH / GRID_WIDTH));
+            gridY = GRID_HEIGHT - 1 - round(y / (MAP_HEIGHT / GRID_HEIGHT));
 
             if (gridMap(gridY, gridX) >= PROB_OCC)
             {

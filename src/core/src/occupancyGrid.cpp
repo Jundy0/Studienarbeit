@@ -13,11 +13,11 @@ OccupancyGrid::OccupancyGrid()
     probOcc = 0.4;
     probFree = -0.2;
     // Grid dimensions
-    gridWidth = 1000;
-    gridHeight = 1000;
+    gridWidth = 500;
+    gridHeight = 500;
     // Map dimensions
-    mapWidth = 1000;
-    mapHeight = 1000;
+    mapWidth = 5000;
+    mapHeight = 5000;
     // Defining a matrix used to store probability values
     probMap = Eigen::MatrixXd::Zero(gridHeight, gridWidth);
 };
