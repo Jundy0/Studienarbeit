@@ -36,6 +36,16 @@ Eigen::MatrixXd Particle::getGridMap()
     return occupancyGrid.getProbMap();
 }
 
+Eigen::RowVector2d Particle::getPosition()
+{
+    return position;
+}
+
+double Particle::getRotation()
+{
+    return rotationAngle;
+}
+
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
 {
     TransformationComponents transComp = icpHandler.call_icp(firstScan, secondScan);
@@ -47,5 +57,3 @@ void Particle::updateGridMap(Eigen::MatrixX2d scan)
 {
     occupancyGrid.updateProbMap(scan, position, rotationAngle);
 }
-
-

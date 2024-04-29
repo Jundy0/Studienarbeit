@@ -13,11 +13,11 @@ OccupancyGrid::OccupancyGrid()
     probOcc = 0.4;
     probFree = -0.2;
     // Grid dimensions
-    gridWidth = 160;
-    gridHeight = 160;
+    gridWidth = 500;
+    gridHeight = 500;
     // Map dimensions
-    mapWidth = 1600;
-    mapHeight = 1600;
+    mapWidth = 5000;
+    mapHeight = 5000;
     // Defining a matrix used to store probability values
     probMap = Eigen::MatrixXd::Zero(gridHeight, gridWidth);
 };
@@ -31,8 +31,8 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
 
     for (int i = 0; i < occPoints->rows(); i++)
     {
-        int x = occPoints->coeff(i, 0) / 10; // Millimeter to Centimeter for grid
-        int y = occPoints->coeff(i, 1) / 10;
+        int x = occPoints->coeff(i, 0) / (mapWidth / gridWidth); // Millimeter to Centimeter for grid
+        int y = occPoints->coeff(i, 1) / (mapWidth / gridWidth);
 
         if (probMap((gridHeight - 1) - y, x) < 1)
             probMap((gridHeight - 1) - y, x) += 0.4;
@@ -40,8 +40,8 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robP
 
     for (int i = 0; i < freePoints->rows(); i++)
     {
-        int x = freePoints->coeff(i, 0) / 10;
-        int y = freePoints->coeff(i, 1) / 10;
+        int x = freePoints->coeff(i, 0) / (mapWidth / gridWidth);
+        int y = freePoints->coeff(i, 1) / (mapWidth / gridWidth);
 
         if (probMap((gridHeight - 1) - y, x) > -1)
             probMap((gridHeight - 1) - y, x) -= 0.2;
@@ -105,8 +105,8 @@ std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(Eigen::Ma
 Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y)
 {
     Eigen::Matrix<int, -1, 2, Eigen::RowMajor> points;
-    int x1 = robPosX / 10, y1 = robPosY / 10;
-    int x2 = x / 10, y2 = y / 10;
+    int x1 = robPosX / (mapWidth / gridWidth), y1 = robPosY / (mapWidth / gridWidth);
+    int x2 = x / (mapWidth / gridWidth), y2 = y / (mapWidth / gridWidth);
 
     // Move endpoint towards robot to exclude lidar point
     if (x1 > x2)
@@ -145,7 +145,7 @@ Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y
         }
 
         points.conservativeResize(points.rows() + 1, Eigen::NoChange);
-        points.row(points.rows() - 1) = Eigen::RowVector2i{x1 * 10, y1 * 10};
+        points.row(points.rows() - 1) = Eigen::RowVector2i{x1 * (mapWidth / gridWidth), y1 * (mapWidth / gridWidth)};
     }
     return points;
 }

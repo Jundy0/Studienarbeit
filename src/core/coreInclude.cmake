@@ -13,5 +13,6 @@ set(CORE_CLASS_FILES
     "${CORE_SOURCE_DIR}/icpHandler.cpp"
 	"${CORE_SOURCE_DIR}/occupancyGrid.cpp"
 	"${CORE_SOURCE_DIR}/particle.cpp"
+    "${CORE_SOURCE_DIR}/slamHandler.cpp"
 	"${CORE_LIBRARY_DIR}/icp/icp.cpp"
 )

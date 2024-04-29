@@ -10,7 +10,7 @@
 
 typedef struct
 {
-    Eigen::RowVector2i translation_vector;
+    Eigen::RowVector2d translation_vector;
     double rotation_angle; // Rotation angle in degrees
 } TransformationComponents;
 

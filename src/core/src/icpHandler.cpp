@@ -13,8 +13,8 @@ TransformationComponents IcpHandler::extractTransformation(const Eigen::Matrix3d
     TransformationComponents components;
 
     // Extract translation vector with only x and y as double
-    components.translation_vector << static_cast<int>(transformationMatrix(0, 2)),
-        static_cast<int>(transformationMatrix(1, 2));
+    components.translation_vector << static_cast<double>(transformationMatrix(0, 2)),
+        static_cast<double>(transformationMatrix(1, 2));
 
     // Calculate rotation angle from the rotation matrix part of T
     // Assuming the rotation is around the Z-axis

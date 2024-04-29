@@ -13,12 +13,14 @@ public:
     void update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
     void visualizeGridMap();
     Eigen::MatrixXd getGridMap();
+    Eigen::RowVector2d getPosition();
+    double getRotation();
 
 private:
     OccupancyGrid occupancyGrid;
     IcpHandler icpHandler;
 
-    Eigen::RowVector2i position;
+    Eigen::RowVector2d position;
     double rotationAngle;
 
     void updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
