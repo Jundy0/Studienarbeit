@@ -73,7 +73,7 @@ TransformationComponents IcpHandler::call_icp(Eigen::MatrixX2d scan_one, Eigen::
 
 Eigen::MatrixX2d IcpHandler::get_matrix_from_points(Eigen::MatrixX2d points)
 {
-    Eigen::MatrixX2d nPoints = get_n_closest_points(points, 20);
+    Eigen::MatrixX2d nPoints = get_n_closest_points(points, 30);
     return polar_to_cartesian_from_matrix(nPoints);
 }
 

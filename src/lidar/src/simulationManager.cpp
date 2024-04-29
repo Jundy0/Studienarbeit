@@ -77,8 +77,10 @@ void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, 
         }
     }
 
-    this->vehicle->setPosition(sf::Vector2f{(float)robPos[0] / (MAP_WIDTH / WINDOW_WIDTH), (float)robPos[1] / (MAP_WIDTH / WINDOW_WIDTH)});
-    this->vehicle->setRotation(robRotation);
+    this->vehicle->setPosition(sf::Vector2f{
+        (float)robPos[0] / (MAP_WIDTH / WINDOW_WIDTH),
+        (float)robPos[1] / (MAP_WIDTH / WINDOW_WIDTH)});
+    this->vehicle->setRotation(robRotation * 180 / M_PI);
     this->vehicle->update();
 
     windowTexture.loadFromImage(windowImage);
