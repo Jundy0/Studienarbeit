@@ -3,6 +3,9 @@
 
 #include "lidarSensor.h"
 #include "vehicleActuator.h"
+#include "particle.h"
+
+#define SCAN_COUNT 360
 
 class SelfdrivingVehicle
 {
@@ -16,6 +19,10 @@ public:
 private:
     ILidarSensor *lidarSensor;
     IVehicleActuator *vehicleActuator;
+    Particle particle;
+    Eigen::MatrixX2d *currentScan;
+    Eigen::MatrixX2d *lastScan;
+    bool initial = true;
 
     lidar_point_t *lidarData;
 };
