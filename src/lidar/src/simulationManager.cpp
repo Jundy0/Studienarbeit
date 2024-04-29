@@ -32,7 +32,9 @@ SimulationManager::SimulationManager()
     this->windowSprite.setTexture(this->windowTexture, true);
     this->font.loadFromFile("../res/Arial.ttf");
 
-    this->vehicle = new Vehicle((float)WINDOW_WIDTH / 2, (float)WINDOW_HEIGHT / 2);
+    this->vehicle = new Vehicle(
+        (float)MAP_WIDTH / 2 / (MAP_WIDTH / WINDOW_WIDTH),
+        (float)MAP_HEIGHT / 2 / (MAP_WIDTH / WINDOW_WIDTH));
 }
 
 SimulationManager::~SimulationManager()
@@ -75,7 +77,7 @@ void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, 
         }
     }
 
-    this->vehicle->setPosition(sf::Vector2f{(float)robPos[0], (float)robPos[1]});
+    this->vehicle->setPosition(sf::Vector2f{(float)robPos[0] / (MAP_WIDTH / WINDOW_WIDTH), (float)robPos[1] / (MAP_WIDTH / WINDOW_WIDTH)});
     this->vehicle->setRotation(robRotation);
     this->vehicle->update();
 

@@ -8,7 +8,7 @@ Particle::Particle()
     OccupancyGrid occupancyGrid;
     IcpHandler icpHandler;
 
-    position = {500, 500};
+    position = {2500, 2500};
     rotationAngle = 0;
 }
 
