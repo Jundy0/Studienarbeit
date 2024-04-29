@@ -53,8 +53,8 @@ void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, 
     {
         for (int y = 0; y < WINDOW_HEIGHT; y++)
         {
-            gridX = round(x / WINDOW_WIDTH / GRID_WIDTH);
-            gridY = round(y / WINDOW_HEIGHT / GRID_HEIGHT);
+            gridX = round(x / (WINDOW_WIDTH / GRID_WIDTH));
+            gridY = GRID_HEIGHT - 1 - round(y / (WINDOW_HEIGHT / GRID_HEIGHT));
 
             if (gridMap(gridY, gridX) >= PROB_OCC)
             {
@@ -62,7 +62,7 @@ void SimulationManager::render(Eigen::MatrixXd gridMap, Eigen::Vector2i robPos, 
             }
             else if (gridMap(gridY, gridX) <= PROB_FREE)
             {
-                color = sf::Color::Black;
+                color = sf::Color::White;
             }
             else
             {
