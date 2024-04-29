@@ -41,11 +41,36 @@ void VisualizeWindow::render()
     //     }
     // }
 
-    const lidar_point_t *lidarData = this->selfdrivingVehicle->getLidarDataPtr();
+    const Eigen::MatrixXd *gridMap = this->selfdrivingVehicle->getGridMap();
+    const Eigen::RowVector2d position = this->selfdrivingVehicle->getPosition();
+    const double rot = this->selfdrivingVehicle->getRotation();
+    if (gridMap->cols() < 1)
+        return;
 
-    for (size_t i = 0; i < SCAN_COUNT; i++)
+    sf::Color color;
+    size_t gridX, gridY;
+
+    for (size_t x = 0; x < WINDOW_WIDTH; x++)
     {
-        this->visualizationImage.setPixel(lidarData[i].x, lidarData[i].y, sf::Color::Red);
+        for (size_t y = 0; y < WINDOW_HEIGHT; y++)
+        {
+            gridX = x;
+            gridY = WINDOW_HEIGHT - 1 - y;
+
+            if ((*gridMap)(gridY, gridX) >= PROB_OCC)
+            {
+                color = sf::Color::Black;
+            }
+            else if ((*gridMap)(gridY, gridX) <= PROB_FREE)
+            {
+                color = sf::Color::White;
+            }
+            else
+            {
+                color = sf::Color::Cyan;
+            }
+            visualizationImage.setPixel(x, y, color);
+        }
     }
 
     this->visualizationTexture.loadFromImage(this->visualizationImage);

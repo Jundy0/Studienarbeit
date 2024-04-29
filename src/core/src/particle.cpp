@@ -8,7 +8,7 @@ Particle::Particle()
     OccupancyGrid occupancyGrid;
     IcpHandler icpHandler;
 
-    position = {750, 750};
+    position = {MAP_WIDTH / 2, MAP_HEIGHT / 2};
     rotationAngle = 0;
 }
 
@@ -31,7 +31,7 @@ void Particle::visualizeGridMap()
     occupancyGrid.visualize();
 }
 
-Eigen::MatrixXd Particle::getGridMap()
+Eigen::MatrixXd *Particle::getGridMap()
 {
     return occupancyGrid.getProbMap();
 }

@@ -12,7 +12,7 @@ public:
     Particle();
     void update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
     void visualizeGridMap();
-    Eigen::MatrixXd getGridMap();
+    Eigen::MatrixXd *getGridMap();
     Eigen::RowVector2d getPosition();
     double getRotation();
 

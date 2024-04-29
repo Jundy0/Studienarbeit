@@ -9,42 +9,33 @@
 
 OccupancyGrid::OccupancyGrid()
 {
-    // Defining threshold
-    probOcc = 0.4;
-    probFree = -0.2;
-    // Grid dimensions
-    gridWidth = 500;
-    gridHeight = 500;
-    // Map dimensions
-    mapWidth = 5000;
-    mapHeight = 5000;
     // Defining a matrix used to store probability values
-    probMap = Eigen::MatrixXd::Zero(gridHeight, gridWidth);
+    probMap = Eigen::MatrixXd::Zero(GRID_HEIGHT, GRID_WIDTH);
 };
 
-void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle)
+void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2d robPos, double robRotAngle)
 {
-    std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> allPoints = getPoints(scan, robPos, robRotAngle);
+    std::pair<Eigen::MatrixX2d, Eigen::MatrixX2d> allPoints = getPoints(scan, robPos, robRotAngle);
 
-    Eigen::MatrixX2i *occPoints = &allPoints.first;
-    Eigen::MatrixX2i *freePoints = &allPoints.second;
+    Eigen::MatrixX2d *occPoints = &allPoints.first;
+    Eigen::MatrixX2d *freePoints = &allPoints.second;
 
     for (int i = 0; i < occPoints->rows(); i++)
     {
-        int x = occPoints->coeff(i, 0) / (mapWidth / gridWidth); // Millimeter to Centimeter for grid
-        int y = occPoints->coeff(i, 1) / (mapWidth / gridWidth);
+        int x = occPoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH); // Millimeter to Centimeter for grid
+        int y = occPoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
-        if (probMap((gridHeight - 1) - y, x) < 1)
-            probMap((gridHeight - 1) - y, x) += 0.4;
+        if (probMap((GRID_HEIGHT - 1) - y, x) < 1)
+            probMap((GRID_HEIGHT - 1) - y, x) += 0.4;
     }
 
     for (int i = 0; i < freePoints->rows(); i++)
     {
-        int x = freePoints->coeff(i, 0) / (mapWidth / gridWidth);
-        int y = freePoints->coeff(i, 1) / (mapWidth / gridWidth);
+        int x = freePoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
+        int y = freePoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
-        if (probMap((gridHeight - 1) - y, x) > -1)
-            probMap((gridHeight - 1) - y, x) -= 0.2;
+        if (probMap((GRID_HEIGHT - 1) - y, x) > -1)
+            probMap((GRID_HEIGHT - 1) - y, x) -= 0.2;
     }
 }
 
@@ -57,13 +48,13 @@ void OccupancyGrid::visualize()
 
     std::cout << LIGHT_GREY_COLOR;
 
-    for (int y = gridHeight - 1; y >= 0; y--)
+    for (int y = GRID_HEIGHT - 1; y >= 0; y--)
     {
-        for (int x = 0; x < gridWidth; x++)
+        for (int x = 0; x < GRID_WIDTH; x++)
         {
-            if (probMap(y, x) >= probOcc)
+            if (probMap(y, x) >= PROB_OCC)
                 std::cout << DARK_GREY_COLOR << " " << LIGHT_GREY_COLOR;
-            else if (probMap(y, x) <= probFree)
+            else if (probMap(y, x) <= PROB_FREE)
                 std::cout << WHITE_COLOR << " " << LIGHT_GREY_COLOR;
             else
                 std::cout << LIGHT_GREY_COLOR << " ";
@@ -73,26 +64,26 @@ void OccupancyGrid::visualize()
     std::cout << DEFAULT_COLOR << std::endl;
 }
 
-Eigen::MatrixXd OccupancyGrid::getProbMap()
+Eigen::MatrixXd *OccupancyGrid::getProbMap()
 {
-    return probMap;
+    return &probMap;
 }
 
-std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(Eigen::MatrixX2d scan, Eigen::RowVector2i robPos, double robRotAngle)
+std::pair<Eigen::MatrixX2d, Eigen::MatrixX2d> OccupancyGrid::getPoints(Eigen::MatrixX2d scan, Eigen::RowVector2d robPos, double robRotAngle)
 {
-    Eigen::Matrix<int, -1, 2, Eigen::RowMajor> occPoints;
-    Eigen::Matrix<int, -1, 2, Eigen::RowMajor> freePoints;
+    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> occPoints;
+    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> freePoints;
 
     Eigen::Matrix<double, -1, 2, Eigen::RowMajor> data = scan;
 
     for (int i = 0; i < data.rows(); i++)
     {
         Eigen::RowVector2d polarPoint = data.block<1, 2>(i, 0);
-        Eigen::RowVector2i cartPoint = polarToCartesian(polarPoint, robPos, robRotAngle);
+        Eigen::RowVector2d cartPoint = polarToCartesian(polarPoint, robPos, robRotAngle);
         occPoints.conservativeResize(occPoints.rows() + 1, Eigen::NoChange);
         occPoints.row(occPoints.rows() - 1) = cartPoint;
 
-        Eigen::MatrixX2i bresenhamPoints = bresenham(robPos[0], robPos[1], cartPoint[0], cartPoint[1]);
+        Eigen::MatrixX2d bresenhamPoints = bresenham(robPos[0], robPos[1], cartPoint[0], cartPoint[1]);
         for (int j = 0; j < bresenhamPoints.rows(); j++)
         {
             freePoints.conservativeResize(freePoints.rows() + 1, Eigen::NoChange);
@@ -102,11 +93,11 @@ std::pair<Eigen::MatrixX2i, Eigen::MatrixX2i> OccupancyGrid::getPoints(Eigen::Ma
     return std::make_pair(occPoints, freePoints);
 }
 
-Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y)
+Eigen::MatrixX2d OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y)
 {
-    Eigen::Matrix<int, -1, 2, Eigen::RowMajor> points;
-    int x1 = robPosX / (mapWidth / gridWidth), y1 = robPosY / (mapWidth / gridWidth);
-    int x2 = x / (mapWidth / gridWidth), y2 = y / (mapWidth / gridWidth);
+    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> points;
+    int x1 = robPosX / (MAP_WIDTH / GRID_WIDTH), y1 = robPosY / (MAP_WIDTH / GRID_WIDTH);
+    int x2 = x / (MAP_WIDTH / GRID_WIDTH), y2 = y / (MAP_WIDTH / GRID_WIDTH);
 
     // Move endpoint towards robot to exclude lidar point
     if (x1 > x2)
@@ -145,14 +136,14 @@ Eigen::MatrixX2i OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y
         }
 
         points.conservativeResize(points.rows() + 1, Eigen::NoChange);
-        points.row(points.rows() - 1) = Eigen::RowVector2i{x1 * (mapWidth / gridWidth), y1 * (mapWidth / gridWidth)};
+        points.row(points.rows() - 1) = Eigen::RowVector2d{x1 * (MAP_WIDTH / GRID_WIDTH), y1 * (MAP_WIDTH / GRID_WIDTH)};
     }
     return points;
 }
 
-Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2i robPos, double robRotAngle)
+Eigen::RowVector2d OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2d robPos, double robRotAngle)
 {
-    Eigen::RowVector2i cartPoint;
+    Eigen::RowVector2d cartPoint;
 
     double theta = polarPoint[0] + robRotAngle;
     double r = polarPoint[1];
@@ -160,7 +151,7 @@ Eigen::RowVector2i OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint
     cartPoint[0] = round(r * cos(theta)) + robPos[0]; // Convert to Cartesian, add RobPos and round to int
     cartPoint[1] = round(r * sin(theta)) + robPos[1];
 
-    if (cartPoint[0] >= mapWidth || cartPoint[1] >= mapHeight)
+    if (cartPoint[0] >= MAP_WIDTH || cartPoint[1] >= MAP_HEIGHT)
     {
         cartPoint = robPos;
     }

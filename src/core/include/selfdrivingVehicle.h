@@ -4,6 +4,7 @@
 #include "lidarSensor.h"
 #include "vehicleActuator.h"
 #include "particle.h"
+#include "slam.h"
 
 #define SCAN_COUNT 360
 
@@ -13,16 +14,16 @@ public:
     SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator);
     ~SelfdrivingVehicle();
     const lidar_point_t *getLidarDataPtr();
+    const Eigen::MatrixXd *getGridMap();
+    const Eigen::RowVector2d getPosition();
+    const double getRotation();
 
     void update();
 
 private:
     ILidarSensor *lidarSensor;
     IVehicleActuator *vehicleActuator;
-    Particle particle;
-    Eigen::MatrixX2d *currentScan;
-    Eigen::MatrixX2d *lastScan;
-    bool initial = true;
+    ISlam *slam;
 
     lidar_point_t *lidarData;
 };

@@ -34,14 +34,14 @@ void SlamHandler::update(lidar_point_t *data)
 
 const Eigen::MatrixXd *SlamHandler::getGridMap()
 {
-    return &this->particle.getGridMap();
+    return this->particle.getGridMap();
 }
 
 const Eigen::RowVector2d SlamHandler::getPosition()
 {
     return this->particle.getPosition();
 }
-    
+
 const double SlamHandler::getRotation()
 {
     return this->particle.getRotation();

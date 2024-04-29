@@ -1,19 +1,17 @@
 #include "selfdrivingVehicle.h"
+#include "slamHandler.h"
 
 SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator)
 {
     this->lidarSensor = lidarSensor;
     this->vehicleActuator = vehicleActuator;
+    this->slam = new SlamHandler(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
-
-    this->currentScan = new Eigen::MatrixX2d(SCAN_COUNT, 2);
-    this->lastScan = new Eigen::MatrixX2d(SCAN_COUNT, 2);
 }
 
 SelfdrivingVehicle::~SelfdrivingVehicle()
 {
-    delete this->currentScan;
-    delete this->lastScan;
+    delete this->slam;
     free(this->lidarData);
 }
 
@@ -22,30 +20,32 @@ const lidar_point_t *SelfdrivingVehicle::getLidarDataPtr()
     return this->lidarData;
 }
 
+const Eigen::MatrixXd *SelfdrivingVehicle::getGridMap()
+{
+    return this->slam->getGridMap();
+}
+
+const Eigen::RowVector2d SelfdrivingVehicle::getPosition()
+{
+    return this->slam->getPosition();
+}
+
+const double SelfdrivingVehicle::getRotation()
+{
+    return this->slam->getRotation();
+}
+
 void SelfdrivingVehicle::update()
 {
-    this->lidarSensor->getScanData(lidarData, SCAN_COUNT);
+    // get lidar Data
+    this->lidarSensor->getScanData(this->lidarData, SCAN_COUNT);
 
-    // icp oder so
-    for (size_t i = 0; i < SCAN_COUNT; i++)
-    {
-        this->currentScan->row(i) = Eigen::RowVector2d{this->lidarData[i].angle, this->lidarData[i].radius};
-    }
+    // execute SLAM
+    this->slam->update(this->lidarData);
 
-    if (this->initial)
-    {
-        this->initial = false;
-    }
-    else
-    {
-        this->particle.update(*this->lastScan, *this->currentScan);
-    }
+    // Evation Control and set values of actuator
+    // TODO
 
-    Eigen::MatrixX2d *ptr = this->lastScan;
-    this->lastScan = this->currentScan;
-    this->currentScan = ptr;
-
-    // ausweichen und actuator ansteuern
-
+    // Update Actuator
     this->vehicleActuator->update();
 }
