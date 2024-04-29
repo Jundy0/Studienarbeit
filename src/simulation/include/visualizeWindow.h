@@ -28,6 +28,8 @@ private:
     sf::Image visualizationImage;
     sf::Texture visualizationTexture;
     sf::Sprite visualizationSprite;
+    sf::Sprite vehicleSprite;
+    sf::Texture vehicleTexture;
     sf::Event ev;
     sf::Clock clock;
     sf::Font font;
