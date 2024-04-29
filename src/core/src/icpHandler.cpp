@@ -87,7 +87,8 @@ Eigen::MatrixX2d IcpHandler::get_n_closest_points(Eigen::MatrixX2d points, int n
 
     for (int i = 0; i < points.rows(); i++)
     {
-        if (points.row(i)[1] != 0)
+        // remove all points closer then 500mm 
+        if (points.row(i)[1] > 500)
         {
             pointVectors.push_back(points.row(i));
         }
