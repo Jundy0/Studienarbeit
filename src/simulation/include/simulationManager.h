@@ -1,12 +1,6 @@
 #ifndef __SIMULATION_MANAGER_H__
 #define __SIMULATION_MANAGER_H__
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-
 #include <vector>
 
 #include "vehicle.h"

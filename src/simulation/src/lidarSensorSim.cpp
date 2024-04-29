@@ -5,6 +5,7 @@
 #include <cstring>
 
 #include "intersection.h"
+#include "simulationSettings.h"
 
 LidarSensorSim::LidarSensorSim(Vehicle *vehicle, std::vector<Obstacle> &obstacles)
 {
@@ -44,7 +45,7 @@ void LidarSensorSim::getScanData(lidar_point_t *data, size_t count)
     const float posY = vehicleRect.top + vehicleRect.height / 2;
 
     const sf::Vector2f vehiclePosition = sf::Vector2f(posX, posY);
-    const sf::FloatRect windowRect = sf::FloatRect(0, 0, 800, 800);
+    const sf::FloatRect windowRect = sf::FloatRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     std::vector<sf::Vector2f> intersectionPoints = std::vector<sf::Vector2f>();
 
