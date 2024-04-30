@@ -11,6 +11,7 @@ class Particle
 public:
     Particle();
     void update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
+    void update(Eigen::MatrixX2d firstScan, Eigen::RowVector2d positionDiff, double rotationDiff);
     void visualizeGridMap();
     Eigen::MatrixXd *getGridMap();
     Eigen::RowVector2d getPosition();
@@ -24,6 +25,7 @@ private:
     double rotationAngle;
 
     void updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan);
+    void updatePositionWithOdometry(Eigen::RowVector2d positionDiff, double rotationDiff);
     void updateGridMap(Eigen::MatrixX2d scan);
 };
 
