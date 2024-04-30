@@ -16,6 +16,8 @@ public:
     void setRight(double value);
     void update();
 
+    const std::pair<Eigen::RowVector2d, double> getOdometry();
+
 private:
     Vehicle *vehicle;
 
@@ -23,6 +25,9 @@ private:
     double backward = .0;
     double left = .0;
     double right = .0;
+
+    sf::FloatRect lastPosition;
+    float lastRotation;
 };
 
 #endif // __VEHICLE_ACTUATOR_SIM_H__

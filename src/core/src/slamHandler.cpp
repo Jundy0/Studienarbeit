@@ -13,7 +13,7 @@ SlamHandler::~SlamHandler()
     delete this->lastScan;
 }
 
-void SlamHandler::update(lidar_point_t *data)
+void SlamHandler::update(lidar_point_t *data, Eigen::RowVector2d positionDiff, double rotationDiff)
 {
     for (size_t i = 0; i < this->pointCount; i++)
     {

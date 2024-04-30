@@ -8,7 +8,7 @@ class ISlam
 {
 public:
     virtual ~ISlam(){};
-    virtual void update(lidar_point_t *data) = 0;
+    virtual void update(lidar_point_t *data, Eigen::RowVector2d positionDiff, double rotationDiff) = 0;
     virtual const Eigen::MatrixXd *getGridMap() = 0;
     virtual const Eigen::RowVector2d getPosition() = 0;
     virtual const double getRotation() = 0;

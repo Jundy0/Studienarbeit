@@ -40,8 +40,10 @@ void SelfdrivingVehicle::update()
     // get lidar Data
     this->lidarSensor->getScanData(this->lidarData, SCAN_COUNT);
 
+    const std::pair<Eigen::RowVector2d, double> odometry = this->vehicleActuator->getOdometry();
+
     // execute SLAM
-    this->slam->update(this->lidarData);
+    this->slam->update(this->lidarData, odometry.first, odometry.second);
 
     // Evation Control and set values of actuator
     // TODO

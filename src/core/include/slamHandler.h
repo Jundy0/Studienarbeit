@@ -9,7 +9,7 @@ class SlamHandler : public ISlam
 public:
     SlamHandler(size_t pointCount);
     ~SlamHandler();
-    void update(lidar_point_t *data);
+    void update(lidar_point_t *data, Eigen::RowVector2d positionDiff, double rotationDiff);
     const Eigen::MatrixXd *getGridMap();
     const Eigen::RowVector2d getPosition();
     const double getRotation();
