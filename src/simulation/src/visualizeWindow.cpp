@@ -10,7 +10,17 @@ VisualizeWindow::VisualizeWindow(SelfdrivingVehicle *selfdrivingVehicle)
     this->visualizationImage.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color::Transparent);
     this->visualizationTexture.loadFromImage(this->visualizationImage);
     this->visualizationSprite.setTexture(this->visualizationTexture, true);
+    this->visualizationSprite.setScale((float)WINDOW_WIDTH / GRID_WIDTH, (float)WINDOW_HEIGHT / GRID_HEIGHT);
+
+    this->vehicleTexture = sf::Texture();
+    this->vehicleTexture.loadFromFile("../res/vehicle.png");
+    this->vehicleSprite = sf::Sprite(this->vehicleTexture);
+    this->vehicleSprite.setScale((float)WINDOW_WIDTH / MAP_WIDTH, (float)WINDOW_HEIGHT / MAP_HEIGHT);
+    const sf::FloatRect pos = this->vehicleSprite.getGlobalBounds();
+    this->vehicleSprite.setOrigin(pos.width / 2, pos.height / 2);
+
     this->font.loadFromFile("../res/Arial.ttf");
+
     this->fpsDisplay.setFont(this->font);
     this->fpsDisplay.setCharacterSize(30);
     this->fpsDisplay.setFillColor(sf::Color::Red);
@@ -31,8 +41,7 @@ void VisualizeWindow::update()
 
 void VisualizeWindow::render()
 {
-    window->clear(sf::Color::Yellow);
-
+    // Reset Image
     // for (size_t i = 0; i < WINDOW_WIDTH; i++)
     // {
     //     for (size_t j = 0; j < WINDOW_HEIGHT; j++)
@@ -44,18 +53,16 @@ void VisualizeWindow::render()
     const Eigen::MatrixXd *gridMap = this->selfdrivingVehicle->getGridMap();
     const Eigen::RowVector2d position = this->selfdrivingVehicle->getPosition();
     const double rot = this->selfdrivingVehicle->getRotation();
-    if (gridMap->cols() < 1)
-        return;
 
     sf::Color color;
     size_t gridX, gridY;
 
-    for (size_t x = 0; x < WINDOW_WIDTH; x++)
+    for (size_t x = 0; x < GRID_WIDTH; x++)
     {
-        for (size_t y = 0; y < WINDOW_HEIGHT; y++)
+        for (size_t y = 0; y < GRID_HEIGHT; y++)
         {
             gridX = x;
-            gridY = WINDOW_HEIGHT - 1 - y;
+            gridY = GRID_HEIGHT - 1 - y;
 
             if ((*gridMap)(gridY, gridX) >= PROB_OCC)
             {
@@ -76,6 +83,11 @@ void VisualizeWindow::render()
     this->visualizationTexture.loadFromImage(this->visualizationImage);
 
     this->window->draw(this->visualizationSprite);
+
+    this->vehicleSprite.setPosition(position(0) * WINDOW_WIDTH / MAP_WIDTH, position(1) * WINDOW_HEIGHT / MAP_HEIGHT);
+    this->vehicleSprite.setRotation(rot * 180 / M_PI);
+
+    this->window->draw(this->vehicleSprite);
 
     this->fpsDisplay.setString(std::to_string(this->fps));
     this->window->draw(this->fpsDisplay);

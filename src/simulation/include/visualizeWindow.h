@@ -9,8 +9,7 @@
 
 #include "selfdrivingVehicle.h"
 
-#define WINDOW_WIDTH 500
-#define WINDOW_HEIGHT 500
+#include "simulationSettings.h"
 
 class VisualizeWindow
 {
@@ -29,6 +28,8 @@ private:
     sf::Image visualizationImage;
     sf::Texture visualizationTexture;
     sf::Sprite visualizationSprite;
+    sf::Sprite vehicleSprite;
+    sf::Texture vehicleTexture;
     sf::Event ev;
     sf::Clock clock;
     sf::Font font;
