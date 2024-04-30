@@ -10,11 +10,12 @@ VisualizeWindow::VisualizeWindow(SelfdrivingVehicle *selfdrivingVehicle)
     this->visualizationImage.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color::Transparent);
     this->visualizationTexture.loadFromImage(this->visualizationImage);
     this->visualizationSprite.setTexture(this->visualizationTexture, true);
+    this->visualizationSprite.setScale((float)WINDOW_WIDTH / GRID_WIDTH, (float)WINDOW_HEIGHT / GRID_HEIGHT);
 
     this->vehicleTexture = sf::Texture();
     this->vehicleTexture.loadFromFile("../res/vehicle.png");
     this->vehicleSprite = sf::Sprite(this->vehicleTexture);
-    this->vehicleSprite.setScale((float)WINDOW_HEIGHT / MAP_HEIGHT, (float)WINDOW_HEIGHT / MAP_HEIGHT);
+    this->vehicleSprite.setScale((float)WINDOW_WIDTH / MAP_WIDTH, (float)WINDOW_HEIGHT / MAP_HEIGHT);
     const sf::FloatRect pos = this->vehicleSprite.getGlobalBounds();
     this->vehicleSprite.setOrigin(pos.width / 2, pos.height / 2);
 
@@ -56,12 +57,12 @@ void VisualizeWindow::render()
     sf::Color color;
     size_t gridX, gridY;
 
-    for (size_t x = 0; x < WINDOW_WIDTH; x++)
+    for (size_t x = 0; x < GRID_WIDTH; x++)
     {
-        for (size_t y = 0; y < WINDOW_HEIGHT; y++)
+        for (size_t y = 0; y < GRID_HEIGHT; y++)
         {
-            gridX = x * ((double)GRID_WIDTH / WINDOW_WIDTH);
-            gridY = (WINDOW_HEIGHT - 1 - y) * ((double)GRID_WIDTH / WINDOW_WIDTH);
+            gridX = x;
+            gridY = GRID_HEIGHT - 1 - y;
 
             if ((*gridMap)(gridY, gridX) >= PROB_OCC)
             {
