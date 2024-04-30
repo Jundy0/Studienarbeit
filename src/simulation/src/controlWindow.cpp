@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <filesystem>
+#include <iostream>
 
 #define CIRCLE_RADIUS 5
 

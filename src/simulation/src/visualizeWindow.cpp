@@ -1,5 +1,7 @@
 #include "visualizeWindow.h"
 
+#include "icpSettings.h"
+
 VisualizeWindow::VisualizeWindow(SelfdrivingVehicle *selfdrivingVehicle)
 {
     this->selfdrivingVehicle = selfdrivingVehicle;

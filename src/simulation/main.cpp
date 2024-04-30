@@ -1,12 +1,9 @@
-#include <iostream>
-
-#include "lidarSensorSim.h"
-#include "vehicleActuatorSim.h"
-#include "selfdrivingVehicle.h"
 #include "simulationManager.h"
 
-int main()
+int main(int argc, char const *argv[])
 {
     SimulationManager simulationManager;
     simulationManager.run();
+
+    return 0;
 }

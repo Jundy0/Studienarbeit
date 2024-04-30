@@ -1,16 +1,12 @@
 #include "vehicleActuatorSim.h"
 
-#include <iostream>
-
 VehicleActuatorSim::VehicleActuatorSim(Vehicle *vehicle)
 {
     this->vehicle = vehicle;
-    std::cout << "VehicleActuatorSim: Constructor" << std::endl;
 }
 
 VehicleActuatorSim::~VehicleActuatorSim()
 {
-    std::cout << "VehicleActuatorSim: Destructor" << std::endl;
 }
 
 void VehicleActuatorSim::setForeward(double value)

@@ -1,14 +1,5 @@
 #include "simulationManager.h"
 
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-#include <filesystem>
-#include <cmath>
-
-#define RADIUS 5
-
 SimulationManager::SimulationManager()
 {
     this->vehicle = new Vehicle(400.f, 400.f);

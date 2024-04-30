@@ -12,7 +12,7 @@
 #include "selfdrivingVehicle.h"
 #include "simulationSettings.h"
 
-enum Mode
+enum class Mode
 {
     placeObstacle = 1,
     placeDestination = 2,

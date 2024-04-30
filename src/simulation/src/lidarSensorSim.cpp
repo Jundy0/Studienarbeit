@@ -11,12 +11,10 @@ LidarSensorSim::LidarSensorSim(Vehicle *vehicle, std::vector<Obstacle> &obstacle
 {
     this->vehicle = vehicle;
     this->obstacles = &obstacles;
-    std::cout << "LidarSensorSim: Constructor" << std::endl;
 }
 
 LidarSensorSim::~LidarSensorSim()
 {
-    std::cout << "LidarSensorSim: Destructor" << std::endl;
 }
 
 void LidarSensorSim::setPWM(int dutyCycle)
