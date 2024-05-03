@@ -3,7 +3,6 @@
 
 #include "Eigen/Dense"
 
-#include "icpHandler.h"
 #include "occupancyGrid.h"
 
 class Particle
@@ -19,7 +18,6 @@ public:
 
 private:
     OccupancyGrid occupancyGrid;
-    IcpHandler icpHandler;
 
     Eigen::RowVector2d position;
     double rotationAngle;

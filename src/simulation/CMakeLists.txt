@@ -21,11 +21,16 @@ set(CLASS_FILES
 )
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
+#find_package(PCL 1.3 REQUIRED)
 
 include_directories(${SFML_INCLUDE_DIR})
+#include_directories(${PCL_INCLUDE_DIRS})
+
+#add_definitions(${PCL_DEFINITIONS})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/coreInclude.cmake")
 
-add_executable(main main.cpp ${CLASS_FILES} ${CORE_CLASS_FILES} ${SLAM_CLASS_FILES})
+add_executable(main main.cpp ${CLASS_FILES} ${CORE_CLASS_FILES})
 
 target_link_libraries(main PRIVATE sfml-graphics sfml-window sfml-system)
+#target_link_libraries(main ${PCL_LIBRARIES})

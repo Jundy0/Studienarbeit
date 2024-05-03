@@ -6,7 +6,6 @@
 Particle::Particle()
 {
     OccupancyGrid occupancyGrid;
-    IcpHandler icpHandler;
 
     position = {MAP_WIDTH / 2, MAP_HEIGHT / 2};
     rotationAngle = 0;
@@ -62,9 +61,9 @@ double Particle::getRotation()
 
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
 {
-    TransformationComponents transComp = icpHandler.call_icp(firstScan, secondScan);
-    position -= transComp.translation_vector;
-    rotationAngle -= transComp.rotation_angle;
+    //TransformationComponents transComp = icpHandler.call_icp(firstScan, secondScan);
+    //position -= transComp.translation_vector;
+    //rotationAngle -= transComp.rotation_angle;
 }
 
 void Particle::updatePositionWithOdometry(Eigen::RowVector2d positionDiff, double rotationDiff)
