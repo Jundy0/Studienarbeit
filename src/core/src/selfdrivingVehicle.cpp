@@ -7,12 +7,14 @@ SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuat
     this->vehicleActuator = vehicleActuator;
     this->slam = new SlamHandler(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
+    this->evasionControl = new EvasionControl(this->vehicleActuator);
 }
 
 SelfdrivingVehicle::~SelfdrivingVehicle()
 {
     delete this->slam;
     free(this->lidarData);
+    delete this->evasionControl;
 }
 
 const lidar_point_t *SelfdrivingVehicle::getLidarDataPtr()
@@ -46,7 +48,7 @@ void SelfdrivingVehicle::update()
     this->slam->update(this->lidarData, odometry.first, odometry.second);
 
     // Evation Control and set values of actuator
-    // TODO
+    this->evasionControl->update();
 
     // Update Actuator
     this->vehicleActuator->update();
