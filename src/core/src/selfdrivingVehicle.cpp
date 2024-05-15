@@ -8,6 +8,7 @@ SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuat
     this->slam = new SlamHandler(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
     this->evasionControl = new EvasionControl(this->vehicleActuator);
+    this->evasionControl->setDestination(Eigen::RowVector2d(500, 500));
 }
 
 SelfdrivingVehicle::~SelfdrivingVehicle()

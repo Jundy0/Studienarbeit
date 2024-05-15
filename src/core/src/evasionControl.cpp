@@ -1,5 +1,7 @@
 #include "evasionControl.h"
 
+#include "icpSettings.h"
+
 #include <iostream>
 #include <queue>
 
@@ -14,13 +16,13 @@ EvasionControl::~EvasionControl()
 
 void EvasionControl::setDestination(Eigen::RowVector2d destination)
 {
-    this->destination = destination;
+    this->destination = destination / (MAP_WIDTH / GRID_WIDTH);
 }
 
 void EvasionControl::update(const Eigen::MatrixXd *map, Eigen::RowVector2d position)
 {
     this->map = map;
-    this->origin = position;
+    this->origin = position / (MAP_WIDTH / GRID_WIDTH);
 
     // check if destination is set
     if (destination.x() == 0 && destination.y() == 0)
