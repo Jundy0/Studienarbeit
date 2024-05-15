@@ -187,6 +187,8 @@ void ControlWindow::pollEvent()
                 if (!contains)
                 {
                     this->destination = newDestination;
+                    // TODO: Koordinaten anpassen so wie bei slam
+                    this->selfdrivingVehicle->setDestination(Eigen::RowVector2d(newDestination.x, newDestination.y));
                 }
                 break;
             }

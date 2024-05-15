@@ -43,6 +43,11 @@ const std::vector<Eigen::RowVector2d> SelfdrivingVehicle::getPath()
     return this->evasionControl->getPath();
 }
 
+void SelfdrivingVehicle::setDestination(Eigen::RowVector2d destination)
+{
+    this->evasionControl->setDestination(destination);
+}
+
 void SelfdrivingVehicle::update()
 {
     // get lidar Data

@@ -16,7 +16,7 @@ EvasionControl::~EvasionControl()
 
 void EvasionControl::setDestination(Eigen::RowVector2d destination)
 {
-    this->destination = destination / (MAP_WIDTH / GRID_WIDTH);
+    this->destination = Eigen::RowVector2d(std::round(destination.x() / (MAP_WIDTH / GRID_WIDTH)), std::round(destination.y() / (MAP_HEIGHT / GRID_HEIGHT)));
 }
 
 const std::vector<Eigen::RowVector2d> EvasionControl::getPath()
@@ -27,7 +27,7 @@ const std::vector<Eigen::RowVector2d> EvasionControl::getPath()
 void EvasionControl::update(const Eigen::MatrixXd *map, Eigen::RowVector2d position)
 {
     this->map = map;
-    this->origin = position / (MAP_WIDTH / GRID_WIDTH);
+    this->origin = Eigen::RowVector2d(std::round(position.x() / (MAP_WIDTH / GRID_WIDTH)), std::round(position.y() / (MAP_HEIGHT / GRID_HEIGHT)));
 
     // check if destination is set
     if (destination.x() == 0 && destination.y() == 0)
@@ -93,8 +93,8 @@ void EvasionControl::AStar()
         std::vector<Eigen::RowVector2d> neighbors = {current + Eigen::RowVector2d(-1, 0), current + Eigen::RowVector2d(1, 0), current + Eigen::RowVector2d(0, -1), current + Eigen::RowVector2d(0, 1)};
         for (const auto &neighbor : neighbors)
         {
-            int x = neighbor.x();
-            int y = neighbor.y();
+            int x = (int)std::round(neighbor.x());
+            int y = (int)std::round(neighbor.y());
 
             if (x >= 0 && x < rows && y >= 0 && y < cols && (*this->map)(x, y) <= 0)
             {

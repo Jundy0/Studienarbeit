@@ -40,6 +40,10 @@ public:
     /// @return The current calculated Path.
     const std::vector<Eigen::RowVector2d> getPath();
 
+    /// @brief Set a new destination Point.
+    /// @param destination The new destination Point.
+    void setDestination(Eigen::RowVector2d destination);
+
     /// @brief The Main update Function to call in the Main Loop. Process: Get Lidar Data -> Execute SLAM -> Execute Evasion -> Update Actuator.
     /// @note Should be called in the Main Loop.
     void update();
