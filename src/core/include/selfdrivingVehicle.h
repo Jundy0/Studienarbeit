@@ -36,6 +36,10 @@ public:
     /// @return The current Rotation in RAD of the Vehicle.
     const double getRotation();
 
+    /// @brief Get the current calculated Path.
+    /// @return The current calculated Path.
+    const std::vector<Eigen::RowVector2d> getPath();
+
     /// @brief The Main update Function to call in the Main Loop. Process: Get Lidar Data -> Execute SLAM -> Execute Evasion -> Update Actuator.
     /// @note Should be called in the Main Loop.
     void update();

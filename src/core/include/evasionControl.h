@@ -21,6 +21,10 @@ public:
     /// @param destination The new destination Point.
     void setDestination(Eigen::RowVector2d destination);
 
+    /// @brief Get the current calculated Path.
+    /// @return The current calculated Path.
+    const std::vector<Eigen::RowVector2d> getPath();
+
     /// @brief The Main update Function to execute the Evasion Algorithm.
     /// @param map A Pointer to the current Map.
     /// @param position The current Position of the Vehicle.
@@ -32,6 +36,8 @@ private:
     const Eigen::MatrixXd *map;     // A Pointer to the current Map.
     Eigen::RowVector2d origin;      // The current origin Point.
     Eigen::RowVector2d destination; // The current destination Point.
+
+    std::vector<Eigen::RowVector2d> path; // The current Path.
 
     /// @brief Calculate the Path using the AStar Algorithm.
     void AStar();

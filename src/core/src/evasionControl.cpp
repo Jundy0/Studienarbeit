@@ -19,6 +19,11 @@ void EvasionControl::setDestination(Eigen::RowVector2d destination)
     this->destination = destination / (MAP_WIDTH / GRID_WIDTH);
 }
 
+const std::vector<Eigen::RowVector2d> EvasionControl::getPath()
+{
+    return this->path;
+}
+
 void EvasionControl::update(const Eigen::MatrixXd *map, Eigen::RowVector2d position)
 {
     this->map = map;
@@ -80,6 +85,8 @@ void EvasionControl::AStar()
                     std::cout << " -> ";
             }
             std::cout << std::endl;
+
+            this->path = path;
             return;
         }
 
@@ -89,7 +96,7 @@ void EvasionControl::AStar()
             int x = neighbor.x();
             int y = neighbor.y();
 
-            if (x >= 0 && x < rows && y >= 0 && y < cols && (*this->map)(x, y) == 0)
+            if (x >= 0 && x < rows && y >= 0 && y < cols && (*this->map)(x, y) <= 0)
             {
                 double tentative_g_cost = g_cost((int)std::round(current.x()), (int)std::round(current.y())) + 1;
 

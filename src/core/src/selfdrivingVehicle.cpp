@@ -38,6 +38,11 @@ const double SelfdrivingVehicle::getRotation()
     return this->slam->getRotation();
 }
 
+const std::vector<Eigen::RowVector2d> SelfdrivingVehicle::getPath()
+{
+    return this->evasionControl->getPath();
+}
+
 void SelfdrivingVehicle::update()
 {
     // get lidar Data
