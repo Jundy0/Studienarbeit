@@ -1,5 +1,7 @@
 #include "controlWindow.h"
 
+#include "icpSettings.h"
+
 #include <fstream>
 #include <filesystem>
 #include <iostream>
@@ -185,8 +187,7 @@ void ControlWindow::pollEvent()
                 if (!contains)
                 {
                     this->destination = newDestination;
-                    // TODO: Koordinaten anpassen so wie bei slam
-                    this->selfdrivingVehicle->setDestination(Eigen::RowVector2d(newDestination.x, newDestination.y));
+                    this->selfdrivingVehicle->setDestination(Eigen::RowVector2d(newDestination.x + (MAP_WIDTH / 2) - (WINDOW_WIDTH / 2), newDestination.y + (MAP_HEIGHT / 2) - (WINDOW_HEIGHT / 2)));
                 }
                 break;
             }
