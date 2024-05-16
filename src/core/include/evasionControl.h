@@ -21,6 +21,10 @@ public:
     /// @param destination The new destination Point.
     void setDestination(Eigen::RowVector2d destination);
 
+    /// @brief Get the current destination Point.
+    /// @return The current destination Point.
+    const Eigen::RowVector2d getDestination();
+
     /// @brief Get the current calculated Path.
     /// @return The current calculated Path.
     const std::vector<Eigen::RowVector2d> getPath();
@@ -40,13 +44,13 @@ private:
     std::vector<Eigen::RowVector2d> path; // The current Path.
 
     /// @brief Calculate the Path using the AStar Algorithm.
+    /// @note https://en.wikipedia.org/wiki/A*_search_algorithm
     void AStar();
 
-    /// @brief Heuristic function to calculate the Manhattan distance between two Points.
-    /// @param v1 The starting Point.
-    /// @param v2 The destination Point.
-    /// @return The Manhattan distance between the two Points.
-    double heuristic(Eigen::RowVector2d v1, Eigen::RowVector2d v2);
+    /// @brief Heuristic function to calculate the Manhattan distance between the current Point and the destination Point.
+    /// @param p The current Point.
+    /// @return The Manhattan distance between the current Point and the destination Point
+    double heuristic(Eigen::RowVector2d p);
 };
 
 #endif // __EVASION_CONTROL_H__

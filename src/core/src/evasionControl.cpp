@@ -5,6 +5,8 @@
 #include <iostream>
 #include <queue>
 
+#define ROUND(x) (size_t) std::round(x)
+
 EvasionControl::EvasionControl(IVehicleActuator *vehicleActuator)
 {
     this->vehicleActuator = vehicleActuator;
@@ -17,6 +19,11 @@ EvasionControl::~EvasionControl()
 void EvasionControl::setDestination(Eigen::RowVector2d destination)
 {
     this->destination = Eigen::RowVector2d(std::round(destination.x() / (MAP_WIDTH / GRID_WIDTH)), std::round(destination.y() / (MAP_HEIGHT / GRID_HEIGHT)));
+}
+
+const Eigen::RowVector2d EvasionControl::getDestination()
+{
+    return this->destination;
 }
 
 const std::vector<Eigen::RowVector2d> EvasionControl::getPath()
@@ -46,20 +53,20 @@ void EvasionControl::update(const Eigen::MatrixXd *map, Eigen::RowVector2d posit
 
 void EvasionControl::AStar()
 {
-    int rows = this->map->rows();
-    int cols = this->map->cols();
+    size_t rows = this->map->rows();
+    size_t cols = this->map->cols();
     auto cmp = [](std::pair<double, Eigen::RowVector2d> left, std::pair<double, Eigen::RowVector2d> right)
     { return left.first > right.first; };
     std::priority_queue<std::pair<double, Eigen::RowVector2d>, std::vector<std::pair<double, Eigen::RowVector2d>>, decltype(cmp)> openSet(cmp);
 
-    Eigen::MatrixXd g_cost = Eigen::MatrixXd::Constant(rows, cols, INF);
-    Eigen::MatrixXd f_cost = Eigen::MatrixXd::Constant(rows, cols, INF);
+    Eigen::MatrixXd gScore = Eigen::MatrixXd::Constant(rows, cols, INF);
+    Eigen::MatrixXd fScore = Eigen::MatrixXd::Constant(rows, cols, INF);
     Eigen::Matrix<Eigen::RowVector2d, Eigen::Dynamic, Eigen::Dynamic> parent(rows, cols);
 
     openSet.push({0, this->origin});
-    g_cost((int)std::round(this->origin.x()), (int)std::round(this->origin.y())) = 0;
-    f_cost((int)std::round(this->origin.x()), (int)std::round(this->origin.y())) = heuristic(this->origin, this->destination);
-    parent((int)std::round(this->origin.x()), (int)std::round(this->origin.y())) = {-1, -1};
+    gScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = 0;
+    fScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = heuristic(this->origin);
+    parent(ROUND(this->origin.x()), ROUND(this->origin.y())) = {-1, -1};
 
     while (!openSet.empty())
     {
@@ -73,7 +80,7 @@ void EvasionControl::AStar()
             while (current != Eigen::RowVector2d(-1, -1))
             {
                 path.push_back(current);
-                current = parent((int)std::round(current.x()), (int)std::round(current.y()));
+                current = parent(ROUND(current.x()), ROUND(current.y()));
             }
 
             // Print the path in reverse order
@@ -93,19 +100,19 @@ void EvasionControl::AStar()
         std::vector<Eigen::RowVector2d> neighbors = {current + Eigen::RowVector2d(-1, 0), current + Eigen::RowVector2d(1, 0), current + Eigen::RowVector2d(0, -1), current + Eigen::RowVector2d(0, 1)};
         for (const auto &neighbor : neighbors)
         {
-            int x = (int)std::round(neighbor.x());
-            int y = (int)std::round(neighbor.y());
+            size_t x = ROUND(neighbor.x());
+            size_t y = ROUND(neighbor.y());
 
             if (x >= 0 && x < rows && y >= 0 && y < cols && (*this->map)(x, y) <= 0)
             {
-                double tentative_g_cost = g_cost((int)std::round(current.x()), (int)std::round(current.y())) + 1;
+                double tentative_g_cost = gScore(ROUND(current.x()), ROUND(current.y())) + 1;
 
-                if (tentative_g_cost < g_cost(x, y))
+                if (tentative_g_cost < gScore(x, y))
                 {
                     parent(x, y) = current;
-                    g_cost(x, y) = tentative_g_cost;
-                    f_cost(x, y) = g_cost(x, y) + heuristic(neighbor, this->destination);
-                    openSet.push({f_cost(x, y), neighbor});
+                    gScore(x, y) = tentative_g_cost;
+                    fScore(x, y) = gScore(x, y) + heuristic(neighbor);
+                    openSet.push({fScore(x, y), neighbor});
                 }
             }
         }
@@ -114,7 +121,7 @@ void EvasionControl::AStar()
     std::cout << "No path exists between (" << this->origin.x() << ", " << this->origin.y() << ") and (" << this->destination.x() << ", " << this->destination.y() << ")" << std::endl;
 }
 
-double EvasionControl::heuristic(Eigen::RowVector2d v1, Eigen::RowVector2d v2)
+double EvasionControl::heuristic(Eigen::RowVector2d p)
 {
-    return std::abs(v1.x() - v2.x()) + std::abs(v1.y() - v2.y());
+    return std::abs(p.x() - this->destination.x()) + std::abs(p.y() - this->destination.y());
 }

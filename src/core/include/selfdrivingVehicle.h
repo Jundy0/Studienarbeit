@@ -36,6 +36,10 @@ public:
     /// @return The current Rotation in RAD of the Vehicle.
     const double getRotation();
 
+    /// @brief Get the current destination Point.
+    /// @return The current destination Point.
+    const Eigen::RowVector2d getDestination();
+
     /// @brief Get the current calculated Path.
     /// @return The current calculated Path.
     const std::vector<Eigen::RowVector2d> getPath();

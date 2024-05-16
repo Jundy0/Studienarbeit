@@ -38,6 +38,11 @@ const double SelfdrivingVehicle::getRotation()
     return this->slam->getRotation();
 }
 
+const Eigen::RowVector2d SelfdrivingVehicle::getDestination()
+{
+    return this->evasionControl->getDestination();
+}
+
 const std::vector<Eigen::RowVector2d> SelfdrivingVehicle::getPath()
 {
     return this->evasionControl->getPath();

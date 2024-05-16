@@ -4,8 +4,6 @@
 #include <filesystem>
 #include <iostream>
 
-#define CIRCLE_RADIUS 5
-
 ControlWindow::ControlWindow(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator, SelfdrivingVehicle *selfdrivingVehicle, Vehicle *vehicle, std::vector<Obstacle> *obstacles)
 {
     this->lidarSensor = lidarSensor;
