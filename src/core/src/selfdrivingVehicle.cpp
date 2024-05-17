@@ -1,5 +1,6 @@
 #include "selfdrivingVehicle.h"
 #include "slamHandler.h"
+#include "evasionAStar.h"
 
 SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator)
 {
@@ -7,7 +8,7 @@ SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuat
     this->vehicleActuator = vehicleActuator;
     this->slam = new SlamHandler(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
-    this->evasionControl = new EvasionControl(this->vehicleActuator);
+    this->evasionControl = new EvasionAStar(this->vehicleActuator);
     this->evasionControl->setDestination(Eigen::RowVector2d(2450, 2450));
 }
 
@@ -64,7 +65,7 @@ void SelfdrivingVehicle::update()
     this->slam->update(this->lidarData, odometry.first, odometry.second);
 
     // Evation Control and set values of actuator
-    this->evasionControl->update(this->getGridMap(), this->getPosition());
+    this->evasionControl->update(this->getGridMap(), this->getPosition(), this->getRotation());
 
     // Update Actuator
     this->vehicleActuator->update();
