@@ -14,3 +14,10 @@ set(CORE_CLASS_FILES
 	"${CORE_SOURCE_DIR}/particle.cpp"
     "${CORE_SOURCE_DIR}/slamHandler.cpp"
 )
+
+find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
+include_directories(${SFML_INCLUDE_DIR})
+
+find_package(PCL 1.3 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+add_definitions(${PCL_DEFINITIONS})
