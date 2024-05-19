@@ -13,6 +13,8 @@ set(CORE_CLASS_FILES
 	"${CORE_SOURCE_DIR}/occupancyGrid.cpp"
 	"${CORE_SOURCE_DIR}/particle.cpp"
     "${CORE_SOURCE_DIR}/slamHandler.cpp"
+    "${CORE_SOURCE_DIR}/pclHandler.cpp"
+
 )
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)

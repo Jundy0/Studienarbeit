@@ -4,6 +4,7 @@
 #include "Eigen/Dense"
 
 #include "occupancyGrid.h"
+#include "pclHandler.h"
 
 class Particle
 {
@@ -18,6 +19,7 @@ public:
 
 private:
     OccupancyGrid occupancyGrid;
+    PclHandler pclHandler;
 
     Eigen::RowVector2d position;
     double rotationAngle;
