@@ -29,12 +29,11 @@ TransformationComponents PclHandler::computeTransformation(Eigen::MatrixX2d firs
 
     // Uncomment this code to run ICP 
     Eigen::Matrix4f tform = Eigen::Matrix4f::Identity();
-    tform = refineAlignment (source_cloud_ptr, target_cloud_ptr, tform, max_correspondence_distance,
+    tform = refineAlignment (source_cloud_ptr, target_cloud_ptr, max_correspondence_distance,
             outlier_rejection_threshold, transformation_epsilon, max_iterations);
     
     
     std::cout << "Calculated transformation\n";
-    std::cout << tform << std:.endl;
 
     return extractTransformationComponents(tform);
 }
@@ -50,8 +49,8 @@ Eigen::Matrix4f PclHandler::refineAlignment (const ICPPointCloudPtr & source_poi
     icp.setTransformationEpsilon (transformation_epsilon);
     icp.setMaximumIterations (max_iterations);
 
-    ICPPointCloudPtr source_points_transformed (new ICPPointCloud);
-    &source_points_icp = *source_points;
+    ICPPointCloudPtr source_points_icp (new ICPPointCloud);
+    source_points_icp = source_points;
 
     icp.setInputSource (source_points_icp);
     icp.setInputTarget (target_points);
@@ -62,7 +61,7 @@ Eigen::Matrix4f PclHandler::refineAlignment (const ICPPointCloudPtr & source_poi
     return icp.getFinalTransformation ();
 }
 
-PointCloud PclHandler::matrixToPointCloudPtr(Eigen::MatrixX2d matrix)
+PointCloud PclHandler::matrixToPointCloud(Eigen::MatrixX2d matrix)
 {
     PointCloud point_cloud;
     point_cloud.resize(matrix.rows());
@@ -99,8 +98,8 @@ TransformationComponents PclHandler::extractTransformationComponents(Eigen::Matr
     TransformationComponents components;
 
     // Extract translation vector with only x and y as double
-    components.translation_vector << static_cast<double>(transformation_matrix(0, 2)),
-        static_cast<double>(transformation_matrix(1, 2));
+    components.translation_vector << static_cast<double>(transformation_matrix(0, 3)),
+        static_cast<double>(transformation_matrix(1, 3));
 
     // Calculate rotation angle from the rotation matrix part of T
     // Assuming the rotation is around the Z-axis

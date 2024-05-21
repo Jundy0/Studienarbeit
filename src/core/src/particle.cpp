@@ -18,7 +18,7 @@ void Particle::update(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
     auto t1 = std::chrono::high_resolution_clock::now();
     updateGridMap(firstScan);
 
-    std::cout << "Updating position wit pcl-registration\n"
+    std::cout << "Updating position with pcl-registration\n"
               << std::endl;
     updatePosition(firstScan, secondScan);
     auto t2 = std::chrono::high_resolution_clock::now();
@@ -63,6 +63,8 @@ double Particle::getRotation()
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
 {
     TransformationComponents transComp = pclHandler.computeTransformation(firstScan, secondScan);
+    std::cout << "Translation Vector: " << transComp.translation_vector << std::endl;
+    std::cout << "Rotation: " << transComp.rotation_angle << std::endl;
     position -= transComp.translation_vector;
     rotationAngle -= transComp.rotation_angle;
 }

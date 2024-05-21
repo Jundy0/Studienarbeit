@@ -5,7 +5,7 @@
 #include "vehicleActuator.h"
 #include "slam.h"
 
-#define SCAN_COUNT 360 // Count of Scans per one rotation.
+#define SCAN_COUNT 720 // Count of Scans per one rotation.
 
 /// @brief The Main Class for the Selfdriving Vehicle.
 class SelfdrivingVehicle

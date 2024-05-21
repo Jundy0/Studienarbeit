@@ -18,16 +18,24 @@ const float max_correspondence_dist = 0.01f;
 const int nr_iters = 500;
 
 // ICP parameters (explanation below)
-const float max_correspondence_distance = 0.05f;
-const float outlier_rejection_threshold = 0.05f;
+const float max_correspondence_distance = 0.005f;
+const float outlier_rejection_threshold = 0.005f;
 const float transformation_epsilon = 0;
-const int max_iterations = 100;
+const int max_iterations = 150;
 
 typedef struct
 {
     Eigen::RowVector2d translation_vector;
     double rotation_angle; // Rotation angle in degrees
 } TransformationComponents;
+
+typedef pcl::PointXYZ PointT;
+typedef pcl::PointCloud<PointT> PointCloud;
+typedef pcl::PointCloud<PointT>::Ptr PointCloudPtr;
+
+typedef pcl::PointXYZ ICPPointT;
+typedef pcl::PointCloud<ICPPointT> ICPPointCloud;
+typedef pcl::PointCloud<ICPPointT>::Ptr ICPPointCloudPtr;
 
 class PclHandler
 {
@@ -36,11 +44,6 @@ public:
     TransformationComponents computeTransformation(Eigen::MatrixX2d first_scan, Eigen::MatrixX2d second_scan);
 
 private:
-    typedef pcl::PointXYZ PointT;
-    typedef pcl::PointCloud<PointT> PointCloud;
-    typedef pcl::PointCloud<PointT>::Ptr PointCloudPtr;
-
-    
     /* Use IterativeClosestPoint to find a precise alignment from the source cloud to the target cloud,                   
     * starting with an intial guess
     * Inputs:
@@ -61,9 +64,6 @@ private:
     *     The maximum number of ICP iterations to perform
     * Return: A transformation matrix that will precisely align the points in source to the points in target
     */
-    typedef pcl::PointXYZ ICPPointT;
-    typedef pcl::PointCloud<ICPPointT> ICPPointCloud;
-    typedef pcl::PointCloud<ICPPointT>::Ptr ICPPointCloudPtr;
     Eigen::Matrix4f refineAlignment (const ICPPointCloudPtr & source_points, const ICPPointCloudPtr & target_points,
                                      float max_correspondence_distance, float outlier_rejection_threshold, 
                                      float transformation_epsilon, float max_iterations);
