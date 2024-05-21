@@ -23,7 +23,7 @@ TransformationComponents PclHandler::computeTransformation(Eigen::MatrixX2d firs
     pcl::search::KdTree<pcl::PointXYZ>::Ptr tree_xyz (new pcl::search::KdTree<pcl::PointXYZ>());
     ne.setInputCloud(source_cloud_ptr);
     ne.setSearchMethod(tree_xyz);
-    ne.setRadiusSearch(0.05);
+    ne.setRadiusSearch(0.5);
     ne.compute(*src_normals_ptr);
     for(size_t i = 0;  i < src_normals.points.size(); ++i) {
         src_normals.points[i].x = source_cloud.points[i].x;
