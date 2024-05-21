@@ -6,125 +6,42 @@ PclHandler::PclHandler()
 
 TransformationComponents PclHandler::computeTransformation(Eigen::MatrixX2d first_scan, Eigen::MatrixX2d second_scan)
 {
-    pcl::PointCloud<pcl::PointXYZ>::Ptr source_cloud_ptr (new pcl::PointCloud<pcl::PointXYZ>);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr target_cloud_ptr (new pcl::PointCloud<pcl::PointXYZ>);
+    PointCloudPtr source_cloud_ptr (new PointCloud);
+    PointCloudPtr target_cloud_ptr (new PointCloud);
 
-    pcl::PointCloud<pcl::PointXYZ>& source_cloud = *source_cloud_ptr;
-    pcl::PointCloud<pcl::PointXYZ>& target_cloud = *target_cloud_ptr;
+    PointCloud& source_cloud = *source_cloud_ptr;
+    PointCloud& target_cloud = *target_cloud_ptr;
 
-    source_cloud = matrixToPointCloudPtr(first_scan);
-    target_cloud = matrixToPointCloudPtr(second_scan);
+    source_cloud = matrixToPointCloud(first_scan);
+    target_cloud = matrixToPointCloud(second_scan);
 
-    // Estimate cloud normals
-    std::cout << "Computing source cloud normals\n";
-    pcl::NormalEstimation<pcl::PointXYZ, pcl::PointNormal> ne;
-    pcl::PointCloud<pcl::PointNormal>::Ptr src_normals_ptr (new pcl::PointCloud<pcl::PointNormal>);
-    pcl::PointCloud<pcl::PointNormal>& src_normals = *src_normals_ptr;
-    pcl::search::KdTree<pcl::PointXYZ>::Ptr tree_xyz (new pcl::search::KdTree<pcl::PointXYZ>());
-    ne.setInputCloud(source_cloud_ptr);
-    ne.setSearchMethod(tree_xyz);
-    ne.setRadiusSearch(0.5);
-    ne.compute(*src_normals_ptr);
-    for(size_t i = 0;  i < src_normals.points.size(); ++i) {
-        src_normals.points[i].x = source_cloud.points[i].x;
-        src_normals.points[i].y = source_cloud.points[i].y;
-        src_normals.points[i].z = source_cloud.points[i].z;
-    }
+    // Remove NaN points from point clouds
+    // (this is necessary to avoid a segfault when running ICP)
+    std::vector<int> nan_idx;
+    pcl::removeNaNFromPointCloud(source_cloud, source_cloud, nan_idx);
+    pcl::removeNaNFromPointCloud(target_cloud, target_cloud, nan_idx);
 
-    std::cout << "Computing target cloud normals\n";
-    pcl::PointCloud<pcl::PointNormal>::Ptr tar_normals_ptr (new pcl::PointCloud<pcl::PointNormal>);
-    pcl::PointCloud<pcl::PointNormal>& tar_normals = *tar_normals_ptr;
-    ne.setInputCloud(target_cloud_ptr);
-    ne.compute(*tar_normals_ptr);
-    for(size_t i = 0;  i < tar_normals.points.size(); ++i) {
-        tar_normals.points[i].x = target_cloud.points[i].x;
-        tar_normals.points[i].y = target_cloud.points[i].y;
-        tar_normals.points[i].z = target_cloud.points[i].z;
-    }
-
-    // Estimate the SIFT keypoints
-    pcl::SIFTKeypoint<pcl::PointNormal, pcl::PointWithScale> sift;
-    pcl::PointCloud<pcl::PointWithScale>::Ptr src_keypoints_ptr (new pcl::PointCloud<pcl::PointWithScale>);
-    pcl::PointCloud<pcl::PointWithScale>& src_keypoints = *src_keypoints_ptr;
-    pcl::search::KdTree<pcl::PointNormal>::Ptr tree_normal(new pcl::search::KdTree<pcl::PointNormal> ());
-    sift.setSearchMethod(tree_normal);
-    sift.setScales(min_scale, n_octaves, n_scales_per_octave);
-    sift.setMinimumContrast(min_contrast);
-    sift.setInputCloud(src_normals_ptr);
-    sift.compute(src_keypoints);
-
-    std::cout << "Found " << src_keypoints.points.size () << " SIFT keypoints in source cloud\n";
-    
-    pcl::PointCloud<pcl::PointWithScale>::Ptr tar_keypoints_ptr (new pcl::PointCloud<pcl::PointWithScale>);
-    pcl::PointCloud<pcl::PointWithScale>& tar_keypoints = *tar_keypoints_ptr;
-    sift.setInputCloud(tar_normals_ptr);
-    sift.compute(tar_keypoints);
-
-    std::cout << "Found " << tar_keypoints.points.size () << " SIFT keypoints in target cloud\n";
-
-    // Extract FPFH features from SIFT keypoints
-    pcl::PointCloud<pcl::PointXYZ>::Ptr src_keypoints_xyz (new pcl::PointCloud<pcl::PointXYZ>);                           
-    pcl::copyPointCloud (src_keypoints, *src_keypoints_xyz);
-    pcl::FPFHEstimation<pcl::PointXYZ, pcl::PointNormal, pcl::FPFHSignature33> fpfh;
-    fpfh.setSearchSurface (source_cloud_ptr);
-    fpfh.setInputCloud (src_keypoints_xyz);
-    fpfh.setInputNormals (src_normals_ptr);
-    fpfh.setSearchMethod (tree_xyz);
-    pcl::PointCloud<pcl::FPFHSignature33>::Ptr src_features_ptr (new pcl::PointCloud<pcl::FPFHSignature33>());
-    pcl::PointCloud<pcl::FPFHSignature33>& src_features = *src_features_ptr;
-    fpfh.setRadiusSearch(0.05);
-    fpfh.compute(src_features);
-    std::cout << "Computed " << src_features.size() << " FPFH features for source cloud\n";
-
-    pcl::PointCloud<pcl::PointXYZ>::Ptr tar_keypoints_xyz (new pcl::PointCloud<pcl::PointXYZ>);                           
-    pcl::copyPointCloud (tar_keypoints, *tar_keypoints_xyz);
-    fpfh.setSearchSurface (target_cloud_ptr);
-    fpfh.setInputCloud (tar_keypoints_xyz);
-    fpfh.setInputNormals (tar_normals_ptr);
-    pcl::PointCloud<pcl::FPFHSignature33>::Ptr tar_features_ptr (new pcl::PointCloud<pcl::FPFHSignature33>());
-    pcl::PointCloud<pcl::FPFHSignature33>& tar_features = *tar_features_ptr;
-    fpfh.compute(tar_features);
-    std::cout << "Computed " << tar_features.size() << " FPFH features for target cloud\n";
-    
-    // Compute the transformation matrix for alignment
+    /* Compute the transformation matrix for alignment
     Eigen::Matrix4f tform = Eigen::Matrix4f::Identity();
     tform = computeInitialAlignment (src_keypoints_ptr, src_features_ptr, tar_keypoints_ptr,
             tar_features_ptr, min_sample_dist, max_correspondence_dist, nr_iters);
+    */
 
-    /* Uncomment this code to run ICP 
+    // Uncomment this code to run ICP 
+    Eigen::Matrix4f tform = Eigen::Matrix4f::Identity();
     tform = refineAlignment (source_cloud_ptr, target_cloud_ptr, tform, max_correspondence_distance,
             outlier_rejection_threshold, transformation_epsilon, max_iterations);
-    */
+    
     
     std::cout << "Calculated transformation\n";
+    std::cout << tform << std:.endl;
 
     return extractTransformationComponents(tform);
 }
 
-Eigen::Matrix4f PclHandler::computeInitialAlignment (const PointCloudPtr & source_points, const LocalDescriptorsPtr & source_descriptors,
-                                         const PointCloudPtr & target_points, const LocalDescriptorsPtr & target_descriptors,
-                                         float min_sample_distance, float max_correspondence_distance, int nr_iterations)
-{
-    pcl::SampleConsensusInitialAlignment<PointT, PointT, LocalDescriptorT> sac_ia;
-    sac_ia.setMinSampleDistance (min_sample_distance);
-    sac_ia.setMaxCorrespondenceDistance (max_correspondence_distance);
-    sac_ia.setMaximumIterations (nr_iterations);
-
-    sac_ia.setInputSource (source_points);
-    sac_ia.setSourceFeatures (source_descriptors);
-
-    sac_ia.setInputTarget (target_points);
-    sac_ia.setTargetFeatures (target_descriptors);
-
-    PointCloud registration_output;
-    sac_ia.align (registration_output);
-
-    return (sac_ia.getFinalTransformation ());
-}
-
 Eigen::Matrix4f PclHandler::refineAlignment (const ICPPointCloudPtr & source_points, const ICPPointCloudPtr & target_points,
-                                     const Eigen::Matrix4f initial_alignment, float max_correspondence_distance,
-                                     float outlier_rejection_threshold, float transformation_epsilon, float max_iterations) 
+                                             float max_correspondence_distance, float outlier_rejection_threshold, 
+                                             float transformation_epsilon, float max_iterations) 
 {
 
     pcl::IterativeClosestPoint<ICPPointT, ICPPointT> icp;
@@ -134,20 +51,20 @@ Eigen::Matrix4f PclHandler::refineAlignment (const ICPPointCloudPtr & source_poi
     icp.setMaximumIterations (max_iterations);
 
     ICPPointCloudPtr source_points_transformed (new ICPPointCloud);
-    pcl::transformPointCloud (*source_points, *source_points_transformed, initial_alignment);
+    &source_points_icp = *source_points;
 
-    icp.setInputSource (source_points_transformed);
+    icp.setInputSource (source_points_icp);
     icp.setInputTarget (target_points);
 
     ICPPointCloud registration_output;
     icp.align (registration_output);
 
-    return (icp.getFinalTransformation () * initial_alignment);
+    return icp.getFinalTransformation ();
 }
 
-pcl::PointCloud<pcl::PointXYZ> PclHandler::matrixToPointCloudPtr(Eigen::MatrixX2d matrix)
+PointCloud PclHandler::matrixToPointCloudPtr(Eigen::MatrixX2d matrix)
 {
-    pcl::PointCloud<pcl::PointXYZ> point_cloud;
+    PointCloud point_cloud;
     point_cloud.resize(matrix.rows());
 
     Eigen::RowVector3i point_vector;
