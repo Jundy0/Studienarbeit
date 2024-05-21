@@ -58,6 +58,8 @@ Eigen::Matrix4f PclHandler::refineAlignment (const ICPPointCloudPtr & source_poi
     ICPPointCloud registration_output;
     icp.align (registration_output);
 
+    std::cout << "Converged: " << icp.hasConverged() << ", Fitness: " << icp.getFitnessScore() << std::endl;
+
     return icp.getFinalTransformation ();
 }
 
@@ -66,28 +68,28 @@ PointCloud PclHandler::matrixToPointCloud(Eigen::MatrixX2d matrix)
     PointCloud point_cloud;
     point_cloud.resize(matrix.rows());
 
-    Eigen::RowVector3i point_vector;
+    Eigen::RowVector3f point_vector;
 
     for (int i = 0; i < matrix.rows(); i++)
     {
         point_vector = polarToCartesianXYZ(matrix.row(i));
-        point_cloud[i].x = (float)point_vector[0];
-        point_cloud[i].y = (float)point_vector[1];
-        point_cloud[i].z = (float)point_vector[2];
+        point_cloud[i].x = point_vector[0];
+        point_cloud[i].y = point_vector[1];
+        point_cloud[i].z = point_vector[2];
     }
 
     return point_cloud;
 }
 
-Eigen::RowVector3i PclHandler::polarToCartesianXYZ(Eigen::RowVector2d polar_point)
+Eigen::RowVector3f PclHandler::polarToCartesianXYZ(Eigen::RowVector2d polar_point)
 {
-    Eigen::RowVector3i cart_point;
+    Eigen::RowVector3f cart_point;
 
     double theta = polar_point[0];
     double r = polar_point[1];
 
-    cart_point[0] = round(r * cos(theta));
-    cart_point[1] = round(r * sin(theta));
+    cart_point[0] = r * cos(theta) / 1000;
+    cart_point[1] = r * sin(theta) / 1000;
     cart_point[2] = 0;
 
     return cart_point;
@@ -98,8 +100,8 @@ TransformationComponents PclHandler::extractTransformationComponents(Eigen::Matr
     TransformationComponents components;
 
     // Extract translation vector with only x and y as double
-    components.translation_vector << static_cast<double>(transformation_matrix(0, 3)),
-        static_cast<double>(transformation_matrix(1, 3));
+    components.translation_vector << static_cast<double>(transformation_matrix(0, 3)*1000),
+        static_cast<double>(transformation_matrix(1, 3)*1000);
 
     // Calculate rotation angle from the rotation matrix part of T
     // Assuming the rotation is around the Z-axis

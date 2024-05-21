@@ -69,7 +69,7 @@ private:
                                      float transformation_epsilon, float max_iterations);
 
     PointCloud matrixToPointCloud(Eigen::MatrixX2d matrix);
-    Eigen::RowVector3i polarToCartesianXYZ(Eigen::RowVector2d polar_point);
+    Eigen::RowVector3f polarToCartesianXYZ(Eigen::RowVector2d polar_point);
     TransformationComponents extractTransformationComponents(Eigen::Matrix4f transformation_matrix);
 };
 
