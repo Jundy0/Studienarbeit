@@ -2,26 +2,14 @@
 #define __PCL_HANDLER_H__
 
 #include <pcl/point_types.h>
-#include <pcl/keypoints/sift_keypoint.h>
-#include <pcl/features/normal_3d.h>
-#include <pcl/features/fpfh.h>
-#include <pcl/registration/ia_ransac.h>
 #include <pcl/registration/icp.h>
-#include <pcl/filters/voxel_grid.h>
-
-// --------------------
-// -----Parameters-----
-// --------------------
-// Sample Consensus Initial Alignment parameters (explanation below)
-const float min_sample_dist = 0.025f;
-const float max_correspondence_dist = 0.01f;
-const int nr_iters = 500;
+#include <pcl/filters/filter_indices.h>
 
 // ICP parameters (explanation below)
-const float max_correspondence_distance = 0.005f;
-const float outlier_rejection_threshold = 0.005f;
+const float max_correspondence_distance = 0.005f;  //  5 mm
+const float outlier_rejection_threshold = 0.01f;   // 10 mm
 const float transformation_epsilon = 0;
-const int max_iterations = 150;
+const int max_iterations = 300;
 
 typedef struct
 {

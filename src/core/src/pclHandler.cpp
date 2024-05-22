@@ -21,12 +21,6 @@ TransformationComponents PclHandler::computeTransformation(Eigen::MatrixX2d firs
     pcl::removeNaNFromPointCloud(source_cloud, source_cloud, nan_idx);
     pcl::removeNaNFromPointCloud(target_cloud, target_cloud, nan_idx);
 
-    /* Compute the transformation matrix for alignment
-    Eigen::Matrix4f tform = Eigen::Matrix4f::Identity();
-    tform = computeInitialAlignment (src_keypoints_ptr, src_features_ptr, tar_keypoints_ptr,
-            tar_features_ptr, min_sample_dist, max_correspondence_dist, nr_iters);
-    */
-
     // Uncomment this code to run ICP 
     Eigen::Matrix4f tform = Eigen::Matrix4f::Identity();
     tform = refineAlignment (source_cloud_ptr, target_cloud_ptr, max_correspondence_distance,
