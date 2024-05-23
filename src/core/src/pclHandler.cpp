@@ -15,41 +15,34 @@ TransformationComponents PclHandler::computeTransformation(Eigen::MatrixX2d firs
     source_cloud = matrixToPointCloud(first_scan);
     target_cloud = matrixToPointCloud(second_scan);
 
-    // Remove NaN points from point clouds
-    // (this is necessary to avoid a segfault when running ICP)
-    std::vector<int> nan_idx;
-    pcl::removeNaNFromPointCloud(source_cloud, source_cloud, nan_idx);
-    pcl::removeNaNFromPointCloud(target_cloud, target_cloud, nan_idx);
-
-    // Uncomment this code to run ICP 
+    // Run ICP 
     Eigen::Matrix4f tform = Eigen::Matrix4f::Identity();
-    tform = refineAlignment (source_cloud_ptr, target_cloud_ptr, max_correspondence_distance,
+    tform = computeAlignment (source_cloud_ptr, target_cloud_ptr, max_correspondence_distance,
             outlier_rejection_threshold, transformation_epsilon, max_iterations);
-    
     
     std::cout << "Calculated transformation\n";
 
     return extractTransformationComponents(tform);
 }
 
-Eigen::Matrix4f PclHandler::refineAlignment (const ICPPointCloudPtr & source_points, const ICPPointCloudPtr & target_points,
+Eigen::Matrix4f PclHandler::computeAlignment (const PointCloudPtr & source_points, const PointCloudPtr & target_points,
                                              float max_correspondence_distance, float outlier_rejection_threshold, 
                                              float transformation_epsilon, float max_iterations) 
 {
 
-    pcl::IterativeClosestPoint<ICPPointT, ICPPointT> icp;
+    pcl::IterativeClosestPoint<PointT, PointT> icp;
     icp.setMaxCorrespondenceDistance (max_correspondence_distance);
     icp.setRANSACOutlierRejectionThreshold (outlier_rejection_threshold);
     icp.setTransformationEpsilon (transformation_epsilon);
     icp.setMaximumIterations (max_iterations);
 
-    ICPPointCloudPtr source_points_icp (new ICPPointCloud);
+    PointCloudPtr source_points_icp (new PointCloud);
     source_points_icp = source_points;
 
     icp.setInputSource (source_points_icp);
     icp.setInputTarget (target_points);
 
-    ICPPointCloud registration_output;
+    PointCloud registration_output;
     icp.align (registration_output);
 
     std::cout << "Converged: " << icp.hasConverged() << ", Fitness: " << icp.getFitnessScore() << std::endl;

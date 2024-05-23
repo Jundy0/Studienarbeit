@@ -5,7 +5,7 @@
 #include <pcl/registration/icp.h>
 #include <pcl/filters/filter_indices.h>
 
-// ICP parameters (explanation below)
+// ICP parameters
 const float max_correspondence_distance = 0.005f;  //  5 mm
 const float outlier_rejection_threshold = 0.01f;   // 10 mm
 const float transformation_epsilon = 0;
@@ -20,10 +20,6 @@ typedef struct
 typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloud;
 typedef pcl::PointCloud<PointT>::Ptr PointCloudPtr;
-
-typedef pcl::PointXYZ ICPPointT;
-typedef pcl::PointCloud<ICPPointT> ICPPointCloud;
-typedef pcl::PointCloud<ICPPointT>::Ptr ICPPointCloudPtr;
 
 class PclHandler
 {
@@ -52,7 +48,7 @@ private:
     *     The maximum number of ICP iterations to perform
     * Return: A transformation matrix that will precisely align the points in source to the points in target
     */
-    Eigen::Matrix4f refineAlignment (const ICPPointCloudPtr & source_points, const ICPPointCloudPtr & target_points,
+    Eigen::Matrix4f computeAlignment (const PointCloudPtr & source_points, const PointCloudPtr & target_points,
                                      float max_correspondence_distance, float outlier_rejection_threshold, 
                                      float transformation_epsilon, float max_iterations);
 
