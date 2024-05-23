@@ -6,8 +6,8 @@
 #include <pcl/filters/filter_indices.h>
 
 // ICP parameters
-const float max_correspondence_distance = 0.005f;  //  5 mm
-const float outlier_rejection_threshold = 0.01f;   // 10 mm
+const float max_correspondence_distance = 0.005f;  //  10 mm
+const float outlier_rejection_threshold = 0.01f;   // 20 mm
 const float transformation_epsilon = 0;
 const int max_iterations = 300;
 

@@ -87,8 +87,8 @@ TransformationComponents PclHandler::extractTransformationComponents(Eigen::Matr
     TransformationComponents components;
 
     // Extract translation vector with only x and y as double
-    components.translation_vector << static_cast<double>(transformation_matrix(0, 3)*1000),
-        static_cast<double>(transformation_matrix(1, 3)*1000);
+    components.translation_vector << static_cast<double>(transformation_matrix(0, 3) * 1000),
+        static_cast<double>(transformation_matrix(1, 3) * 1000);
 
     // Calculate rotation angle from the rotation matrix part of T
     // Assuming the rotation is around the Z-axis
