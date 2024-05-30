@@ -5,8 +5,6 @@ project(Studienarbeit_Simulation)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_BUILD_TYPE DEBUG)
-
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
 )
@@ -21,6 +19,9 @@ set(CLASS_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/controlWindow.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/visualizeWindow.cpp"
 )
+
+find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
+include_directories(${SFML_INCLUDE_DIR})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/coreInclude.cmake")
 

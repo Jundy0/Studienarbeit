@@ -51,9 +51,10 @@ void SelfdrivingVehicle::update()
 
         // execute SLAM
         this->slam->update(this->lidarData, odometry.first, odometry.second);
+
+        // Evation Control and set values of actuator
+        // TODO
     }
-    // Evation Control and set values of actuator
-    // TODO
 
     // Update Actuator
     this->vehicleActuator->update();

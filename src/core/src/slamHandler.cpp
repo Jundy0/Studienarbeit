@@ -26,8 +26,8 @@ void SlamHandler::update(lidar_point_t *data, Eigen::RowVector2d positionDiff, d
     }
     else
     {
-        this->particle.updateDebug(*this->lastScan, *this->currentScan, positionDiff, rotationDiff);
-        //this->particle.update(*this->currentScan, positionDiff, rotationDiff); //Only Ododmetry, no ICP
+        // this->particle.updateDebug(*this->lastScan, *this->currentScan, positionDiff, rotationDiff);
+        this->particle.update(*this->currentScan, positionDiff, rotationDiff); // Only Ododmetry, no ICP
     }
 
     std::swap(this->currentScan, this->lastScan);
