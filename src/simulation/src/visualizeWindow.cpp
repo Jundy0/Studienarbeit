@@ -59,20 +59,16 @@ void VisualizeWindow::render()
     const std::vector<Eigen::RowVector2d> path = this->selfdrivingVehicle->getPath();
 
     sf::Color color;
-    size_t gridX, gridY;
 
     for (size_t x = 0; x < GRID_WIDTH; x++)
     {
         for (size_t y = 0; y < GRID_HEIGHT; y++)
         {
-            gridX = x;
-            gridY = GRID_HEIGHT - 1 - y;
-
-            if ((*gridMap)(gridY, gridX) >= PROB_OCC)
+            if ((*gridMap)(y, x) >= PROB_OCC)
             {
                 color = sf::Color::Black;
             }
-            else if ((*gridMap)(gridY, gridX) <= PROB_FREE)
+            else if ((*gridMap)(y, x) <= PROB_FREE)
             {
                 color = sf::Color::White;
             }
