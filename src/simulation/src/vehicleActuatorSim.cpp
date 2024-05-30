@@ -108,8 +108,8 @@ const std::pair<Eigen::RowVector2d, double> VehicleActuatorSim::getOdometry()
     sf::FloatRect currentPosition = this->vehicle->getPosition();
     float currentRotation = this->vehicle->getRotation();
 
-    Eigen::RowVector2d positionDiff = {this->lastPosition.left - currentPosition.left, this->lastPosition.top - currentPosition.top};
-    float rotationDiff = (this->lastRotation - currentRotation) * M_PI / 180; // Convert from DEG to RAD
+    Eigen::RowVector2d positionDiff = {currentPosition.left - this->lastPosition.left, currentPosition.top - this->lastPosition.top};
+    float rotationDiff = (currentRotation - this->lastRotation) * M_PI / 180; // Convert from DEG to RAD
 
     std::pair<Eigen::RowVector2d, double> odometry = std::make_pair(positionDiff, rotationDiff);
 

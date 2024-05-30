@@ -79,14 +79,14 @@ void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secon
     TransformationComponents transComp = pclHandler.computeTransformation(firstScan, secondScan);
     std::cout << "Translation Vector: " << transComp.translation_vector << std::endl;
     std::cout << "Rotation: " << transComp.rotation_angle << std::endl;
-    position -= transComp.translation_vector;
-    rotationAngle -= transComp.rotation_angle;
+    position += transComp.translation_vector;
+    rotationAngle += transComp.rotation_angle;
 }
 
 void Particle::updatePositionWithOdometry(Eigen::RowVector2d positionDiff, double rotationDiff)
 {
-    position -= positionDiff;
-    rotationAngle -= rotationDiff;
+    position += positionDiff;
+    rotationAngle += rotationDiff;
 }
 
 void Particle::updatePositionDebug(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan, Eigen::RowVector2d positionDiff, double rotationDiff)
@@ -96,8 +96,8 @@ void Particle::updatePositionDebug(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d 
     std::cout << "Estimated Rotation: " << transComp.rotation_angle << std::endl;
     std::cout << "Real Translation Vector: " << positionDiff << ", Delta: " << transComp.translation_vector - positionDiff << std::endl;
     std::cout << "Real Rotation: " << rotationDiff << ", Delta: " << transComp.rotation_angle - rotationDiff << std::endl;
-    position -= transComp.translation_vector;
-    rotationAngle -= transComp.rotation_angle;
+    position += transComp.translation_vector;
+    rotationAngle += transComp.rotation_angle;
 }
 
 void Particle::updateGridMap(Eigen::MatrixX2d scan)
