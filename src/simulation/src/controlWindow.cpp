@@ -1,6 +1,6 @@
 #include "controlWindow.h"
 
-#include "icpSettings.h"
+#include "settings.h"
 
 #include <fstream>
 #include <filesystem>

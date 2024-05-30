@@ -11,6 +11,8 @@ SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuat
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
     this->evasionControl = new EvasionAStar(this->vehicleActuator);
     this->evasionControl->setDestination(Eigen::RowVector2d(2450, 2450));
+
+    this->frameCount = 0;
 }
 
 SelfdrivingVehicle::~SelfdrivingVehicle()
@@ -57,17 +59,22 @@ void SelfdrivingVehicle::setDestination(Eigen::RowVector2d destination)
 
 void SelfdrivingVehicle::update()
 {
-    // get lidar Data
-    this->lidarSensor->getScanData(this->lidarData, SCAN_COUNT);
+    this->frameCount++;
+    this->frameCount = this->frameCount % 10;
 
-    const std::pair<Eigen::RowVector2d, double> odometry = this->vehicleActuator->getOdometry();
+    if (this->frameCount == 0)
+    {
+        // get lidar Data
+        this->lidarSensor->getScanData(this->lidarData, SCAN_COUNT);
 
-    // execute SLAM
-    this->slam->update(this->lidarData, odometry.first, odometry.second);
+        const std::pair<Eigen::RowVector2d, double> odometry = this->vehicleActuator->getOdometry();
 
-    // Evation Control and set values of actuator
-    this->evasionControl->update(this->getGridMap(), this->getPosition(), this->getRotation());
+        // execute SLAM
+        this->slam->update(this->lidarData, odometry.first, odometry.second);
 
+        // Evation Control and set values of actuator
+        this->evasionControl->update(this->getGridMap(), this->getPosition(), this->getRotation());
+    }
     // Update Actuator
     this->vehicleActuator->update();
 }

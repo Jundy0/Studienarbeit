@@ -26,6 +26,7 @@ include_directories(${SFML_INCLUDE_DIR})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/coreInclude.cmake")
 
-add_executable(main main.cpp ${CLASS_FILES} ${CORE_CLASS_FILES} ${SLAM_CLASS_FILES})
+add_executable(main main.cpp ${CLASS_FILES} ${CORE_CLASS_FILES})
 
-target_link_libraries(main PRIVATE sfml-graphics sfml-window sfml-system)
+target_link_libraries(main PRIVATE sfml-graphics sfml-window sfml-system ${PCL_LIBRARIES})
+

@@ -3,7 +3,7 @@
 
 #include "Eigen/Dense"
 #include "vehicleActuator.h"
-#include "icpSettings.h"
+#include "settings.h"
 
 #define INF 1e9
 

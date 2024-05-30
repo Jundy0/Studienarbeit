@@ -1,6 +1,6 @@
 #include "visualizeWindow.h"
 
-#include "icpSettings.h"
+#include "settings.h"
 
 VisualizeWindow::VisualizeWindow(SelfdrivingVehicle *selfdrivingVehicle)
 {

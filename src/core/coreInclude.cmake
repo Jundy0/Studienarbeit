@@ -13,9 +13,12 @@ set(CORE_CLASS_FILES
     "${CORE_SOURCE_DIR}/evasionControl.cpp"
     "${CORE_SOURCE_DIR}/evasionAStar.cpp"
     "${CORE_SOURCE_DIR}/evasionThetaStar.cpp"
-    "${CORE_SOURCE_DIR}/icpHandler.cpp"
-	"${CORE_SOURCE_DIR}/occupancyGrid.cpp"
-	"${CORE_SOURCE_DIR}/particle.cpp"
+    "${CORE_SOURCE_DIR}/occupancyGrid.cpp"
+    "${CORE_SOURCE_DIR}/particle.cpp"
     "${CORE_SOURCE_DIR}/slamHandler.cpp"
-	"${CORE_LIBRARY_DIR}/icp/icp.cpp"
+    "${CORE_SOURCE_DIR}/pclHandler.cpp"
 )
+
+find_package(PCL 1.3 REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+add_definitions(${PCL_DEFINITIONS})

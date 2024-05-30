@@ -25,8 +25,8 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2d robP
         int x = occPoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH); // Millimeter to Centimeter for grid
         int y = occPoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
-        if (probMap((GRID_HEIGHT - 1) - y, x) < 1)
-            probMap((GRID_HEIGHT - 1) - y, x) += 0.4;
+        if (probMap(y, x) < 1)
+            probMap(y, x) += 0.4;
     }
 
     for (int i = 0; i < freePoints->rows(); i++)
@@ -34,8 +34,8 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2d robP
         int x = freePoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
         int y = freePoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
-        if (probMap((GRID_HEIGHT - 1) - y, x) > -1)
-            probMap((GRID_HEIGHT - 1) - y, x) -= 0.2;
+        if (probMap(y, x) > -1)
+            probMap(y, x) -= 0.2;
     }
 }
 

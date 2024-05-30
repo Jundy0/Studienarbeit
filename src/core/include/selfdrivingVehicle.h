@@ -6,7 +6,7 @@
 #include "slam.h"
 #include "evasionControl.h"
 
-#define SCAN_COUNT 360 // Count of Scans per one rotation.
+#define SCAN_COUNT 720 // Count of Scans per one rotation.
 
 /// @brief The Main Class for the Selfdriving Vehicle.
 class SelfdrivingVehicle
@@ -58,6 +58,8 @@ private:
     ISlam *slam;                       // The SLAM Algorithm to Map the Position of the Vehicle.
     lidar_point_t *lidarData;          // The current Lidar Data.
     EvasionControl *evasionControl;    // The Algorithm to evade obstacles.
+
+    int frameCount;
 };
 
 #endif //__SELFDRIVING_VEHICLE_H__

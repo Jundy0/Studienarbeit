@@ -27,6 +27,12 @@ git clone https://github.com/Jundy0/Studienarbeit --recurse-submodules
 sudo apt-get install libpigpio-dev
 ```
 
+3. Install PCL
+
+```bash
+sudo apt install libpcl-dev
+```
+
 # Lidar (Running on Raspberry Pi):
 
 ## Build:

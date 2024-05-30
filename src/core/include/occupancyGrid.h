@@ -7,7 +7,7 @@
 #include <string>
 
 #include "Eigen/Dense"
-#include "icpSettings.h"
+#include "settings.h"
 
 class OccupancyGrid
 {
