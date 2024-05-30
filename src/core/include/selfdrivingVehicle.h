@@ -44,6 +44,8 @@ private:
     IVehicleActuator *vehicleActuator; // The Actuator to controll the Vehicle.
     ISlam *slam;                       // The SLAM Algorithm to Map the Position of the Vehicle.
     lidar_point_t *lidarData;          // The current Lidar Data
+
+    int frameCount;
 };
 
 #endif //__SELFDRIVING_VEHICLE_H__

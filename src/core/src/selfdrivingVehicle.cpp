@@ -7,6 +7,8 @@ SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuat
     this->vehicleActuator = vehicleActuator;
     this->slam = new SlamHandler(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
+
+    this->frameCount = 0;
 }
 
 SelfdrivingVehicle::~SelfdrivingVehicle()
@@ -37,14 +39,19 @@ const double SelfdrivingVehicle::getRotation()
 
 void SelfdrivingVehicle::update()
 {
-    // get lidar Data
-    this->lidarSensor->getScanData(this->lidarData, SCAN_COUNT);
+    this->frameCount++;
+    this->frameCount = this->frameCount % 20;
 
-    const std::pair<Eigen::RowVector2d, double> odometry = this->vehicleActuator->getOdometry();
+    if (this->frameCount == 0)
+    {
+        // get lidar Data
+        this->lidarSensor->getScanData(this->lidarData, SCAN_COUNT);
 
-    // execute SLAM
-    this->slam->update(this->lidarData, odometry.first, odometry.second);
+        const std::pair<Eigen::RowVector2d, double> odometry = this->vehicleActuator->getOdometry();
 
+        // execute SLAM
+        this->slam->update(this->lidarData, odometry.first, odometry.second);
+    }
     // Evation Control and set values of actuator
     // TODO
 
