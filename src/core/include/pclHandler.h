@@ -14,7 +14,7 @@
 // Max Iterations before the algorithm will be considered to have converged
 const int MAX_ITERATIONS_ICP = 25; 
 // Mximum distance threshold between two correspondent points in source <-> target.
-const float MAX_CORRESPONDENCE_DISTANCE_ICP = 500.0f; // 150mmm  
+const float MAX_CORRESPONDENCE_DISTANCE_ICP = 50.0f; // 150mmm  
 // Inlier distance threshold for the internal RANSAC outlier rejection loop
 const float OUTLIER_REJECTION_THRESHOLD_ICP = 10.0f; // 10mm
 // Maximum allowable translation squared difference between two consecutive transformations in order for an optimization to be considered as having converged.
@@ -32,12 +32,6 @@ typedef struct
 
 typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloud;
-
-typedef pcl::PointNormal PointNormalT;
-typedef pcl::PointCloud<PointNormalT> PointCloudNormal;
-
-typedef pcl::FPFHSignature33 LocalDescriptorT;
-typedef pcl::PointCloud<LocalDescriptorT> LocalDescriptorCloud;
 
 class PclHandler
 {

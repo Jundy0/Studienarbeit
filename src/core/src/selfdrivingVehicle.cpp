@@ -40,7 +40,7 @@ const double SelfdrivingVehicle::getRotation()
 void SelfdrivingVehicle::update()
 {
     this->frameCount++;
-    this->frameCount = this->frameCount % 20;
+    this->frameCount = this->frameCount % 10;
 
     if (this->frameCount == 0)
     {
