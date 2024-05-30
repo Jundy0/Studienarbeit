@@ -4,6 +4,7 @@
 #include "lidarSensor.h"
 #include "vehicleActuator.h"
 #include "slam.h"
+#include "evasionControl.h"
 
 #define SCAN_COUNT 720 // Count of Scans per one rotation.
 
@@ -35,6 +36,18 @@ public:
     /// @return The current Rotation in RAD of the Vehicle.
     const double getRotation();
 
+    /// @brief Get the current destination Point.
+    /// @return The current destination Point.
+    const Eigen::RowVector2d getDestination();
+
+    /// @brief Get the current calculated Path.
+    /// @return The current calculated Path.
+    const std::vector<Eigen::RowVector2d> getPath();
+
+    /// @brief Set a new destination Point.
+    /// @param destination The new destination Point.
+    void setDestination(Eigen::RowVector2d destination);
+
     /// @brief The Main update Function to call in the Main Loop. Process: Get Lidar Data -> Execute SLAM -> Execute Evasion -> Update Actuator.
     /// @note Should be called in the Main Loop.
     void update();
@@ -43,7 +56,8 @@ private:
     ILidarSensor *lidarSensor;         // The Lidar Sensor to get the Scan Data from.
     IVehicleActuator *vehicleActuator; // The Actuator to controll the Vehicle.
     ISlam *slam;                       // The SLAM Algorithm to Map the Position of the Vehicle.
-    lidar_point_t *lidarData;          // The current Lidar Data
+    lidar_point_t *lidarData;          // The current Lidar Data.
+    EvasionControl *evasionControl;    // The Algorithm to evade obstacles.
 
     int frameCount;
 };

@@ -4,4 +4,6 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 
+#define CIRCLE_RADIUS 5
+
 #endif // __SIMULATION_SETTINGS_H__

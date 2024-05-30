@@ -10,8 +10,11 @@ include_directories(
 
 set(CORE_CLASS_FILES
     "${CORE_SOURCE_DIR}/selfdrivingVehicle.cpp"
-	"${CORE_SOURCE_DIR}/occupancyGrid.cpp"
-	"${CORE_SOURCE_DIR}/particle.cpp"
+    "${CORE_SOURCE_DIR}/evasionControl.cpp"
+    "${CORE_SOURCE_DIR}/evasionAStar.cpp"
+    "${CORE_SOURCE_DIR}/evasionThetaStar.cpp"
+    "${CORE_SOURCE_DIR}/occupancyGrid.cpp"
+    "${CORE_SOURCE_DIR}/particle.cpp"
     "${CORE_SOURCE_DIR}/slamHandler.cpp"
     "${CORE_SOURCE_DIR}/pclHandler.cpp"
 )

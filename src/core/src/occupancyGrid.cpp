@@ -20,7 +20,6 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2d robP
     Eigen::MatrixX2d *occPoints = &allPoints.first;
     Eigen::MatrixX2d *freePoints = &allPoints.second;
 
-    // Mirror y coordinate so (0,0) is at the bottom left
     for (int i = 0; i < occPoints->rows(); i++)
     {
         int x = occPoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH); // Millimeter to Centimeter for grid

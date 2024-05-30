@@ -54,7 +54,9 @@ void VisualizeWindow::render()
 
     const Eigen::MatrixXd *gridMap = this->selfdrivingVehicle->getGridMap();
     const Eigen::RowVector2d position = this->selfdrivingVehicle->getPosition();
+    const Eigen::RowVector2d destination = this->selfdrivingVehicle->getDestination();
     const double rot = this->selfdrivingVehicle->getRotation();
+    const std::vector<Eigen::RowVector2d> path = this->selfdrivingVehicle->getPath();
 
     sf::Color color;
 
@@ -86,6 +88,27 @@ void VisualizeWindow::render()
     this->vehicleSprite.setRotation(rot * 180 / M_PI);
 
     this->window->draw(this->vehicleSprite);
+
+    for (int i = path.size() - 1; i > 0; i--)
+    {
+
+        sf::Vertex line[] =
+            {
+                sf::Vertex(sf::Vector2f(path[i].x() * (WINDOW_WIDTH / GRID_WIDTH), path[i].y() * (WINDOW_HEIGHT / GRID_HEIGHT)), sf::Color::Red),
+                sf::Vertex(sf::Vector2f(path[i - 1].x() * (WINDOW_WIDTH / GRID_WIDTH), path[i - 1].y() * (WINDOW_HEIGHT / GRID_HEIGHT)), sf::Color::Red),
+            };
+
+        window->draw(line, 2, sf::Lines);
+    }
+
+    sf::CircleShape circle = sf::CircleShape(CIRCLE_RADIUS);
+
+    if (destination != Eigen::RowVector2d(0, 0)) // Default value for Destaination Point
+    {
+        circle.setFillColor(sf::Color::Magenta);
+        circle.setPosition(sf::Vector2f(destination.x() * (WINDOW_WIDTH / GRID_WIDTH), destination.y() * (WINDOW_HEIGHT / GRID_HEIGHT)) - sf::Vector2f(CIRCLE_RADIUS, CIRCLE_RADIUS));
+        window->draw(circle);
+    }
 
     this->fpsDisplay.setString(std::to_string(this->fps));
     this->window->draw(this->fpsDisplay);

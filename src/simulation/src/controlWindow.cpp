@@ -1,10 +1,10 @@
 #include "controlWindow.h"
 
+#include "settings.h"
+
 #include <fstream>
 #include <filesystem>
 #include <iostream>
-
-#define CIRCLE_RADIUS 5
 
 ControlWindow::ControlWindow(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator, SelfdrivingVehicle *selfdrivingVehicle, Vehicle *vehicle, std::vector<Obstacle> *obstacles)
 {
@@ -187,6 +187,7 @@ void ControlWindow::pollEvent()
                 if (!contains)
                 {
                     this->destination = newDestination;
+                    this->selfdrivingVehicle->setDestination(Eigen::RowVector2d(newDestination.x + (MAP_WIDTH / 2) - (WINDOW_WIDTH / 2), newDestination.y + (MAP_HEIGHT / 2) - (WINDOW_HEIGHT / 2)));
                 }
                 break;
             }

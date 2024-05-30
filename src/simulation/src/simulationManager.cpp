@@ -2,7 +2,7 @@
 
 SimulationManager::SimulationManager()
 {
-    this->vehicle = new Vehicle(400.f, 400.f);
+    this->vehicle = new Vehicle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     Obstacle obstacle1 = Obstacle(100.f, 100.f, 50.f, 50.f);
     Obstacle obstacle2 = Obstacle(190.f, 170.f, 100.f, 50.f);

@@ -21,6 +21,7 @@ set(CLASS_FILES
 )
 
 find_package(SFML 2 COMPONENTS graphics window system REQUIRED)
+
 include_directories(${SFML_INCLUDE_DIR})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../core/coreInclude.cmake")
