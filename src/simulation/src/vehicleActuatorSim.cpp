@@ -1,8 +1,8 @@
 #include "vehicleActuatorSim.h"
 
-VehicleActuatorSim::VehicleActuatorSim(Vehicle *vehicle)
+VehicleActuatorSim::VehicleActuatorSim(const std::shared_ptr<Vehicle> &vehicle)
+    : vehicle(vehicle)
 {
-    this->vehicle = vehicle;
 }
 
 VehicleActuatorSim::~VehicleActuatorSim()

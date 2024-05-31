@@ -21,7 +21,7 @@ enum class Mode
 class ControlWindow
 {
 public:
-    ControlWindow(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator, SelfdrivingVehicle *selfdrivingVehicle, Vehicle *vehicle, std::vector<Obstacle> *obstacles);
+    ControlWindow(const std::shared_ptr<ILidarSensor> &lidarSensor, const std::shared_ptr<IVehicleActuator> &vehicleActuator, const std::shared_ptr<SelfdrivingVehicle> &selfdrivingVehicle, const std::shared_ptr<Vehicle> &vehicle, std::vector<Obstacle> &obstacles);
     ~ControlWindow();
 
     void update();
@@ -31,7 +31,7 @@ public:
     void close();
 
 private:
-    sf::RenderWindow *window;
+    std::unique_ptr<sf::RenderWindow> window;
     sf::Event ev;
     sf::Clock clock;
     sf::Font font;
@@ -40,7 +40,7 @@ private:
 
     Mode mode = Mode::placeObstacle;
 
-    Vehicle *vehicle;
+    std::shared_ptr<Vehicle> vehicle;
     std::vector<Obstacle> *obstacles;
     bool placingObstacle = false;
     sf::Vector2f newObstacleP1;
@@ -48,9 +48,9 @@ private:
 
     sf::Vector2f destination;
 
-    ILidarSensor *lidarSensor;
-    IVehicleActuator *vehicleActuator;
-    SelfdrivingVehicle *selfdrivingVehicle;
+    std::shared_ptr<ILidarSensor> lidarSensor;
+    std::shared_ptr<IVehicleActuator> vehicleActuator;
+    std::shared_ptr<SelfdrivingVehicle> selfdrivingVehicle;
     bool collision = false;
 
     void pollEvent();

@@ -1,6 +1,8 @@
 #ifndef __EVASION_CONTROL_H__
 #define __EVASION_CONTROL_H__
 
+#include <memory>
+
 #include "Eigen/Dense"
 #include "vehicleActuator.h"
 #include "settings.h"
@@ -11,6 +13,10 @@
 class EvasionControl
 {
 public:
+    /// @brief Create a new Evasion Control.
+    /// @param vehicleActuator The Actuator to controll the Vehicle.
+    EvasionControl(const std::shared_ptr<IVehicleActuator> &vehicleActuator);
+
     /// @brief Destroy the Evasion Control.
     virtual ~EvasionControl(){};
 
@@ -33,7 +39,7 @@ public:
     void update(const Eigen::MatrixXd *map, Eigen::RowVector2d position, double rotation);
 
 protected:
-    IVehicleActuator *vehicleActuator; // The Actuator to controll the Vehicle.
+    std::shared_ptr<IVehicleActuator> vehicleActuator; // The Actuator to controll the Vehicle.
 
     const Eigen::MatrixXd *map;     // A Pointer to the current Map.
     Eigen::RowVector2d origin;      // The current origin Point.

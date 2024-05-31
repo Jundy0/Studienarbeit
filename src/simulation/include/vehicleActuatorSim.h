@@ -1,13 +1,15 @@
 #ifndef __VEHICLE_ACTUATOR_SIM_H__
 #define __VEHICLE_ACTUATOR_SIM_H__
 
+#include <memory>
+
 #include "vehicleActuator.h"
 #include "vehicle.h"
 
 class VehicleActuatorSim : public IVehicleActuator
 {
 public:
-    VehicleActuatorSim(Vehicle *vehicle);
+    VehicleActuatorSim(const std::shared_ptr<Vehicle> &vehicle);
     ~VehicleActuatorSim();
 
     void setForeward(double value);
@@ -19,7 +21,7 @@ public:
     const std::pair<Eigen::RowVector2d, double> getOdometry();
 
 private:
-    Vehicle *vehicle;
+    std::shared_ptr<Vehicle> vehicle;
 
     double foreward = .0;
     double backward = .0;

@@ -2,6 +2,7 @@
 #define __SIMULATION_MANAGER_H__
 
 #include <vector>
+#include <memory>
 
 #include "vehicle.h"
 #include "obstacle.h"
@@ -20,15 +21,15 @@ public:
     void run();
 
 private:
-    ControlWindow *controlWindow;
-    VisualizeWindow *visualizeWindow;
+    std::shared_ptr<ControlWindow> controlWindow;
+    std::shared_ptr<VisualizeWindow> visualizeWindow;
 
-    Vehicle *vehicle;
+    std::shared_ptr<Vehicle> vehicle;
     std::vector<Obstacle> obstacles;
 
-    ILidarSensor *lidarSensor;
-    IVehicleActuator *vehicleActuator;
-    SelfdrivingVehicle *selfdrivingVehicle;
+    std::shared_ptr<ILidarSensor> lidarSensor;
+    std::shared_ptr<IVehicleActuator> vehicleActuator;
+    std::shared_ptr<SelfdrivingVehicle> selfdrivingVehicle;
 
     void update();
     void render();

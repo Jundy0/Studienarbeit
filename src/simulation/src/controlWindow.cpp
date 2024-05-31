@@ -6,15 +6,14 @@
 #include <filesystem>
 #include <iostream>
 
-ControlWindow::ControlWindow(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator, SelfdrivingVehicle *selfdrivingVehicle, Vehicle *vehicle, std::vector<Obstacle> *obstacles)
+ControlWindow::ControlWindow(const std::shared_ptr<ILidarSensor> &lidarSensor, const std::shared_ptr<IVehicleActuator> &vehicleActuator, const std::shared_ptr<SelfdrivingVehicle> &selfdrivingVehicle, const std::shared_ptr<Vehicle> &vehicle, std::vector<Obstacle> &obstacles)
+    : lidarSensor(lidarSensor),
+      vehicleActuator(vehicleActuator),
+      selfdrivingVehicle(selfdrivingVehicle),
+      vehicle(vehicle),
+      obstacles(&obstacles)
 {
-    this->lidarSensor = lidarSensor;
-    this->vehicleActuator = vehicleActuator;
-    this->selfdrivingVehicle = selfdrivingVehicle;
-    this->vehicle = vehicle;
-    this->obstacles = obstacles;
-
-    this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
+    this->window = std::make_unique<sf::RenderWindow>(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
     this->font.loadFromFile("../res/Arial.ttf");
     this->fpsDisplay.setFont(this->font);
@@ -24,7 +23,6 @@ ControlWindow::ControlWindow(ILidarSensor *lidarSensor, IVehicleActuator *vehicl
 
 ControlWindow::~ControlWindow()
 {
-    delete this->window;
 }
 
 void ControlWindow::update()

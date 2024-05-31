@@ -7,6 +7,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
+#include <memory>
+
 #include "selfdrivingVehicle.h"
 
 #include "simulationSettings.h"
@@ -14,7 +16,7 @@
 class VisualizeWindow
 {
 public:
-    VisualizeWindow(SelfdrivingVehicle *selfdrivingVehicle);
+    VisualizeWindow(const std::shared_ptr<SelfdrivingVehicle> &selfdrivingVehicle);
     ~VisualizeWindow();
 
     void update();
@@ -24,7 +26,7 @@ public:
     void close();
 
 private:
-    sf::RenderWindow *window;
+    std::unique_ptr<sf::RenderWindow> window;
     sf::Image visualizationImage;
     sf::Texture visualizationTexture;
     sf::Sprite visualizationSprite;
@@ -36,7 +38,7 @@ private:
     sf::Text fpsDisplay;
     uint8_t fps;
 
-    SelfdrivingVehicle *selfdrivingVehicle;
+    std::shared_ptr<SelfdrivingVehicle> selfdrivingVehicle;
 
     void pollEvent();
 };

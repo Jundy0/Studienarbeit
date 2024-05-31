@@ -3,13 +3,13 @@
 #include "evasionAStar.h"
 #include "evasionThetaStar.h"
 
-SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator)
+SelfdrivingVehicle::SelfdrivingVehicle(const std::shared_ptr<ILidarSensor> &lidarSensor, const std::shared_ptr<IVehicleActuator> &vehicleActuator)
+    : lidarSensor(lidarSensor),
+      vehicleActuator(vehicleActuator)
 {
-    this->lidarSensor = lidarSensor;
-    this->vehicleActuator = vehicleActuator;
-    this->slam = new SlamHandler(SCAN_COUNT);
+    this->slam = std::make_unique<SlamHandler>(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
-    this->evasionControl = new EvasionAStar(this->vehicleActuator);
+    this->evasionControl = std::make_unique<EvasionAStar>(this->vehicleActuator);
     this->evasionControl->setDestination(Eigen::RowVector2d(2450, 2450));
 
     this->frameCount = 0;
@@ -17,9 +17,7 @@ SelfdrivingVehicle::SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuat
 
 SelfdrivingVehicle::~SelfdrivingVehicle()
 {
-    delete this->slam;
     free(this->lidarData);
-    delete this->evasionControl;
 }
 
 const lidar_point_t *SelfdrivingVehicle::getLidarDataPtr()

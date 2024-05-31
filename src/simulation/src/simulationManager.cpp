@@ -2,34 +2,24 @@
 
 SimulationManager::SimulationManager()
 {
-    this->vehicle = new Vehicle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+    this->vehicle = std::make_shared<Vehicle>(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
-    Obstacle obstacle1 = Obstacle(100.f, 100.f, 50.f, 50.f);
-    Obstacle obstacle2 = Obstacle(190.f, 170.f, 100.f, 50.f);
-    Obstacle obstacle3 = Obstacle(500.f, 200.f, 100.f, 200.f);
-    Obstacle obstacle4 = Obstacle(300.f, 600.f, 300.f, 50.f);
+    this->obstacles.emplace_back(100.f, 100.f, 50.f, 50.f);
+    this->obstacles.emplace_back(190.f, 170.f, 100.f, 50.f);
+    this->obstacles.emplace_back(500.f, 200.f, 100.f, 200.f);
+    this->obstacles.emplace_back(300.f, 600.f, 300.f, 50.f);
 
-    this->obstacles.push_back(obstacle1);
-    this->obstacles.push_back(obstacle2);
-    this->obstacles.push_back(obstacle3);
-    this->obstacles.push_back(obstacle4);
+    this->lidarSensor = std::make_shared<LidarSensorSim>(this->vehicle, this->obstacles);
+    this->vehicleActuator = std::make_shared<VehicleActuatorSim>(this->vehicle);
+    this->selfdrivingVehicle = std::make_shared<SelfdrivingVehicle>(this->lidarSensor, this->vehicleActuator);
 
-    this->lidarSensor = new LidarSensorSim(this->vehicle, this->obstacles);
-    this->vehicleActuator = new VehicleActuatorSim(this->vehicle);
-    this->selfdrivingVehicle = new SelfdrivingVehicle(this->lidarSensor, this->vehicleActuator);
-
-    this->controlWindow = new ControlWindow(this->lidarSensor, this->vehicleActuator, this->selfdrivingVehicle, this->vehicle, &this->obstacles);
-    this->visualizeWindow = new VisualizeWindow(this->selfdrivingVehicle);
+    this->controlWindow = std::make_shared<ControlWindow>(this->lidarSensor, this->vehicleActuator, this->selfdrivingVehicle, this->vehicle, this->obstacles);
+    this->controlWindow = std::make_shared<ControlWindow>(this->lidarSensor, this->vehicleActuator, this->selfdrivingVehicle, this->vehicle, this->obstacles);
+    this->visualizeWindow = std::make_shared<VisualizeWindow>(this->selfdrivingVehicle);
 }
 
 SimulationManager::~SimulationManager()
 {
-    delete this->vehicle;
-    delete this->lidarSensor;
-    delete this->vehicleActuator;
-    delete this->selfdrivingVehicle;
-    delete this->controlWindow;
-    delete this->visualizeWindow;
 }
 
 void SimulationManager::run()

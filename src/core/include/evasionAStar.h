@@ -9,7 +9,7 @@ class EvasionAStar : public EvasionControl
 public:
     /// @brief Create a new Evasion Control, that uses AStar.
     /// @param vehicleActuator The Actuator to controll the Vehicle.
-    EvasionAStar(IVehicleActuator *vehicleActuator);
+    EvasionAStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator);
 
 protected:
     /// @brief Execute the AStar Pathfinding Algorithm.

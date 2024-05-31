@@ -1,5 +1,10 @@
 #include "evasionControl.h"
 
+EvasionControl::EvasionControl(const std::shared_ptr<IVehicleActuator> &vehicleActuator)
+    : vehicleActuator(vehicleActuator)
+{
+}
+
 void EvasionControl::setDestination(Eigen::RowVector2d destination)
 {
     this->destination = Eigen::RowVector2d(std::round(destination.x() / (MAP_WIDTH / GRID_WIDTH)), std::round(destination.y() / (MAP_HEIGHT / GRID_HEIGHT)));

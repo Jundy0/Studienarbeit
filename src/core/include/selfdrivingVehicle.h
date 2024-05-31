@@ -1,6 +1,8 @@
 #ifndef __SELFDRIVING_VEHICLE_H__
 #define __SELFDRIVING_VEHICLE_H__
 
+#include <memory>
+
 #include "lidarSensor.h"
 #include "vehicleActuator.h"
 #include "slam.h"
@@ -15,7 +17,7 @@ public:
     /// @brief Create a new Selfdriving Vehicle.
     /// @param lidarSensor The Lidar Sensor to get the Scan Data from.
     /// @param vehicleActuator The Actuator to controll the Vehicle.
-    SelfdrivingVehicle(ILidarSensor *lidarSensor, IVehicleActuator *vehicleActuator);
+    SelfdrivingVehicle(const std::shared_ptr<ILidarSensor> &lidarSensor, const std::shared_ptr<IVehicleActuator> &vehicleActuator);
 
     /// @brief Destroy the Selfdriving Vehicle.
     ~SelfdrivingVehicle();
@@ -53,11 +55,11 @@ public:
     void update();
 
 private:
-    ILidarSensor *lidarSensor;         // The Lidar Sensor to get the Scan Data from.
-    IVehicleActuator *vehicleActuator; // The Actuator to controll the Vehicle.
-    ISlam *slam;                       // The SLAM Algorithm to Map the Position of the Vehicle.
-    lidar_point_t *lidarData;          // The current Lidar Data.
-    EvasionControl *evasionControl;    // The Algorithm to evade obstacles.
+    std::shared_ptr<ILidarSensor> lidarSensor;         // The Lidar Sensor to get the Scan Data from.
+    std::shared_ptr<IVehicleActuator> vehicleActuator; // The Actuator to controll the Vehicle.
+    std::unique_ptr<ISlam> slam;                       // The SLAM Algorithm to Map the Position of the Vehicle.
+    lidar_point_t *lidarData;                          // The current Lidar Data.
+    std::unique_ptr<EvasionControl> evasionControl;    // The Algorithm to evade obstacles.
 
     int frameCount;
 };

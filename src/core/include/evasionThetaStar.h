@@ -26,7 +26,7 @@ class EvasionThetaStar : public EvasionControl
 public:
     /// @brief Create a new Evasion Control, that uses ThetaStar.
     /// @param vehicleActuator The Actuator to controll the Vehicle.
-    EvasionThetaStar(IVehicleActuator *vehicleActuator);
+    EvasionThetaStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator);
 
 protected:
     /// @brief Execute the ThetaStar Pathfinding Algorithm.

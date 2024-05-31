@@ -2,11 +2,10 @@
 
 #include "settings.h"
 
-VisualizeWindow::VisualizeWindow(SelfdrivingVehicle *selfdrivingVehicle)
+VisualizeWindow::VisualizeWindow(const std::shared_ptr<SelfdrivingVehicle> &selfdrivingVehicle)
+    : selfdrivingVehicle(selfdrivingVehicle)
 {
-    this->selfdrivingVehicle = selfdrivingVehicle;
-
-    this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation Visualization", sf::Style::Titlebar | sf::Style::Close);
+    this->window = std::make_unique<sf::RenderWindow>(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Simulation Visualization", sf::Style::Titlebar | sf::Style::Close);
     this->window->setFramerateLimit(60);
 
     this->visualizationImage.create(WINDOW_WIDTH, WINDOW_HEIGHT, sf::Color::Transparent);
@@ -30,7 +29,6 @@ VisualizeWindow::VisualizeWindow(SelfdrivingVehicle *selfdrivingVehicle)
 
 VisualizeWindow::~VisualizeWindow()
 {
-    delete this->window;
 }
 
 void VisualizeWindow::update()

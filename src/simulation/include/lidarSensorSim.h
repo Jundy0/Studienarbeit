@@ -2,6 +2,7 @@
 #define __LIDAR_SENSOR_SIM_H__
 
 #include <vector>
+#include <memory>
 
 #include "lidarSensor.h"
 #include "vehicle.h"
@@ -10,7 +11,7 @@
 class LidarSensorSim : public ILidarSensor
 {
 public:
-    LidarSensorSim(Vehicle *vehicle, std::vector<Obstacle> &obstacles);
+    LidarSensorSim(const std::shared_ptr<Vehicle> &vehicle, std::vector<Obstacle> &obstacles);
     ~LidarSensorSim();
 
     void setPWM(int dutyCycle);
@@ -19,7 +20,7 @@ public:
     void getScanData(lidar_point_t *data, size_t count);
 
 private:
-    Vehicle *vehicle;
+    std::shared_ptr<Vehicle> vehicle;
     std::vector<Obstacle> *obstacles;
 };
 

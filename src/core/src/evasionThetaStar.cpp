@@ -5,9 +5,9 @@
 
 #define ROUND(x) (size_t) std::round(x)
 
-EvasionThetaStar::EvasionThetaStar(IVehicleActuator *vehicleActuator)
+EvasionThetaStar::EvasionThetaStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator)
+    : EvasionControl(vehicleActuator)
 {
-    this->vehicleActuator = vehicleActuator;
 }
 
 void EvasionThetaStar::execute()

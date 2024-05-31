@@ -7,10 +7,10 @@
 #include "intersection.h"
 #include "simulationSettings.h"
 
-LidarSensorSim::LidarSensorSim(Vehicle *vehicle, std::vector<Obstacle> &obstacles)
+LidarSensorSim::LidarSensorSim(const std::shared_ptr<Vehicle> &vehicle, std::vector<Obstacle> &obstacles)
+    : vehicle(vehicle),
+      obstacles(&obstacles)
 {
-    this->vehicle = vehicle;
-    this->obstacles = &obstacles;
 }
 
 LidarSensorSim::~LidarSensorSim()
