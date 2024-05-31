@@ -14,7 +14,7 @@
 // Max Iterations before the algorithm will be considered to have converged
 const int MAX_ITERATIONS_ICP = 25;
 // Mximum distance threshold between two correspondent points in source <-> target.
-const float MAX_CORRESPONDENCE_DISTANCE_ICP = 50.0f; // 150mmm
+const float MAX_CORRESPONDENCE_DISTANCE_ICP = 100.0f; // 100mmm
 // Inlier distance threshold for the internal RANSAC outlier rejection loop
 const float OUTLIER_REJECTION_THRESHOLD_ICP = 10.0f; // 10mm
 // Maximum allowable translation squared difference between two consecutive transformations in order for an optimization to be considered as having converged.
@@ -37,7 +37,7 @@ class PclHandler
 {
 public:
     PclHandler();
-    TransformationComponents computeTransformation(Eigen::MatrixX2d first_scan, Eigen::MatrixX2d second_scan);
+    TransformationComponents computeTransformation(Eigen::MatrixX2d first_scan, Eigen::MatrixX2d second_scan, double current_rotation);
 
 private:
     /*
@@ -51,8 +51,8 @@ private:
      */
     Eigen::Matrix4f computeAlignment(const PointCloud::Ptr &source_points, const PointCloud::Ptr &target_points);
 
-    PointCloud matrixToPointCloud(Eigen::MatrixX2d matrix);
-    Eigen::RowVector3f polarToCartesianXYZ(Eigen::RowVector2d polar_point);
+    PointCloud matrixToPointCloud(Eigen::MatrixX2d matrix, double current_rotation);
+    Eigen::RowVector3f polarToCartesianXYZ(Eigen::RowVector2d polar_point, double current_rotation);
     TransformationComponents extractTransformationComponents(Eigen::Matrix4f transformation_matrix);
 };
 

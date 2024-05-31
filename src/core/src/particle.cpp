@@ -76,7 +76,7 @@ double Particle::getRotation()
 
 void Particle::updatePosition(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan)
 {
-    TransformationComponents transComp = pclHandler.computeTransformation(firstScan, secondScan);
+    TransformationComponents transComp = pclHandler.computeTransformation(firstScan, secondScan, this->rotationAngle);
     std::cout << "Translation Vector: " << transComp.translation_vector << std::endl;
     std::cout << "Rotation: " << transComp.rotation_angle << std::endl;
     position += transComp.translation_vector;
@@ -91,7 +91,7 @@ void Particle::updatePositionWithOdometry(Eigen::RowVector2d positionDiff, doubl
 
 void Particle::updatePositionDebug(Eigen::MatrixX2d firstScan, Eigen::MatrixX2d secondScan, Eigen::RowVector2d positionDiff, double rotationDiff)
 {
-    TransformationComponents transComp = pclHandler.computeTransformation(firstScan, secondScan);
+    TransformationComponents transComp = pclHandler.computeTransformation(firstScan, secondScan, this->rotationAngle);
     std::cout << "Estimated Translation Vector: " << transComp.translation_vector << std::endl;
     std::cout << "Estimated Rotation: " << transComp.rotation_angle << std::endl;
     std::cout << "Real Translation Vector: " << positionDiff << ", Delta: " << transComp.translation_vector - positionDiff << std::endl;
