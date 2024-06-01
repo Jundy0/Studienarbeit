@@ -48,12 +48,14 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &source_point
                  0, 0, 1, 0,
                  0, 0, 0, 1;
 
+    int nr_iterations = 0;
+
     // Loop ICP until fitness score is under a threshhold or other criteria is met
     do
     {
         // Set ICP parameter
         icp.setMaximumIterations(MAX_ITERATIONS_ICP);
-        icp.setMaxCorrespondenceDistance(MAX_CORRESPONDENCE_DISTANCE_ICP);
+        icp.setMaxCorrespondenceDistance(MAX_CORRESPONDENCE_DISTANCE_ICP - (nr_iterations * 30));
         icp.setRANSACOutlierRejectionThreshold(OUTLIER_REJECTION_THRESHOLD_ICP);
         icp.setTransformationEpsilon(TRANSFORMATION_EPSILON_ICP);
         icp.setTransformationRotationEpsilon(ROTATION_EPSILON_ICP);
@@ -70,7 +72,9 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &source_point
         // If icp is not run for the first time the result gets added onto the results from previous iterations
         tf_matrix = icp.getFinalTransformation() * tf_matrix;
 
-    } while (icp.getFitnessScore() > 500);
+        nr_iterations ++;
+
+    } while (icp.getFitnessScore() > 300 && nr_iterations < 3);
     
     // Output of ICP results
     std::cout << "Converged: " << icp.hasConverged() << std::endl;

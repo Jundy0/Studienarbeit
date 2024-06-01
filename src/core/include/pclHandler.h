@@ -14,13 +14,13 @@
 /// @brief Max Iterations before the algorithm will be considered to have converged
 const int MAX_ITERATIONS_ICP = 25;
 /// @brief Mximum distance threshold between two correspondent points in source <-> target.
-const float MAX_CORRESPONDENCE_DISTANCE_ICP = 100.0f; // 100mmm
+const float MAX_CORRESPONDENCE_DISTANCE_ICP = 150.0f; // 150mmm
 /// @brief Inlier distance threshold for the internal RANSAC outlier rejection loop
 const float OUTLIER_REJECTION_THRESHOLD_ICP = 10.0f; // 10mm
 /// @brief Maximum allowable translation squared difference between two consecutive transformations in order for an optimization to be considered as having converged.
 const float TRANSFORMATION_EPSILON_ICP = 1e-10 * 1e-10;
 /// @brief Maximum allowable rotation difference between two consecutive transformations in order for an optimization to be considered as having converged.
-const float ROTATION_EPSILON_ICP = 0.001; // 0.029deg
+const float ROTATION_EPSILON_ICP = 1e-5; // 0.029deg
 /// @brief Maximum allowed distance error before the algorithm will be considered to have converged
 const float EUCLIDEAN_FITNESS_EPSILON_ICP = 1e-4;
 
