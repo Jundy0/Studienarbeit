@@ -19,6 +19,6 @@ set(CORE_CLASS_FILES
     "${CORE_SOURCE_DIR}/pclHandler.cpp"
 )
 
-find_package(PCL 1.3 REQUIRED)
+find_package(PCL 1.3 REQUIRED COMPONENTS registration common)
 include_directories(${PCL_INCLUDE_DIRS})
 add_definitions(${PCL_DEFINITIONS})

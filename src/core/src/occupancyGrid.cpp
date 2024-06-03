@@ -1,11 +1,6 @@
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-
-#include "Eigen/Dense"
-
 #include "occupancyGrid.h"
+
+#include <iostream>
 
 OccupancyGrid::OccupancyGrid()
 {
@@ -13,7 +8,7 @@ OccupancyGrid::OccupancyGrid()
     probMap = Eigen::MatrixXd::Zero(GRID_HEIGHT, GRID_WIDTH);
 };
 
-void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2d robPos, double robRotAngle)
+void OccupancyGrid::updateProbMap(const Eigen::MatrixX2d &scan, const Eigen::RowVector2d &robPos, double robRotAngle)
 {
     // Gets coordinates of free and occupied points and saves them into matrix
     std::pair<Eigen::MatrixX2d, Eigen::MatrixX2d> allPoints = getPoints(scan, robPos, robRotAngle);
@@ -24,7 +19,7 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2d robP
     // Updates values in the probMap for occupied points
     for (int i = 0; i < occPoints->rows(); i++)
     {
-        // Gets x and y for each point from the matrix 
+        // Gets x and y for each point from the matrix
         // Must be divided by the ratio between map and grid since the grind is a fraction of the size to allow for some error
         // (e.g. 1x1 in the grid is 10x10 in the map so all the points on the map that lay in this 10x10 area will change the value of probability at that point in the grid)
         int x = occPoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
@@ -37,8 +32,8 @@ void OccupancyGrid::updateProbMap(Eigen::MatrixX2d scan, Eigen::RowVector2d robP
     // Updates values in the probMap for free points
     for (int i = 0; i < freePoints->rows(); i++)
     {
-        // Gets x and y for each point from the matrix 
-        // Must be divided by the ratio between map and grid since the grind is a fraction of the size to allow for some error 
+        // Gets x and y for each point from the matrix
+        // Must be divided by the ratio between map and grid since the grind is a fraction of the size to allow for some error
         int x = freePoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
         int y = freePoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
@@ -52,7 +47,7 @@ Eigen::MatrixXd *OccupancyGrid::getProbMap()
     return &probMap;
 }
 
-std::pair<Eigen::MatrixX2d, Eigen::MatrixX2d> OccupancyGrid::getPoints(Eigen::MatrixX2d scan, Eigen::RowVector2d robPos, double robRotAngle)
+std::pair<Eigen::MatrixX2d, Eigen::MatrixX2d> OccupancyGrid::getPoints(const Eigen::MatrixX2d &scan, const Eigen::RowVector2d &robPos, double robRotAngle)
 {
     // Define X,2 Matrices for occupied and free points.
     // RowMajor stores the matrix row wise in memory and is used since each point is represented by one row in the matrix.
@@ -131,7 +126,7 @@ Eigen::MatrixX2d OccupancyGrid::bresenham(int robPosX, int robPosY, int x, int y
     return points;
 }
 
-Eigen::RowVector2d OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint, Eigen::RowVector2d robPos, double robRotAngle)
+Eigen::RowVector2d OccupancyGrid::polarToCartesian(const Eigen::RowVector2d &polarPoint, const Eigen::RowVector2d &robPos, double robRotAngle)
 {
     Eigen::RowVector2d cartPoint;
 
@@ -140,7 +135,7 @@ Eigen::RowVector2d OccupancyGrid::polarToCartesian(Eigen::RowVector2d polarPoint
     double r = polarPoint[1];
 
     // Convert to Cartesian, add RobPos and round to int
-    cartPoint[0] = round(r * cos(theta)) + robPos[0]; 
+    cartPoint[0] = round(r * cos(theta)) + robPos[0];
     cartPoint[1] = round(r * sin(theta)) + robPos[1];
 
     if (cartPoint[0] >= MAP_WIDTH || cartPoint[1] >= MAP_HEIGHT)

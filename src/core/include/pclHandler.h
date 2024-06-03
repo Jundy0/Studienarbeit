@@ -6,8 +6,6 @@
 
 #include <pcl/common/transforms.h>
 
-#include <pcl/io/pcd_io.h>
-
 ////////////////////
 // ICP parameters //
 ////////////////////
@@ -33,47 +31,53 @@ typedef struct
     double rotation_angle;
 } TransformationComponents;
 
-/// @brief Point definition used during icp computation
+/// @brief Point definition used during icp computation.
 typedef pcl::PointXYZ PointT;
-/// @brief PointCloud definition used during icp computation
+/// @brief PointCloud definition used during icp computation.
 typedef pcl::PointCloud<PointT> PointCloud;
 
-/// @brief Interface between particle and the pcl library
+/// @brief Interface between particle and the pcl library.
 class PclHandler
 {
 public:
     /// @brief Empty Constructor.
     PclHandler();
-    /// @brief Computes the transformation matrix between two sets of scan data and parses them into TransformationComponents
-    /// @param first_scan First set of scan data composed of polar coordinates
-    /// @param second_scan Second set of scan data composed of polar coordinates
-    /// @param current_rotation The rotation angle of the particle at the time of the first scan. 
-    //                          Used to align local axis of the scan data with the global axis of the map
-    /// @return TransformationComponents got from the calculated transformation matrix
-    TransformationComponents computeTransformation(Eigen::MatrixX2d first_scan, Eigen::MatrixX2d second_scan, double current_rotation);
+
+    /// @brief Empty Deconstructor.
+    ~PclHandler() {}
+
+    /// @brief Computes the transformation matrix between two sets of scan data and parses them into TransformationComponents.
+    /// @param firstScan First set of scan data composed of polar coordinates.
+    /// @param secondScan Second set of scan data composed of polar coordinates.
+    /// @param currentRotation The rotation angle of the particle at the time of the first scan.
+    //                          Used to align local axis of the scan data with the global axis of the map.
+    /// @return TransformationComponents got from the calculated transformation matrix.
+    TransformationComponents computeTransformation(const Eigen::MatrixX2d &firstScan, const Eigen::MatrixX2d &secondScan, double currentRotation);
 
 private:
-    
-    /// @brief Use IterativeClosestPoint to find a precise alignment from the source cloud to the target cloud
-    /// @param source_points The "source" points, i.e., the points that must be transformed to align with the target point cloud
-    /// @param target_points The "target" points, i.e., the points to which the source point cloud will be aligned
-    /// @return A transformation matrix that will precisely align the points in source to the points in target
-    Eigen::Matrix4f computeAlignment(const PointCloud::Ptr &source_points, const PointCloud::Ptr &target_points);
-    /// @brief Converts the matrix to a point cloud aligned with the global x and y axis
-    /// @param matrix Set of scan data composed of polar coordinates
-    /// @param current_rotation The rotation angle of the particle at the time of the first scan. 
-    //                          Used to align local axis of the scan data with the global axis of the map
-    /// @return The PointCloud composed of all the points within the given matrix
-    PointCloud matrixToPointCloud(Eigen::MatrixX2d matrix, double current_rotation);
-    /// @brief Aligns polar point to the global axis and parses it into x, y and z coordinates with z always being zero
-    /// @param polar_point The polar point 
-    /// @param current_rotation The rotation angle of the particle at the time of the first scan. 
+    /// @brief Use IterativeClosestPoint to find a precise alignment from the source cloud to the target cloud.
+    /// @param sourcePoints The "source" points, i.e., the points that must be transformed to align with the target point cloud.
+    /// @param targetPoints The "target" points, i.e., the points to which the source point cloud will be aligned.
+    /// @return A transformation matrix that will precisely align the points in source to the points in target.
+    Eigen::Matrix4f computeAlignment(const PointCloud::Ptr &sourcePoints, const PointCloud::Ptr &targetPoints);
+
+    /// @brief Converts the matrix to a point cloud aligned with the global x and y axis.
+    /// @param matrix Set of scan data composed of polar coordinates.
+    /// @param currentRotation The rotation angle of the particle at the time of the first scan.
+    //                          Used to align local axis of the scan data with the global axis of the map.
+    /// @return The PointCloud composed of all the points within the given matrix.
+    PointCloud matrixToPointCloud(const Eigen::MatrixX2d &matrix, double currentRotation);
+
+    /// @brief Aligns polar point to the global axis and parses it into x, y and z coordinates with z always being zero.
+    /// @param polarPoint The polar point.
+    /// @param currentRotation The rotation angle of the particle at the time of the first scan.
     /// @return Cartesian representation of the polar point (X,Y,0)
-    Eigen::RowVector3f polarToCartesianXYZ(Eigen::RowVector2d polar_point, double current_rotation);
-    /// @brief Extracts the TransformationComponents from the transformation matrix computed by the icp algorithm
-    /// @param transformation_matrix The transformation matrix. Result of the icp algorithm
-    /// @return TransformationComponents composed of a vector with the x and y delta and the rotation delta between the two sets of scan data
-    TransformationComponents extractTransformationComponents(Eigen::Matrix4f transformation_matrix);
+    Eigen::RowVector3f polarToCartesianXYZ(const Eigen::RowVector2d &polarPoint, double currentRotation);
+
+    /// @brief Extracts the TransformationComponents from the transformation matrix computed by the icp algorithm.
+    /// @param transformationMatrix The transformation matrix. Result of the icp algorithm.
+    /// @return TransformationComponents composed of a vector with the x and y delta and the rotation delta between the two sets of scan data.
+    TransformationComponents extractTransformationComponents(const Eigen::Matrix4f &transformationMatrix);
 };
 
 #endif //__PCL_HANDLER_H__
