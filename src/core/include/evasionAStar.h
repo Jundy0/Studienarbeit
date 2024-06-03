@@ -3,6 +3,34 @@
 
 #include "evasionControl.h"
 
+/// @brief A Node, used for the A Star Algorithm.
+struct AStarNode
+{
+    Eigen::RowVector2d position; // Position of Node in Map.
+    double gCost;                // Cost from Start to this Node.
+    double hCost;                // Heuristic Cost.
+    double fCost;                // Total Cost: gCost + hCost.
+    AStarNode *parent;           // Parent Node for path reconstruction.
+
+    /// @brief Create a new A Star Node.
+    /// @param pos Position of Node in Map.
+    /// @param g Cost from Start to this Node.
+    /// @param h Heuristic Cost.
+    /// @param p Parent Node for path reconstruction.
+    AStarNode(Eigen::RowVector2d pos, double g, double h, AStarNode *p = nullptr)
+        : position(pos), gCost(g), hCost(h), fCost(g + h), parent(p)
+    {
+    }
+
+    /// @brief Compare two AStarNodes.
+    /// @param other Another AStarNode.
+    /// @return True, if the fCost of this AStarNode is greater than the other.
+    bool operator>(const AStarNode &other) const
+    {
+        return fCost > other.fCost;
+    }
+};
+
 /// @brief The Class for Executing the AStar Pathfinding Algorithm.
 class EvasionAStar : public EvasionControl
 {
@@ -16,11 +44,11 @@ protected:
     /// @note https://en.wikipedia.org/wiki/A*_search_algorithm.
     void execute();
 
-private:
-    /// @brief Heuristic function to calculate the Manhattan distance between the current Point and the destination Point.
-    /// @param p The current Point.
-    /// @return The Manhattan distance between the current Point and the destination Point.
-    double heuristic(Eigen::RowVector2d p);
+    /// @brief Heuristic Function to calculate the Manhattan Distance between two Points.
+    /// @param p1 The first Point.
+    /// @param p2 The second Point.
+    /// @return The Manhattan Distance between the two Points.
+    inline virtual double heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2);
 };
 
 #endif // __EVASION_A_STAR_H__

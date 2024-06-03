@@ -3,8 +3,6 @@
 #include <queue>
 #include <unordered_set>
 
-#define ROUND(x) (size_t) std::round(x)
-
 EvasionThetaStar::EvasionThetaStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator)
     : EvasionControl(vehicleActuator)
 {
@@ -12,23 +10,26 @@ EvasionThetaStar::EvasionThetaStar(const std::shared_ptr<IVehicleActuator> &vehi
 
 void EvasionThetaStar::execute()
 {
-    std::priority_queue<Node, std::vector<Node>, std::greater<Node>> open_set;
-    std::unordered_set<long> closed_set;
+    size_t rows = this->map->rows();
+    size_t cols = this->map->cols();
+
+    std::priority_queue<ThetaStarNode, std::vector<ThetaStarNode>, std::greater<ThetaStarNode>> openSet;
+    std::unordered_set<long> closedSet;
 
     auto hash = [](const Eigen::RowVector2d &v)
     { return std::hash<double>()(v.x()) ^ std::hash<double>()(v.y()); };
 
-    open_set.emplace(this->origin, 0.0, euclideanDistance(this->origin, this->destination));
+    openSet.emplace(this->origin, 0.0, heuristic(this->origin, this->destination));
 
-    while (!open_set.empty())
+    while (!openSet.empty())
     {
-        Node current = open_set.top();
-        open_set.pop();
+        ThetaStarNode current = openSet.top();
+        openSet.pop();
 
         if (current.position == this->destination)
         {
             std::vector<Eigen::RowVector2d> path;
-            Node *node = &current;
+            ThetaStarNode *node = &current;
             while (node != nullptr)
             {
                 path.push_back(node->position);
@@ -36,9 +37,11 @@ void EvasionThetaStar::execute()
             }
             std::reverse(path.begin(), path.end());
             this->path = path;
+
+            return;
         }
 
-        closed_set.insert(hash(current.position));
+        closedSet.insert(hash(current.position));
 
         std::vector<Eigen::RowVector2d> neighbors = {
             current.position + Eigen::RowVector2d(-1, 0),
@@ -51,46 +54,49 @@ void EvasionThetaStar::execute()
             current.position + Eigen::RowVector2d(1, 1),
         };
 
-        for (const auto &neighbor_pos : neighbors)
+        for (const auto &neighborPos : neighbors)
         {
-            if (neighbor_pos.x() < 0 || neighbor_pos.y() < 0 || neighbor_pos.x() >= (*this->map).rows() || neighbor_pos.y() >= (*this->map).cols() ||
-                (*this->map)(ROUND(neighbor_pos.x()), ROUND(neighbor_pos.y())) == 1 || closed_set.count(hash(neighbor_pos)))
+            size_t x = ROUND(neighborPos.x());
+            size_t y = ROUND(neighborPos.y());
+
+            if (x < 0 || y < 0 || x >= rows || y >= cols ||
+                !isFree(x, y) || closedSet.count(hash(neighborPos)))
             {
                 continue;
             }
 
-            double tentative_g_cost = current.g_cost + euclideanDistance(current.position, neighbor_pos);
-            double h_cost = euclideanDistance(neighbor_pos, this->destination);
+            double tentative_g_cost = current.gCost + heuristic(current.position, neighborPos);
+            double hCost = heuristic(neighborPos, this->destination);
 
-            Node neighbor(neighbor_pos, tentative_g_cost, h_cost, &current);
+            ThetaStarNode neighbor(neighborPos, tentative_g_cost, hCost, &current);
 
             if (current.parent != nullptr && lineOfSight(current.parent->position, neighbor.position))
             {
-                if (tentative_g_cost < neighbor.g_cost)
+                if (tentative_g_cost < neighbor.gCost)
                 {
-                    neighbor.g_cost = tentative_g_cost;
-                    neighbor.f_cost = tentative_g_cost + h_cost;
+                    neighbor.gCost = tentative_g_cost;
+                    neighbor.fCost = tentative_g_cost + hCost;
                     neighbor.parent = current.parent;
                 }
             }
 
-            open_set.push(neighbor);
+            openSet.push(neighbor);
         }
     }
 }
 
-double EvasionThetaStar::euclideanDistance(const Eigen::RowVector2d &a, const Eigen::RowVector2d &b)
+inline double EvasionThetaStar::heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2)
 {
-    return (a - b).norm();
+    return (p1 - p2).norm();
 }
 
-bool EvasionThetaStar::lineOfSight(const Eigen::RowVector2d &a, const Eigen::RowVector2d &b)
+bool EvasionThetaStar::lineOfSight(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2)
 {
-    int x0 = a.x(), y0 = a.y();
-    int x1 = b.x(), y1 = b.y();
+    int x1 = p1.x(), y0 = p1.y();
+    int x2 = p2.x(), y1 = p2.y();
 
     int dy = y1 - y0;
-    int dx = x1 - x0;
+    int dx = x2 - x1;
     int f = 0;
 
     int sy = (dy > 0) ? 1 : -1;
@@ -101,21 +107,21 @@ bool EvasionThetaStar::lineOfSight(const Eigen::RowVector2d &a, const Eigen::Row
 
     if (dx >= dy)
     {
-        while (x0 != x1)
+        while (x1 != x2)
         {
             f += dy;
             if (f >= dx)
             {
-                if ((*this->map)(y0 + ((sy - 1) / 2), x0 + ((sx - 1) / 2)) == 1)
+                if (!isFree(y0 + ((sy - 1) / 2), x1 + ((sx - 1) / 2)))
                     return false;
                 y0 += sy;
                 f -= dx;
             }
-            if (f != 0 && (*this->map)(y0 + ((sy - 1) / 2), x0 + ((sx - 1) / 2)) == 1)
+            if (f != 0 && !isFree(y0 + ((sy - 1) / 2), x1 + ((sx - 1) / 2)))
                 return false;
-            if (dy == 0 && (*this->map)(y0, x0 + ((sx - 1) / 2)) == 1 && (*this->map)(y0 - 1, x0 + ((sx - 1) / 2)) == 1)
+            if (dy == 0 && !isFree(y0, x1 + ((sx - 1) / 2)) && !isFree(y0 - 1, x1 + ((sx - 1) / 2)))
                 return false;
-            x0 += sx;
+            x1 += sx;
         }
     }
     else
@@ -125,14 +131,14 @@ bool EvasionThetaStar::lineOfSight(const Eigen::RowVector2d &a, const Eigen::Row
             f += dx;
             if (f >= dy)
             {
-                if ((*this->map)(y0 + ((sy - 1) / 2), x0 + ((sx - 1) / 2)) == 1)
+                if (!isFree(y0 + ((sy - 1) / 2), x1 + ((sx - 1) / 2)))
                     return false;
-                x0 += sx;
+                x1 += sx;
                 f -= dy;
             }
-            if (f != 0 && (*this->map)(y0 + ((sy - 1) / 2), x0 + ((sx - 1) / 2)) == 1)
+            if (f != 0 && !isFree(y0 + ((sy - 1) / 2), x1 + ((sx - 1) / 2)))
                 return false;
-            if (dx == 0 && (*this->map)(y0 + ((sy - 1) / 2), x0) == 1 && (*this->map)(y0 + ((sy - 1) / 2), x0 - 1) == 1)
+            if (dx == 0 && !isFree(y0 + ((sy - 1) / 2), x1) && !isFree(y0 + ((sy - 1) / 2), x1 - 1))
                 return false;
             y0 += sy;
         }

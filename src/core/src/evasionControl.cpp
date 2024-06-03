@@ -5,7 +5,7 @@ EvasionControl::EvasionControl(const std::shared_ptr<IVehicleActuator> &vehicleA
 {
 }
 
-void EvasionControl::setDestination(Eigen::RowVector2d destination)
+void EvasionControl::setDestination(const Eigen::RowVector2d &destination)
 {
     this->destination = Eigen::RowVector2d(std::round(destination.x() / (MAP_WIDTH / GRID_WIDTH)), std::round(destination.y() / (MAP_HEIGHT / GRID_HEIGHT)));
 }
@@ -20,7 +20,7 @@ const std::vector<Eigen::RowVector2d> EvasionControl::getPath()
     return this->path;
 }
 
-void EvasionControl::update(const Eigen::MatrixXd *map, Eigen::RowVector2d position, double rotation)
+void EvasionControl::update(const Eigen::MatrixXd *map, const Eigen::RowVector2d &position, double rotation)
 {
     this->map = map;
     this->origin = Eigen::RowVector2d(std::round(position.x() / (MAP_WIDTH / GRID_WIDTH)), std::round(position.y() / (MAP_HEIGHT / GRID_HEIGHT)));
@@ -42,4 +42,9 @@ void EvasionControl::update(const Eigen::MatrixXd *map, Eigen::RowVector2d posit
     this->execute();
 
     // TODO: use VehicleActuator
+}
+
+bool EvasionControl::isFree(size_t x, size_t y)
+{
+    return (*this->map)(y, x) < PROB_OCC;
 }

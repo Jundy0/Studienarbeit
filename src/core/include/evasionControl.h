@@ -7,7 +7,7 @@
 #include "vehicleActuator.h"
 #include "settings.h"
 
-#define INF 1e9
+#define ROUND(x) (size_t) std::round(x)
 
 /// @brief The Base Class for Executing an Evasion Algorithm.
 class EvasionControl
@@ -22,7 +22,7 @@ public:
 
     /// @brief Set a new destination Point.
     /// @param destination The new destination Point.
-    void setDestination(Eigen::RowVector2d destination);
+    void setDestination(const Eigen::RowVector2d &destination);
 
     /// @brief Get the current destination Point.
     /// @return The current destination Point.
@@ -36,7 +36,7 @@ public:
     /// @param map A Pointer to the current Map.
     /// @param position The current Position of the Vehicle.
     /// @param rotation The current Rotation of the Vehicle in radiant.
-    void update(const Eigen::MatrixXd *map, Eigen::RowVector2d position, double rotation);
+    void update(const Eigen::MatrixXd *map, const Eigen::RowVector2d &position, double rotation);
 
 protected:
     std::shared_ptr<IVehicleActuator> vehicleActuator; // The Actuator to controll the Vehicle.
@@ -50,6 +50,19 @@ protected:
 
     /// @brief Execute the Pathfinding Algorithm.
     virtual void execute() = 0;
+
+    /// @brief Heuristic Function to calculate the Distance between two Points.
+    /// @param p1 The first Point.
+    /// @param p2 The second Point.
+    /// @return The Distance between the two Points.
+    inline virtual double heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2) = 0;
+
+    /// @brief Check, if the Field at the Coordiantes is free.
+    /// @param x The x Coordinate.
+    /// @param y The y Coordinate.
+    /// @return True, if the Field is free.
+    /// TODO: make inline????
+    bool isFree(size_t x, size_t y);
 };
 
 #endif // __EVASION_CONTROL_H__
