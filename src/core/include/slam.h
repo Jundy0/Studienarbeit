@@ -28,7 +28,7 @@ public:
     /// @param positionDiff The Position Difference since the last call of the Method.
     /// @param rotationDiff The Rotation Difference in RAD since the last call of the Method.
     /// @note Not every SLAM Algorithm actually uses the Odometry Data (Position and Rotation Difference).
-    virtual void update(lidar_point_t *data, Eigen::RowVector2d positionDiff, double rotationDiff) = 0;
+    virtual void update(lidar_point_t *data, const Eigen::RowVector2d& positionDiff, double rotationDiff) = 0;
 };
 
 #endif // __SLAM_H__
