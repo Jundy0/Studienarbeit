@@ -41,15 +41,6 @@ void VisualizeWindow::update()
 
 void VisualizeWindow::render()
 {
-    // Reset Image
-    // for (size_t i = 0; i < WINDOW_WIDTH; i++)
-    // {
-    //     for (size_t j = 0; j < WINDOW_HEIGHT; j++)
-    //     {
-    //         window2Image.setPixel(i, j, sf::Color::Transparent);
-    //     }
-    // }
-
     const Eigen::MatrixXd *gridMap = this->selfdrivingVehicle->getGridMap();
     const Eigen::RowVector2d position = this->selfdrivingVehicle->getPosition();
     const Eigen::RowVector2d destination = this->selfdrivingVehicle->getDestination();
@@ -82,14 +73,8 @@ void VisualizeWindow::render()
 
     this->window->draw(this->visualizationSprite);
 
-    this->vehicleSprite.setPosition(position(0) * WINDOW_WIDTH / MAP_WIDTH, position(1) * WINDOW_HEIGHT / MAP_HEIGHT);
-    this->vehicleSprite.setRotation(rot * 180 / M_PI);
-
-    this->window->draw(this->vehicleSprite);
-
     for (int i = path.size() - 1; i > 0; i--)
     {
-
         sf::Vertex line[] =
             {
                 sf::Vertex(sf::Vector2f(path[i].x() * (WINDOW_WIDTH / GRID_WIDTH), path[i].y() * (WINDOW_HEIGHT / GRID_HEIGHT)), sf::Color::Red),
@@ -99,12 +84,18 @@ void VisualizeWindow::render()
         window->draw(line, 2, sf::Lines);
     }
 
-    sf::CircleShape circle = sf::CircleShape(CIRCLE_RADIUS);
+    const sf::FloatRect vehicleSize = this->vehicleSprite.getGlobalBounds();
+
+    this->vehicleSprite.setPosition(sf::Vector2f(position(0) * (WINDOW_WIDTH / MAP_WIDTH), position(1) * (WINDOW_HEIGHT / MAP_HEIGHT)) - sf::Vector2f(vehicleSize.width / 2, vehicleSize.height / 2));
+    this->vehicleSprite.setRotation(rot * 180 / M_PI);
+
+    this->window->draw(this->vehicleSprite);
 
     if (destination != Eigen::RowVector2d(0, 0)) // Default value for Destaination Point
     {
+        sf::CircleShape circle = sf::CircleShape(CIRCLE_RADIUS);
         circle.setFillColor(sf::Color::Magenta);
-        circle.setPosition(sf::Vector2f(destination.x() * (WINDOW_WIDTH / GRID_WIDTH), destination.y() * (WINDOW_HEIGHT / GRID_HEIGHT)) - sf::Vector2f(CIRCLE_RADIUS, CIRCLE_RADIUS));
+        circle.setPosition(sf::Vector2f((destination.x() * (WINDOW_WIDTH / GRID_WIDTH)), destination.y() * (WINDOW_HEIGHT / GRID_HEIGHT)) - sf::Vector2f(CIRCLE_RADIUS / 2, CIRCLE_RADIUS / 2));
         window->draw(circle);
     }
 
