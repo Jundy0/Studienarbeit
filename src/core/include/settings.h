@@ -1,8 +1,8 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
-#define MAP_WIDTH 5000
-#define MAP_HEIGHT 5000
+#define MAP_WIDTH 2000
+#define MAP_HEIGHT 2000
 
 #define GRID_WIDTH 500
 #define GRID_HEIGHT 500

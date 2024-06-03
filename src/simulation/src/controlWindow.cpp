@@ -1,7 +1,5 @@
 #include "controlWindow.h"
 
-#include "settings.h"
-
 #include <fstream>
 #include <filesystem>
 #include <iostream>

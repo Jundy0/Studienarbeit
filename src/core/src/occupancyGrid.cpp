@@ -1,12 +1,14 @@
 #include "occupancyGrid.h"
 
-#include <iostream>
-
 OccupancyGrid::OccupancyGrid()
 {
     // Defines the matrix used to store probability values and fills it with zeroes
     probMap = Eigen::MatrixXd::Zero(GRID_HEIGHT, GRID_WIDTH);
-};
+}
+
+OccupancyGrid::~OccupancyGrid()
+{
+}
 
 void OccupancyGrid::updateProbMap(const Eigen::MatrixX2d &scan, const Eigen::RowVector2d &robPos, double robRotAngle)
 {

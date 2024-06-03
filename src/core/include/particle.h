@@ -1,7 +1,7 @@
 #ifndef __PARTICLE_H__
 #define __PARTICLE_H__
 
-#include "Eigen/Dense"
+#include <Eigen/Dense>
 
 #include "occupancyGrid.h"
 #include "pclHandler.h"
@@ -39,7 +39,7 @@ public:
     double getRotation();
 
 private:
- OccupancyGrid occupancyGrid; // An instance of the OccupancyGrid used for storing and interacting with the map of the particle.
+    OccupancyGrid occupancyGrid; // An instance of the OccupancyGrid used for storing and interacting with the map of the particle.
     PclHandler pclHandler;       // The interface for the pcl library used to do the icp computations.
 
     Eigen::RowVector2d position; // The current position of the particle.

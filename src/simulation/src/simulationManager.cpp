@@ -14,7 +14,6 @@ SimulationManager::SimulationManager()
     this->selfdrivingVehicle = std::make_shared<SelfdrivingVehicle>(this->lidarSensor, this->vehicleActuator);
 
     this->controlWindow = std::make_shared<ControlWindow>(this->lidarSensor, this->vehicleActuator, this->selfdrivingVehicle, this->vehicle, this->obstacles);
-    this->controlWindow = std::make_shared<ControlWindow>(this->lidarSensor, this->vehicleActuator, this->selfdrivingVehicle, this->vehicle, this->obstacles);
     this->visualizeWindow = std::make_shared<VisualizeWindow>(this->selfdrivingVehicle);
 }
 

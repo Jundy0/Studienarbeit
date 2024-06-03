@@ -1,9 +1,9 @@
 #ifndef __INTERSECTION_H__
 #define __INTERSECTION_H__
 
-#include <SFML/Graphics.hpp>
-
 #include <vector>
+
+#include <SFML/Graphics.hpp>
 
 #include "obstacle.h"
 

@@ -3,7 +3,6 @@
 
 #include <pcl/point_types.h>
 #include <pcl/registration/icp.h>
-
 #include <pcl/common/transforms.h>
 
 ////////////////////

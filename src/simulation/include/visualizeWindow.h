@@ -1,17 +1,13 @@
 #ifndef __VISUALIZE_WINDOW_H__
 #define __VISUALIZE_WINDOW_H__
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/Network.hpp>
-
 #include <memory>
 
-#include "selfdrivingVehicle.h"
+#include <SFML/Graphics.hpp>
 
+#include "selfdrivingVehicle.h"
 #include "simulationSettings.h"
+#include "settings.h"
 
 class VisualizeWindow
 {

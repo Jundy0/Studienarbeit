@@ -2,6 +2,7 @@
 #define __SELFDRIVING_VEHICLE_H__
 
 #include <memory>
+#include <chrono>
 
 #include "lidarSensor.h"
 #include "vehicleActuator.h"
@@ -61,7 +62,7 @@ private:
     lidar_point_t *lidarData;                          // The current Lidar Data.
     std::unique_ptr<EvasionControl> evasionControl;    // The Algorithm to evade obstacles.
 
-    int frameCount;
+    std::chrono::_V2::system_clock::time_point lastTime; // The last Timepoint.
 };
 
 #endif //__SELFDRIVING_VEHICLE_H__

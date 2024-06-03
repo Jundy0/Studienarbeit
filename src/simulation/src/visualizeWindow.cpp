@@ -1,7 +1,5 @@
 #include "visualizeWindow.h"
 
-#include "settings.h"
-
 VisualizeWindow::VisualizeWindow(const std::shared_ptr<SelfdrivingVehicle> &selfdrivingVehicle)
     : selfdrivingVehicle(selfdrivingVehicle)
 {
@@ -86,7 +84,7 @@ void VisualizeWindow::render()
 
     const sf::FloatRect vehicleSize = this->vehicleSprite.getGlobalBounds();
 
-    this->vehicleSprite.setPosition(sf::Vector2f(position(0) * (WINDOW_WIDTH / MAP_WIDTH), position(1) * (WINDOW_HEIGHT / MAP_HEIGHT)) - sf::Vector2f(vehicleSize.width / 2, vehicleSize.height / 2));
+    this->vehicleSprite.setPosition(position(0) * WINDOW_WIDTH / MAP_WIDTH, position(1) * WINDOW_HEIGHT / MAP_HEIGHT);
     this->vehicleSprite.setRotation(rot * 180 / M_PI);
 
     this->window->draw(this->vehicleSprite);

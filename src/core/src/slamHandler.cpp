@@ -1,5 +1,7 @@
 #include "slamHandler.h"
 
+#include <chrono>
+
 SlamHandler::SlamHandler(size_t pointCount)
     : pointCount(pointCount)
 {
@@ -13,6 +15,8 @@ SlamHandler::~SlamHandler()
 
 void SlamHandler::update(lidar_point_t *data, const Eigen::RowVector2d &positionDiff, double rotationDiff)
 {
+    auto t1 = std::chrono::high_resolution_clock::now();
+
     // Set currentScan to the data of the scan
     for (size_t i = 0; i < this->pointCount; i++)
     {
@@ -38,6 +42,10 @@ void SlamHandler::update(lidar_point_t *data, const Eigen::RowVector2d &position
 
     // currentScan gets moved to lastScan and gets overwritten next time update is called
     std::swap(this->currentScan, this->lastScan);
+
+    auto t2 = std::chrono::high_resolution_clock::now();
+    std::cout << "Update finished in " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << "ms\n\n"
+              << std::endl;
 }
 
 const Eigen::MatrixXd *SlamHandler::getGridMap()

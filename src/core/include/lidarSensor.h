@@ -1,8 +1,6 @@
 #ifndef __LIDAR_SENSOR_H__
 #define __LIDAR_SENSOR_H__
 
-#include <cstddef>
-
 /// @brief A Point that is scanned by the Lidar.
 typedef struct
 {

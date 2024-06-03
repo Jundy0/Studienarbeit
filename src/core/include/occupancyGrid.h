@@ -1,16 +1,19 @@
 #ifndef __OCCUPANCY_GRID_H__
 #define __OCCUPANCY_GRID_H__
 
-#include "Eigen/Dense"
+#include <Eigen/Dense>
+
 #include "settings.h"
 
 /// @brief The Grid where the map for a particle is stored in.
 class OccupancyGrid
 {
-
 public:
     /// @brief Constructor. Fills probMap with zeros.
     OccupancyGrid();
+
+    // @brief Destructor.
+    ~OccupancyGrid();
 
     /// @brief Updates the probability map based on scan data and the position and angle of the robot.
     /// @param scan The scan data. Points with angle and distance.

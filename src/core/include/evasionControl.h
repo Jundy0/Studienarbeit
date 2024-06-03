@@ -3,7 +3,8 @@
 
 #include <memory>
 
-#include "Eigen/Dense"
+#include <Eigen/Dense>
+
 #include "vehicleActuator.h"
 #include "settings.h"
 

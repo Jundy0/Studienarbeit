@@ -1,8 +1,5 @@
 #include "particle.h"
 
-#include <cmath>
-#include <chrono>
-
 Particle::Particle()
 {
     // Set starting position to the middle of the map
@@ -13,8 +10,6 @@ Particle::Particle()
 
 void Particle::update(const std::shared_ptr<Eigen::MatrixX2d> &firstScan, const std::shared_ptr<Eigen::MatrixX2d> &secondScan, const Eigen::RowVector2d &positionDiff, double rotationDiff)
 {
-    auto t1 = std::chrono::high_resolution_clock::now();
-
     // Update grid map with data from previous scan and the position of the particle
     std::cout << "Updating grid map" << std::endl;
     updateGridMap(*firstScan);
@@ -31,16 +26,10 @@ void Particle::update(const std::shared_ptr<Eigen::MatrixX2d> &firstScan, const 
     std::cout << "Real Rotation: " << rotationDiff << ", Delta: " << transComp.rotation_angle - rotationDiff << std::endl;
 
     updatePosition(transComp.translation_vector, transComp.rotation_angle);
-
-    auto t2 = std::chrono::high_resolution_clock::now();
-    std::cout << "Update finished in " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << "ms\n\n"
-              << std::endl;
 }
 
 void Particle::update(const std::shared_ptr<Eigen::MatrixX2d> &currentScan, const Eigen::RowVector2d &positionDiff, double rotationDiff)
 {
-    auto t1 = std::chrono::high_resolution_clock::now();
-
     // Update particle position and rotation using data read from the simulation
     std::cout << "Updating position with odometry data\n"
               << std::endl;
@@ -49,10 +38,6 @@ void Particle::update(const std::shared_ptr<Eigen::MatrixX2d> &currentScan, cons
     // Update grid map with data from current scan and the position of the particle
     std::cout << "Updating grid map" << std::endl;
     updateGridMap(*currentScan);
-
-    auto t2 = std::chrono::high_resolution_clock::now();
-    std::cout << "Update finished in " << std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count() << "ms\n\n"
-              << std::endl;
 }
 
 Eigen::MatrixXd *Particle::getGridMap()
