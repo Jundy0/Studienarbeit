@@ -63,6 +63,10 @@ protected:
     /// @return True, if the Field is free.
     /// TODO: make inline????
     bool isFree(size_t x, size_t y);
+
+private:
+    /// @brief Print the Path in the console.
+    void printPath();
 };
 
 #endif // __EVASION_CONTROL_H__

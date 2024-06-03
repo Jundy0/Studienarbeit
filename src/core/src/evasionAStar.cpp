@@ -1,6 +1,5 @@
 #include "evasionAStar.h"
 
-#include <iostream>
 #include <queue>
 #include <unordered_set>
 
@@ -25,8 +24,10 @@ void EvasionAStar::execute()
 
     openSet.push({0, this->origin});
     gScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = 0;
-    fScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = heuristic(this->origin, this->destination);
+    fScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = this->heuristic(this->origin, this->destination);
     parent(ROUND(this->origin.x()), ROUND(this->origin.y())) = {-1, -1};
+
+    this->path.clear();
 
     while (!openSet.empty())
     {
@@ -35,13 +36,13 @@ void EvasionAStar::execute()
 
         if (current == this->destination)
         {
-            this->path.clear();
-
             while (current != Eigen::RowVector2d(-1, -1))
             {
                 this->path.push_back(current);
                 current = parent(ROUND(current.x()), ROUND(current.y()));
             }
+
+            std::reverse(this->path.begin(), this->path.end());
 
             return;
         }
@@ -58,22 +59,20 @@ void EvasionAStar::execute()
             size_t x = ROUND(neighbor.x());
             size_t y = ROUND(neighbor.y());
 
-            if (x >= 0 && x < rows && y >= 0 && y < cols && isFree(x, y))
+            if (x >= 0 && x < rows && y >= 0 && y < cols && this->isFree(x, y))
             {
-                double tentative_g_cost = gScore(ROUND(current.x()), ROUND(current.y())) + 1;
+                double tentativeGCost = gScore(ROUND(current.x()), ROUND(current.y())) + 1;
 
-                if (tentative_g_cost < gScore(x, y))
+                if (tentativeGCost < gScore(x, y))
                 {
                     parent(x, y) = current;
-                    gScore(x, y) = tentative_g_cost;
-                    fScore(x, y) = gScore(x, y) + heuristic(neighbor, this->destination);
+                    gScore(x, y) = tentativeGCost;
+                    fScore(x, y) = gScore(x, y) + this->heuristic(neighbor, this->destination);
                     openSet.push({fScore(x, y), neighbor});
                 }
             }
         }
     }
-
-    std::cout << "No path exists between (" << this->origin.x() << ", " << this->origin.y() << ") and (" << this->destination.x() << ", " << this->destination.y() << ")" << std::endl;
 }
 
 inline double EvasionAStar::heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2)
