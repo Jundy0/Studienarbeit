@@ -3,6 +3,8 @@
 VehicleActuatorSim::VehicleActuatorSim(const std::shared_ptr<Vehicle> &vehicle)
     : vehicle(vehicle)
 {
+    this->lastPosition = this->vehicle->getPosition();
+    this->lastRotation = this->vehicle->getRotation();
 }
 
 VehicleActuatorSim::~VehicleActuatorSim()

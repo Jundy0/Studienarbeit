@@ -1,11 +1,12 @@
 #include "evasionAStar.h"
 
-#include <iostream>
 #include <queue>
+#include <unordered_set>
 
-#define ROUND(x) (size_t) std::round(x)
+#define INF 1e9
 
-EvasionAStar::EvasionAStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator) : EvasionControl(vehicleActuator)
+EvasionAStar::EvasionAStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator)
+    : EvasionControl(vehicleActuator)
 {
 }
 
@@ -23,8 +24,10 @@ void EvasionAStar::execute()
 
     openSet.push({0, this->origin});
     gScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = 0;
-    fScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = heuristic(this->origin);
+    fScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = this->heuristic(this->origin, this->destination);
     parent(ROUND(this->origin.x()), ROUND(this->origin.y())) = {-1, -1};
+
+    this->path.clear();
 
     while (!openSet.empty())
     {
@@ -33,53 +36,46 @@ void EvasionAStar::execute()
 
         if (current == this->destination)
         {
-            // Path found, now trace back the path using parent array
-            std::vector<Eigen::RowVector2d> path;
             while (current != Eigen::RowVector2d(-1, -1))
             {
-                path.push_back(current);
+                this->path.push_back(current);
                 current = parent(ROUND(current.x()), ROUND(current.y()));
             }
 
-            // Print the path in reverse order
-            std::cout << "Shortest path from (" << this->origin.x() << ", " << this->origin.y() << ") to (" << this->destination.x() << ", " << this->destination.y() << ") : ";
-            for (int i = path.size() - 1; i >= 0; i--)
-            {
-                std::cout << "(" << path[i].x() << ", " << path[i].y() << ")";
-                if (i != 0)
-                    std::cout << " -> ";
-            }
-            std::cout << std::endl;
+            std::reverse(this->path.begin(), this->path.end());
 
-            this->path = path;
             return;
         }
 
-        std::vector<Eigen::RowVector2d> neighbors = {current + Eigen::RowVector2d(-1, 0), current + Eigen::RowVector2d(1, 0), current + Eigen::RowVector2d(0, -1), current + Eigen::RowVector2d(0, 1)};
+        std::vector<Eigen::RowVector2d> neighbors = {
+            current + Eigen::RowVector2d(-1, 0),
+            current + Eigen::RowVector2d(1, 0),
+            current + Eigen::RowVector2d(0, -1),
+            current + Eigen::RowVector2d(0, 1),
+        };
+
         for (const auto &neighbor : neighbors)
         {
             size_t x = ROUND(neighbor.x());
             size_t y = ROUND(neighbor.y());
 
-            if (x >= 0 && x < rows && y >= 0 && y < cols && (*this->map)(x, y) <= 0)
+            if (x >= 0 && x < rows && y >= 0 && y < cols && this->isFree(x, y))
             {
-                double tentative_g_cost = gScore(ROUND(current.x()), ROUND(current.y())) + 1;
+                double tentativeGCost = gScore(ROUND(current.x()), ROUND(current.y())) + 1;
 
-                if (tentative_g_cost < gScore(x, y))
+                if (tentativeGCost < gScore(x, y))
                 {
                     parent(x, y) = current;
-                    gScore(x, y) = tentative_g_cost;
-                    fScore(x, y) = gScore(x, y) + heuristic(neighbor);
+                    gScore(x, y) = tentativeGCost;
+                    fScore(x, y) = gScore(x, y) + this->heuristic(neighbor, this->destination);
                     openSet.push({fScore(x, y), neighbor});
                 }
             }
         }
     }
-
-    std::cout << "No path exists between (" << this->origin.x() << ", " << this->origin.y() << ") and (" << this->destination.x() << ", " << this->destination.y() << ")" << std::endl;
 }
 
-double EvasionAStar::heuristic(Eigen::RowVector2d p)
+inline double EvasionAStar::heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2)
 {
-    return std::abs(p.x() - this->destination.x()) + std::abs(p.y() - this->destination.y());
+    return std::abs(p1.x() - p2.x()) + std::abs(p1.y() - p2.y());
 }
