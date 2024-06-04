@@ -39,7 +39,7 @@ void VisualizeWindow::update()
 
 void VisualizeWindow::render()
 {
-    const Eigen::MatrixXd *gridMap = this->selfdrivingVehicle->getGridMap();
+    const std::shared_ptr<Eigen::MatrixXd> gridMap = this->selfdrivingVehicle->getGridMap();
     const Eigen::RowVector2d position = this->selfdrivingVehicle->getPosition();
     const Eigen::RowVector2d destination = this->selfdrivingVehicle->getDestination();
     const double rot = this->selfdrivingVehicle->getRotation();
@@ -58,6 +58,10 @@ void VisualizeWindow::render()
             else if ((*gridMap)(y, x) <= PROB_FREE)
             {
                 color = sf::Color::White;
+            }
+            else if ((*gridMap)(y, x) >= INFLATED)
+            {
+                color = sf::Color(240, 240, 240);
             }
             else
             {

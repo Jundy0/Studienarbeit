@@ -25,7 +25,7 @@ const lidar_point_t *SelfdrivingVehicle::getLidarDataPtr()
     return this->lidarData;
 }
 
-const Eigen::MatrixXd *SelfdrivingVehicle::getGridMap()
+std::shared_ptr<Eigen::MatrixXd> SelfdrivingVehicle::getGridMap()
 {
     return this->slam->getGridMap();
 }

@@ -29,7 +29,7 @@ public:
 
     /// @brief Get a readonly Pointer to the current Grid Map.
     /// @return A readonly Pointer to the current Grid Map.
-    const Eigen::MatrixXd *getGridMap();
+    std::shared_ptr<Eigen::MatrixXd> getGridMap();
 
     /// @brief Get the current Position of the Vehicle.
     /// @return The current Position of the Vehicle.

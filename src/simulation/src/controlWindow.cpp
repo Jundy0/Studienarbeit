@@ -170,6 +170,7 @@ void ControlWindow::pollEvent()
                 this->newObstacleP1 = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
                 break;
             case Mode::placeDestination:
+                // TODO Check if Destination is in infalted Obstacle
                 sf::Vector2f newDestination = sf::Vector2f(this->ev.mouseButton.x, this->ev.mouseButton.y);
                 // Check if new Destination is in obstacle
                 bool contains = false;

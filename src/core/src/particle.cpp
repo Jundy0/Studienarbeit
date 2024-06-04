@@ -40,7 +40,7 @@ void Particle::update(const std::shared_ptr<Eigen::MatrixX2d> &currentScan, cons
     updateGridMap(*currentScan);
 }
 
-Eigen::MatrixXd *Particle::getGridMap()
+std::shared_ptr<Eigen::MatrixXd> Particle::getGridMap()
 {
     return occupancyGrid.getProbMap();
 }

@@ -63,7 +63,6 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints
         tfMatrix = icp.getFinalTransformation() * tfMatrix;
 
         iterations++;
-
     } while (icp.getFitnessScore() > 50 && iterations < 5);
 
     // Output of ICP results
@@ -71,7 +70,7 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints
     std::cout << "Fitness: " << icp.getFitnessScore() << std::endl;
     std::cout << "Reason: " << icp.getConvergeCriteria()->getConvergenceState() << std::endl;
 
-    return (tfMatrix);
+    return tfMatrix;
 }
 
 PointCloud PclHandler::matrixToPointCloud(const Eigen::MatrixX2d &matrix, double currentRotation)

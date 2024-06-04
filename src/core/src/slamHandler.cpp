@@ -48,7 +48,7 @@ void SlamHandler::update(lidar_point_t *data, const Eigen::RowVector2d &position
               << std::endl;
 }
 
-const Eigen::MatrixXd *SlamHandler::getGridMap()
+std::shared_ptr<Eigen::MatrixXd> SlamHandler::getGridMap()
 {
     return this->particle.getGridMap();
 }

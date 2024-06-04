@@ -1,6 +1,8 @@
 #ifndef __SLAM_H__
 #define __SLAM_H__
 
+#include <memory>
+
 #include <Eigen/Dense>
 
 #include "lidarSensor.h"
@@ -14,7 +16,7 @@ public:
 
     /// @brief Get the current calculated Grid Map.
     /// @return The current calculated Grid Map.
-    virtual const Eigen::MatrixXd *getGridMap() = 0;
+    virtual std::shared_ptr<Eigen::MatrixXd> getGridMap() = 0;
 
     /// @brief Get the current Calculated Position of the Vehicle.
     /// @return The current Calculated Position of the Vehicle.

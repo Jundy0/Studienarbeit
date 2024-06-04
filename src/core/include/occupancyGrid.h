@@ -1,6 +1,8 @@
 #ifndef __OCCUPANCY_GRID_H__
 #define __OCCUPANCY_GRID_H__
 
+#include <memory>
+
 #include <Eigen/Dense>
 
 #include "settings.h"
@@ -22,10 +24,11 @@ public:
     void updateProbMap(const Eigen::MatrixX2d &scan, const Eigen::RowVector2d &robPos, double robRotAngle);
 
     /// @brief Returns the pointer of the current probability map.
-    Eigen::MatrixXd *getProbMap();
+    std::shared_ptr<Eigen::MatrixXd> getProbMap();
 
 private:
-    Eigen::MatrixXd probMap; // The map where the probabilities for each pixel are stored at.
+    std::unique_ptr<Eigen::MatrixXd> probMap;    // The map where the probabilities for each pixel are stored at.
+    std::shared_ptr<Eigen::MatrixXd> probMapCpy; // A copy of the Map to return for other uses.
 
     /// @brief Returns X and Y coordinates of all points that are occupied and all points that are free based on given scan data.
     /// @param scan The scan data. Points with angle and distance.
