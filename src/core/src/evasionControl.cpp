@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <cmath>
 
 EvasionControl::EvasionControl(const std::shared_ptr<IVehicleActuator> &vehicleActuator)
     : vehicleActuator(vehicleActuator)
@@ -97,7 +98,8 @@ void EvasionControl::infalteObstacles()
             {
                 for (int x = -VEHICLE_RADIUS; x <= VEHICLE_RADIUS; ++x)
                 {
-                    for (int y = -VEHICLE_RADIUS + std::abs(x); y <= VEHICLE_RADIUS - std::abs(x); ++y)
+                    const double circleMultiplier = std::cos(std::abs(x) * M_PI / (2 * VEHICLE_RADIUS));
+                    for (int y = -VEHICLE_RADIUS * circleMultiplier; y <= VEHICLE_RADIUS * circleMultiplier; ++y)
                     {
                         int nx = i + x;
                         int ny = j + y;

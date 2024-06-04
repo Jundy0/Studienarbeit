@@ -7,7 +7,7 @@
 #define GRID_WIDTH 500  // Width of Grid
 #define GRID_HEIGHT 500 // Height of Grid
 
-#define VEHICLE_RADIUS 5 // The Radius of the Vehicle
+#define VEHICLE_RADIUS 10 // The Radius of the Vehicle
 
 #define PROB_OCC 2                    // Problably Occupied
 #define PROB_FREE -1                  // Probably Free
