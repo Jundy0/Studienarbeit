@@ -10,7 +10,6 @@ SelfdrivingVehicle::SelfdrivingVehicle(const std::shared_ptr<ILidarSensor> &lida
     this->slam = std::make_unique<SlamHandler>(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
     this->evasionControl = std::make_unique<EvasionAStar>(this->vehicleActuator);
-    this->evasionControl->setDestination(Eigen::RowVector2d(MAP_WIDTH / 2 - 50, MAP_HEIGHT / 2 - 50));
 
     this->lastTime = std::chrono::high_resolution_clock::now();
 }

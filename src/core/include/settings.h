@@ -7,7 +7,8 @@
 #define GRID_WIDTH 500  // Width of Grid
 #define GRID_HEIGHT 500 // Height of Grid
 
-#define VEHICLE_RADIUS 10 // The Radius of the Vehicle
+#define VEHICLE_RADIUS 10        // The Radius of the Vehicle (in cm)
+#define VEHICLE_MAX_ROT_ANGLE 10 // Max. Rotational Angle of the Vehicle (in deg)
 
 #define PROB_OCC 2                    // Problably Occupied
 #define PROB_FREE -1                  // Probably Free

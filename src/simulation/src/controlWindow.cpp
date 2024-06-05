@@ -17,6 +17,9 @@ ControlWindow::ControlWindow(const std::shared_ptr<ILidarSensor> &lidarSensor, c
     this->fpsDisplay.setFont(this->font);
     this->fpsDisplay.setCharacterSize(30);
     this->fpsDisplay.setFillColor(sf::Color::Red);
+
+    this->destination = sf::Vector2f(WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT / 2 - 50);
+    this->selfdrivingVehicle->setDestination(Eigen::RowVector2d(this->destination.x + (MAP_WIDTH / 2) - (WINDOW_WIDTH / 2), this->destination.y + (MAP_HEIGHT / 2) - (WINDOW_HEIGHT / 2)));
 }
 
 ControlWindow::~ControlWindow()

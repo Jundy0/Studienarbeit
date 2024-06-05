@@ -116,8 +116,9 @@ void EvasionControl::infalteObstacles()
             {
                 for (int x = -VEHICLE_RADIUS; x <= VEHICLE_RADIUS; ++x)
                 {
-                    const double circleMultiplier = std::cos(std::abs(x) * M_PI / (2 * VEHICLE_RADIUS));
-                    for (int y = -VEHICLE_RADIUS * circleMultiplier; y <= VEHICLE_RADIUS * circleMultiplier; ++y)
+                    // TODO: better for loop value
+                    const int circleValue = std::round(VEHICLE_RADIUS * std::cos(std::abs(x) * M_PI / (2 * VEHICLE_RADIUS)));
+                    for (int y = -circleValue; y <= circleValue; ++y)
                     {
                         int nx = i + x;
                         int ny = j + y;
