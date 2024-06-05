@@ -28,7 +28,7 @@ public:
 
     /// @brief Returns the pointer to the grid map of the occupancyGrid.
     /// @return A pointer to the grid map of the occupancyGrid.
-    Eigen::MatrixXd *getGridMap();
+    std::shared_ptr<Eigen::MatrixXd> getGridMap();
 
     /// @brief Returns current x and y coordinates of the particle.
     /// @return The current x and y coordinates of the particle.

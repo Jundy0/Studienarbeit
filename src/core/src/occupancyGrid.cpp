@@ -3,7 +3,9 @@
 OccupancyGrid::OccupancyGrid()
 {
     // Defines the matrix used to store probability values and fills it with zeroes
-    probMap = Eigen::MatrixXd::Zero(GRID_HEIGHT, GRID_WIDTH);
+    probMap = std::make_unique<Eigen::MatrixXd>(GRID_HEIGHT, GRID_WIDTH);
+    probMapCpy = std::make_shared<Eigen::MatrixXd>(GRID_HEIGHT, GRID_WIDTH);
+    *probMap = Eigen::MatrixXd::Zero(GRID_HEIGHT, GRID_WIDTH);
 }
 
 OccupancyGrid::~OccupancyGrid()
@@ -27,8 +29,8 @@ void OccupancyGrid::updateProbMap(const Eigen::MatrixX2d &scan, const Eigen::Row
         int x = occPoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
         int y = occPoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
-        if (probMap(y, x) < 1)
-            probMap(y, x) += 0.4;
+        if ((*probMap)(y, x) < PROB_OCC_THRES)
+            (*probMap)(y, x) += DELTA_OCC;
     }
 
     // Updates values in the probMap for free points
@@ -39,14 +41,17 @@ void OccupancyGrid::updateProbMap(const Eigen::MatrixX2d &scan, const Eigen::Row
         int x = freePoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
         int y = freePoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
-        if (probMap(y, x) > -1)
-            probMap(y, x) -= 0.2;
+        if ((*probMap)(y, x) > PROB_FREE_THRES)
+            (*probMap)(y, x) += DELTA_FREE;
     }
+
+    // Copy Map
+    *this->probMapCpy = *this->probMap;
 }
 
-Eigen::MatrixXd *OccupancyGrid::getProbMap()
+std::shared_ptr<Eigen::MatrixXd> OccupancyGrid::getProbMap()
 {
-    return &probMap;
+    return this->probMapCpy;
 }
 
 std::pair<Eigen::MatrixX2d, Eigen::MatrixX2d> OccupancyGrid::getPoints(const Eigen::MatrixX2d &scan, const Eigen::RowVector2d &robPos, double robRotAngle)

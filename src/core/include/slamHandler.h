@@ -23,7 +23,7 @@ public:
 
     /// @brief Returns the pointer to the grid map of the occupancyGrid.
     /// @return A pointer to the grid map of the occupancyGrid.
-    const Eigen::MatrixXd *getGridMap();
+    std::shared_ptr<Eigen::MatrixXd> getGridMap();
 
     /// @brief Returns current x and y coordinates of the particle.
     /// @return The current x and y coordinates of the particle.
@@ -34,7 +34,7 @@ public:
     const double getRotation();
 
 private:
-    const bool useOdometry = false; // Flag tu use Odometry, instead of PCL.
+    const bool useOdometry = false; // Flag to use Odometry, instead of PCL.
     bool initial = true;            // Flag that is true if no scan has been made.
     size_t pointCount;              // Number of points in each set of scan data.
 

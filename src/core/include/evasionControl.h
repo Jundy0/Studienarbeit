@@ -37,15 +37,15 @@ public:
     /// @param map A Pointer to the current Map.
     /// @param position The current Position of the Vehicle.
     /// @param rotation The current Rotation of the Vehicle in radiant.
-    void update(const Eigen::MatrixXd *map, const Eigen::RowVector2d &position, double rotation);
+    void update(std::shared_ptr<Eigen::MatrixXd> map, const Eigen::RowVector2d &position, double rotation);
 
 protected:
     std::shared_ptr<IVehicleActuator> vehicleActuator; // The Actuator to controll the Vehicle.
 
-    const Eigen::MatrixXd *map;     // A Pointer to the current Map.
-    Eigen::RowVector2d origin;      // The current origin Point.
-    Eigen::RowVector2d destination; // The current destination Point.
-    double direction;               // The current direction in radiant.
+    std::shared_ptr<Eigen::MatrixXd> map; // A Pointer to the current Map.
+    Eigen::RowVector2d origin;            // The current origin Point.
+    Eigen::RowVector2d destination;       // The current destination Point.
+    double direction;                     // The current direction in radiant.
 
     std::vector<Eigen::RowVector2d> path; // The current Path.
 
@@ -68,6 +68,9 @@ protected:
 private:
     /// @brief Print the Path in the console.
     void printPath();
+
+    /// @brief Inflate the Obstalces in the Map.
+    void infalteObstacles();
 };
 
 #endif // __EVASION_CONTROL_H__
