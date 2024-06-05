@@ -34,15 +34,33 @@ void EvasionControl::update(std::shared_ptr<Eigen::MatrixXd> map, const Eigen::R
 
     this->infalteObstacles();
 
+    this->path.clear();
+
     // check if destination is set
     if (destination.x() == 0 && destination.y() == 0)
     {
+        std::cout << "No Destination set" << std::endl;
         return;
     }
 
     // check if destination is reached
     if (origin == destination)
     {
+        std::cout << "Reached Destination" << std::endl;
+        return;
+    }
+
+    const double destVal = (*this->map)(ROUND(this->destination.y()), ROUND(this->destination.x()));
+
+    if (destVal >= PROB_OCC)
+    {
+        std::cout << "Destination inside Obsatcle" << std::endl;
+        return;
+    }
+
+    if (destVal >= INFLATED)
+    {
+        std::cout << "Destination to close to Obstacle" << std::endl;
         return;
     }
 

@@ -27,8 +27,6 @@ void EvasionAStar::execute()
     fScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = this->heuristic(this->origin, this->destination);
     parent(ROUND(this->origin.x()), ROUND(this->origin.y())) = {-1, -1};
 
-    this->path.clear();
-
     while (!openSet.empty())
     {
         Eigen::RowVector2d current = openSet.top().second;
