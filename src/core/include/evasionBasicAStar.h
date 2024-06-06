@@ -1,43 +1,43 @@
-#ifndef __EVASION_A_STAR_H__
-#define __EVASION_A_STAR_H__
+#ifndef __EVASION_BASIC_A_STAR_H__
+#define __EVASION_BASIC_A_STAR_H__
 
 #include "evasionControl.h"
 
 /// @brief A Node, used for the A Star Algorithm.
-struct AStarNode
+struct BasicAStarNode
 {
     Eigen::RowVector2d position; // Position of Node in Map.
     double gCost;                // Cost from Start to this Node.
     double hCost;                // Heuristic Cost.
     double fCost;                // Total Cost: gCost + hCost.
-    AStarNode *parent;           // Parent Node for path reconstruction.
+    BasicAStarNode *parent;      // Parent Node for path reconstruction.
 
     /// @brief Create a new A Star Node.
     /// @param pos Position of Node in Map.
     /// @param g Cost from Start to this Node.
     /// @param h Heuristic Cost.
     /// @param p Parent Node for path reconstruction.
-    AStarNode(Eigen::RowVector2d pos, double g, double h, AStarNode *p = nullptr)
+    BasicAStarNode(Eigen::RowVector2d pos, double g, double h, BasicAStarNode *p = nullptr)
         : position(pos), gCost(g), hCost(h), fCost(g + h), parent(p)
     {
     }
 
     /// @brief Compare two AStarNodes.
-    /// @param other Another AStarNode.
-    /// @return True, if the fCost of this AStarNode is greater than the other.
-    bool operator>(const AStarNode &other) const
+    /// @param other Another BasicAStarNode.
+    /// @return True, if the fCost of this BasicAStarNode is greater than the other.
+    bool operator>(const BasicAStarNode &other) const
     {
         return fCost > other.fCost;
     }
 };
 
 /// @brief The Class for Executing the AStar Pathfinding Algorithm.
-class EvasionAStar : public EvasionControl
+class EvasionBasicAStar : public EvasionControl
 {
 public:
     /// @brief Create a new Evasion Control, that uses AStar.
     /// @param vehicleActuator The Actuator to controll the Vehicle.
-    EvasionAStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator);
+    EvasionBasicAStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator);
 
 protected:
     /// @brief Execute the AStar Pathfinding Algorithm.
@@ -51,4 +51,4 @@ protected:
     inline virtual double heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2);
 };
 
-#endif // __EVASION_A_STAR_H__
+#endif // __EVASION_BASIC_A_STAR_H__

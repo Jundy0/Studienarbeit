@@ -1,0 +1,4 @@
+#ifndef __EVASION_ADVANCED_A_STAR_H__
+#define __EVASION_ADVANCED_A_STAR_H__
+
+#endif // __EVASION_ADVANCED_A_STAR_H__

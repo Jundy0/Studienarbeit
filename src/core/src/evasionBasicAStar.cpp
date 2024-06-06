@@ -1,16 +1,16 @@
-#include "evasionAStar.h"
+#include "evasionBasicAStar.h"
 
 #include <queue>
 #include <unordered_set>
 
 #define INF 1e9
 
-EvasionAStar::EvasionAStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator)
+EvasionBasicAStar::EvasionBasicAStar(const std::shared_ptr<IVehicleActuator> &vehicleActuator)
     : EvasionControl(vehicleActuator)
 {
 }
 
-void EvasionAStar::execute()
+void EvasionBasicAStar::execute()
 {
     size_t rows = this->map->rows();
     size_t cols = this->map->cols();
@@ -73,7 +73,7 @@ void EvasionAStar::execute()
     }
 }
 
-inline double EvasionAStar::heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2)
+inline double EvasionBasicAStar::heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2)
 {
     return std::abs(p1.x() - p2.x()) + std::abs(p1.y() - p2.y());
 }
