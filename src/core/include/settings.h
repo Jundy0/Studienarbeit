@@ -19,4 +19,10 @@
 #define DELTA_OCC 0.75  // Delta Value for Occupied
 #define DELTA_FREE -0.4 // Delta Value for Free
 
+#define MIN_ICP_DISTANCE 300
+#define MAX_ICP_DISTANCE 1500
+
+#define ICP_FITNESS_THRESHOLD 10
+#define ICP_MAX_NR_CORRECTIONS 15
+
 #endif // __SETTINGS_H__

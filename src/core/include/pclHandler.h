@@ -5,19 +5,23 @@
 #include <pcl/registration/icp.h>
 #include <pcl/common/transforms.h>
 
+#include <settings.h>
+
+#include <string>
+
 ////////////////////
 // ICP parameters //
 ////////////////////
 /// @brief Max Iterations before the algorithm will be considered to have converged
-const int MAX_ITERATIONS_ICP = 25;
+const int MAX_ITERATIONS_ICP = 30;
 /// @brief Mximum distance threshold between two correspondent points in source <-> target.
-const float MAX_CORRESPONDENCE_DISTANCE_ICP = 150.0f; // 150mmm
+const float MAX_CORRESPONDENCE_DISTANCE_ICP = 200.0f; // 200mmm
 /// @brief Inlier distance threshold for the internal RANSAC outlier rejection loop
-const float OUTLIER_REJECTION_THRESHOLD_ICP = 10.0f; // 10mm
+const float OUTLIER_REJECTION_THRESHOLD_ICP = 50.0f; // 50mm
 /// @brief Maximum allowable translation squared difference between two consecutive transformations in order for an optimization to be considered as having converged.
 const float TRANSFORMATION_EPSILON_ICP = 1e-12 * 1e-12;
 /// @brief Maximum allowable rotation difference between two consecutive transformations in order for an optimization to be considered as having converged.
-const float ROTATION_EPSILON_ICP = 1e-5; // 0.029deg
+const float ROTATION_EPSILON_ICP = 1e-5; 
 /// @brief Maximum allowed distance error before the algorithm will be considered to have converged
 const float EUCLIDEAN_FITNESS_EPSILON_ICP = 1e-10;
 

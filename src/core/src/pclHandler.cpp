@@ -1,5 +1,16 @@
 #include "pclHandler.h"
 
+std::string convCrit[] =
+{
+    "not_converged",
+    "iterations",
+    "transformation_epsilon",
+    "absolute_mse",
+    "relative_mse",
+    "nor_correspondence",
+    "failure_after_max_iterations"
+};
+
 PclHandler::PclHandler()
 {
 }
@@ -62,32 +73,35 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints
         // If icp is not run for the first time the result gets added onto the results from previous iterations
         tfMatrix = icp.getFinalTransformation() * tfMatrix;
 
-        iterations++;
-    } while (icp.getFitnessScore() > 50 && iterations < 5);
+        iterations++; 
+
+    } while (icp.getFitnessScore() > ICP_FITNESS_THRESHOLD && iterations < ICP_MAX_NR_CORRECTIONS);
 
     // Output of ICP results
-    std::cout << "Converged: " << icp.hasConverged() << std::endl;
+    std::cout << "Converged: " << (bool)icp.hasConverged() << std::endl;
     std::cout << "Fitness: " << icp.getFitnessScore() << std::endl;
-    std::cout << "Reason: " << icp.getConvergeCriteria()->getConvergenceState() << std::endl;
+    std::cout << "Reason: " << convCrit[icp.getConvergeCriteria()->getConvergenceState()] << std::endl;
 
     return tfMatrix;
 }
 
 PointCloud PclHandler::matrixToPointCloud(const Eigen::MatrixX2d &matrix, double currentRotation)
 {
-    // Create PointCloud with the same size as the input matrix
+    // Create PointCloud and push all points above a certain threshhold onto it
     PointCloud pointCloud;
-    pointCloud.resize(matrix.rows());
-
     Eigen::RowVector3f pointVector;
+    PointT point;
 
     for (int i = 0; i < matrix.rows(); i++)
     {
-        // Rotate point cloud and calculate X,Y and Z coordinates
-        pointVector = polarToCartesianXYZ(matrix.row(i), currentRotation);
-        pointCloud[i].x = pointVector[0];
-        pointCloud[i].y = pointVector[1];
-        pointCloud[i].z = pointVector[2];
+        if (matrix.row(i)[1] > MIN_ICP_DISTANCE || matrix.row(i)[1] > MAX_ICP_DISTANCE)
+        {
+            pointVector = polarToCartesianXYZ(matrix.row(i), currentRotation);
+            point.x = pointVector[0];
+            point.y = pointVector[1];
+            point.z = pointVector[2];
+            pointCloud.push_back(point);
+        }
     }
 
     return pointCloud;
