@@ -10,8 +10,8 @@ SelfdrivingVehicle::SelfdrivingVehicle(const std::shared_ptr<ILidarSensor> &lida
 {
     this->slam = std::make_unique<SlamHandler>(SCAN_COUNT);
     this->lidarData = (lidar_point_t *)malloc(sizeof(lidar_point_t) * SCAN_COUNT);
-    this->evasionControl = std::make_unique<EvasionBasicAStar>(this->vehicleActuator);
-    // this->evasionControl = std::make_unique<EvasionAdvancedAStar>(this->vehicleActuator);
+    // this->evasionControl = std::make_unique<EvasionBasicAStar>(this->vehicleActuator);
+    this->evasionControl = std::make_unique<EvasionAdvancedAStar>(this->vehicleActuator);
     // this->evasionControl = std::make_unique<EvasionThetaStar>(this->vehicleActuator);
 
     this->lastTime = std::chrono::high_resolution_clock::now();
