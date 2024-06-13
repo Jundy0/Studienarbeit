@@ -1,30 +1,43 @@
-\section{Simultanous Localization and Mapping}
+\section{\acf{slam}}
+\ac{slam} ist ein bekanntes Problem in der Robotertechnik. 
+Im Folgenden wird das Problem selbst erläutert und näher auf die Umsetzung von \ac{slam} im Rahmen dieser Studienarbeit eingegangen.
 
-\subsection{Was ist SLAM?}
+\subsection{Was ist \ac{slam}?}
+Bei dem \ac{slam}-Problem handelt es sich um das Problem, eine Karte einer unbekannten Umgebung zu erstellen.
+Gleichzeitig soll die aktuelle Position des Roboters in dieser Karte ermittelt und dargestellt werden.
+Hierzu wird ausschließlich die Sensorik des Roboters genutzt.
+
+\subsubsection{Mathematische Betrachtung}
+
 
 \subsection{Mapping}
+%% Occupancy Grid
 
 \subsection{Lokalisierung}
 Das selbstfahrende Fahrzeug soll in der Lage sein ein vorgegebenes Ziel zu erreichen. 
-Um diese Aufgabe zu meistern ist die Lokalisierung des Fahrzeuges eine zentrale Aufgabe. Denn nur dann kann erkannt werden, wie sich das Fahrzeug bewegen muss
-und ob das Ziel erreicht ist.
-\subsubsection{Global Positioning System (GPS)}
-Für die Ortung eines Fahrzeugs kommt in der Praxis das GPS zum Einsatz. GPS arbeitet mit Satelliten, die die Position des Benutters, in diesem Fall des Fahrzeugs, bestimmen
-und übermittlen \cite{ashby2003relativity}. Die Genauigkeit des GPS beträgt ca. 5-10 cm \cite{ashby2003relativity}. \\
+Um diese Aufgabe zu meistern ist die Lokalisierung des Fahrzeuges eine zentrale Aufgabe. 
+Die aktuelle Position des Fahrzeugs ist für eine Berechnung des noch zu fahrenden Weges unabdingbar.
+
+\subsubsection{\acf{gps}}
+Für die Ortung eines Fahrzeugs kommt in der Praxis das \ac{gps} zum Einsatz. \ac{gps} arbeitet mit Satelliten, die die Position des Benutters, in diesem Fall des Fahrzeugs, bestimmen
+und übermittlen \cite{ashby2003relativity}. Die Genauigkeit des \ac{gps} beträgt ca. 5-10 cm \cite{ashby2003relativity}. \\
 Im Einsatz für Fahrzeuge auf der Straße ist diese Genauigkeit ausreichend, da die lokalisierten Objekte deutlich größer sind und dadurch, trotz der Toleranzen, der richtige Ort gefunden werden kann.
 Relativ zur Fahrzeuggröße sind 5-10 cm bei einem kleinen Modellfahrzeug eine deutliche Abweeichung, die abhängig von der Umgebung des Fahrzeugs ernsthafte Konsequenzen haben kann. \\
-Eine weitere Problematik die die Verwendung von GPS-Daten mit sich bringt ist die Abhängigkeit von der Signalstärke und -verfügbarkeit. Ist das Siganl schewach, kann die Abweeichung noch größer werden. Ist kein Siganl
+Eine weitere Problematik die die Verwendung von \ac{gps}-Daten mit sich bringt ist die Abhängigkeit von der Signalstärke und -verfügbarkeit. Ist das Siganl schewach, kann die Abweeichung noch größer werden. Ist kein Siganl
 verfügbar, ist gar keine Ortung möglich.
-\subsubsection{Eigenes GPS}
-Um das Problem der Siganlverfügbarkeit zu lösen, könnte man auf die Idee kommen ein eigenes GPS aufzubauen, dass kleine Sender statt Satelliten verwendet. 
+
+\subsubsection{Eigenes \ac{gps}}
+Um das Problem der Siganlverfügbarkeit zu lösen, könnte man auf die Idee kommen ein eigenes \ac{gps} aufzubauen, dass kleine Sender statt Satelliten verwendet.
 Diese Sender werden an den Wänden der Umgebung befestigt. Auf dem Fahrzeug ist ein Empfänger moniteirt, der die Entfernungen zu den Sendern misst.\\
 Mit dieser Technologie kann dann über Triangulation die Position des Fahrzeugs bestimmt werden. Dadurch wäre je nach Qualität von Sender und Empfänger eine höhere Präzision als 
 5-10 cm möglich. \\
-Damit wären also beide Probleme von GPS in diesem Kontext gelöst. Aber es gibt auch einen deutlichen Nachteil. Denn vor der Verwendung des Fahrzeugs muss die Umgebung zunächst
+Damit wären also beide Probleme von \ac{gps} in diesem Kontext gelöst. Aber es gibt auch einen deutlichen Nachteil. Denn vor der Verwendung des Fahrzeugs muss die Umgebung zunächst
 mit den Sendern ausgestattet werden. Ein Einsatz in unbekannten Gebieten ist dadurch nicht möglich. Das ist je nach Einsatzzweck des Fahrzeuges ein größeres oder kleiners Problem.
 Um den Einsatzzweck aber so wenig wie möglich einzuschränken, soll im Rahmen dieser Arbeit ein Verfahren genutzt werden, das auch in unbekannten Umgebungen genutzt werden kann.
+
 \subsubsection{Unabhängige Ortungsverfahren}
-Um das Auto in jeder Situation orten zu können, soll ein System zum Einsatz kommen, dass auf dem Fahrzeug selbst verbaut ist, und keine zusätzlichen technischen Installationen außerhalb des Fahrzeugs erfordert.\\
+Um das Auto in jeder Situation orten zu können, soll ein System zum Einsatz kommen, dass auf dem Fahrzeug selbst verbaut ist und keine zusätzlichen technischen Installationen außerhalb des Fahrzeugs erfordert.\\
+
 \paragraph{ICP}
 
 \newpage
