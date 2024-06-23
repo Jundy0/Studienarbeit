@@ -1,14 +1,14 @@
 #include "pclHandler.h"
 
 std::string convCrit[] =
-{
-    "not_converged",
-    "iterations",
-    "transformation_epsilon",
-    "absolute_mse",
-    "relative_mse",
-    "nor_correspondence",
-    "failure_after_max_iterations"
+    {
+        "not_converged",
+        "iterations",
+        "transformation_epsilon",
+        "absolute_mse",
+        "relative_mse",
+        "nor_correspondence",
+        "failure_after_max_iterations",
 };
 
 PclHandler::PclHandler()
@@ -56,7 +56,7 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints
     {
         // Set ICP parameter
         icp.setMaximumIterations(MAX_ITERATIONS_ICP);
-        icp.setMaxCorrespondenceDistance(MAX_CORRESPONDENCE_DISTANCE_ICP - (iterations * 20));
+        icp.setMaxCorrespondenceDistance(MAX_CORRESPONDENCE_DISTANCE_ICP - (iterations * 10));
         icp.setRANSACOutlierRejectionThreshold(OUTLIER_REJECTION_THRESHOLD_ICP);
         icp.setTransformationEpsilon(TRANSFORMATION_EPSILON_ICP);
         icp.setTransformationRotationEpsilon(ROTATION_EPSILON_ICP);
@@ -73,7 +73,7 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints
         // If icp is not run for the first time the result gets added onto the results from previous iterations
         tfMatrix = icp.getFinalTransformation() * tfMatrix;
 
-        iterations++; 
+        iterations++;
 
     } while (icp.getFitnessScore() > ICP_FITNESS_THRESHOLD && iterations < ICP_MAX_NR_CORRECTIONS);
 

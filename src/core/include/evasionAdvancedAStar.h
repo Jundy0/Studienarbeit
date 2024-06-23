@@ -11,14 +11,16 @@ struct AdvancedAStarNode
     double gCost;                // Cost from Start to this Node.
     double hCost;                // Heuristic Cost.
     double fCost;                // Total Cost: gCost + hCost.
+    AdvancedAStarNode *parent;   // Parent Node for path reconstruction.
 
     /// @brief Create a new AdvancedAStarNode.
     /// @param pos Position of Node in Map.
+    /// @param rot Rotation of Node.
     /// @param g Cost from Start to this Node.
     /// @param h Heuristic Cost.
     /// @param p Parent Node for path reconstruction.
-    AdvancedAStarNode(Eigen::RowVector2d pos, double rot, double g, double h)
-        : position(pos), rotation(rot), gCost(g), hCost(h), fCost(g + h)
+    AdvancedAStarNode(Eigen::RowVector2d pos, double rot, double g, double h, AdvancedAStarNode *p = nullptr)
+        : position(pos), rotation(rot), gCost(g), hCost(h), fCost(g + h), parent(p)
     {
     }
 
@@ -27,10 +29,10 @@ struct AdvancedAStarNode
     {
     }
 
-    /// @brief Compare two AStarNodes.
+    /// @brief Compare two AStarNodes with greater.
     /// @param other Another AdvancedAStarNode.
     /// @return True, if the fCost of this AdvancedAStarNode is greater than the other.
-    bool operator>(const AdvancedAStarNode &other) const
+    inline bool operator>(const AdvancedAStarNode &other) const
     {
         return fCost > other.fCost;
     }
@@ -55,6 +57,9 @@ protected:
     /// @param p2 The second Point.
     /// @return The Manhattan Distance between the two Points.
     inline virtual double heuristic(const Eigen::RowVector2d &p1, const Eigen::RowVector2d &p2);
+
+private:
+    std::vector<Eigen::RowVector2d> getNeighbors(const Eigen::RowVector2d &position, const double rotation);
 };
 
 #endif // __EVASION_ADVANCED_A_STAR_H__
