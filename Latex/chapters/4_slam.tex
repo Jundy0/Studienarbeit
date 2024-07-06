@@ -1,8 +1,8 @@
-\section{\acf{slam}}
+\section{SLAM}
 \ac{slam} ist ein bekanntes Problem in der Robotertechnik. 
 Im Folgenden wird das Problem selbst erläutert und näher auf die Umsetzung von \ac{slam} im Rahmen dieser Studienarbeit eingegangen.
 
-\subsection{Was ist \ac{slam}?}
+\subsection{Was ist SLAM?}
 Bei dem \ac{slam}-Problem handelt es sich um das Problem, eine Karte einer unbekannten Umgebung zu erstellen.
 Gleichzeitig soll die aktuelle Position des Roboters in dieser Karte ermittelt und dargestellt werden.
 Hierzu wird ausschließlich die Sensorik des Roboters genutzt.
@@ -26,8 +26,8 @@ Relativ zur Fahrzeuggröße sind 5-10 cm bei einem kleinen Modellfahrzeug eine d
 Eine weitere Problematik die die Verwendung von \ac{gps}-Daten mit sich bringt ist die Abhängigkeit von der Signalstärke und -verfügbarkeit. Ist das Siganl schewach, kann die Abweeichung noch größer werden. Ist kein Siganl
 verfügbar, ist gar keine Ortung möglich.
 
-\subsubsection{Eigenes \ac{gps}}
-Um das Problem der Siganlverfügbarkeit zu lösen, könnte man auf die Idee kommen ein eigenes \ac{gps} aufzubauen, dass kleine Sender statt Satelliten verwendet.
+\subsubsection{Eigenes GPS}
+Um das Problem der Siganlverfügbarkeit zu lösen, könnte man auf die Idee kommen ein eigenes \acf{gps} aufzubauen, dass kleine Sender statt Satelliten verwendet.
 Diese Sender werden an den Wänden der Umgebung befestigt. Auf dem Fahrzeug ist ein Empfänger moniteirt, der die Entfernungen zu den Sendern misst.\\
 Mit dieser Technologie kann dann über Triangulation die Position des Fahrzeugs bestimmt werden. Dadurch wäre je nach Qualität von Sender und Empfänger eine höhere Präzision als 
 5-10 cm möglich. \\

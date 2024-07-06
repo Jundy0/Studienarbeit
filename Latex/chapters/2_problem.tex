@@ -3,30 +3,82 @@ In diesem Abschnitt wird auf die Problemstellung, das generelle Ziel und die gep
 Des weiteren wird Erläutert, weshalb das Ziel der Arbeit wichtig ist, wie die Arbeit aufgebaut ist und welche Probleme und Schwierigkeiten durch bereits getätigte Versuche einer Umsetzung des Arbeits-Ziels bereits bekannt sind.
 
 \subsection{Problemstellung}
-Bisherige Versuche, ein selbstfahrendes Auto, im Rahmen einer Studienarbeit zu entwerfen und einen entsprechenden Algorithmus zu programmieren, sind gescheitert. Die beiden Hauptprobleme der bisherigen Arbeiten, war zum einen der Bau eines geeigneten Fahrzeugs und zum Anderen die Entwicklung einer Software, welche es dem Auto ermöglicht, ohne manuelle Steuerung, Hindernisse zu erkennen und um diese herum zu navigieren. Da es sich bei den Studenten der bisherigen Gruppen ausschließlich um Studenten mit einem Schwerpunkt in Elektrotechnik handelte, war die Entwicklung und Implementierung der Software zum autonomen Fahren die größere Herausforderung.
+Bisherige Versuche, ein selbstfahrendes Auto, im Rahmen einer Studienarbeit zu entwerfen und einen entsprechenden Algorithmus zu programmieren, sind gescheitert. 
+Die beiden Hauptprobleme der bisherigen Arbeiten, war zum Einen der Bau eines geeigneten Fahrzeugs und zum Anderen die Entwicklung einer Software, welche es dem Auto ermöglicht, 
+ohne manuelle Steuerung, Hindernisse zu erkennen und um diese herum zu navigieren.
+Da es sich bei den Studenten der bisherigen Gruppen ausschließlich um Studenten mit einem Schwerpunkt in Elektrotechnik handelte, war die Entwicklung und Implementierung der Software zum autonomen Fahren die größere Herausforderung.
 
-Da keine der bisherigen Gruppen, das Problem der Software lösen konnte, wurde sich dazu entschieden, die Aufgaben aufzuteilen. Die Aufgabe, der Erstellung eines funktionsfähigen Modell-Autos und einer Schnittstelle, zur Steuerung des Autos, wurde einer Gruppe von Studenten mit einem Schwerpunkt in Elektrotechnik zugeteilt. Somit ist das Hauptproblem dieser Arbeit, die Entwicklung und Implementierung eines Ausweichalgorithmus, welcher das Auto, über die, von der anderen Gruppe zur Verfügung gestellten Schnittstelle, steuern soll und so eine autonome Hindernis-Detektierung und Vermeidung ermöglicht.
+Da keine der bisherigen Gruppen, das Problem der Software lösen konnte, wurde sich dazu entschieden, die Aufgaben aufzuteilen. 
+Die Aufgabe, der Erstellung eines funktionsfähigen Modell-Autos und einer Schnittstelle, zur Steuerung des Autos, wurde einer Gruppe von Studenten mit einem Schwerpunkt in Elektrotechnik zugeteilt. 
+Somit ist das Hauptproblem dieser Arbeit, die Entwicklung und Implementierung eines Ausweichalgorithmus, 
+welcher das Auto, über die, von der anderen Gruppe zur Verfügung gestellten Schnittstelle, steuern soll und so eine autonome Hindernis-Detektierung und Vermeidung ermöglicht.
 
-Da die Aufgabe auf mehrere Gruppen aufgeteilt wurde, ist ein weiteres Problem die Kommunikation zwischen den Gruppen. Um einen reibungslosen und effizienten Ablauf gewährleisten zu können, sollte diese möglichst Umfangreich sein.
+Da die Aufgabe auf mehrere Gruppen aufgeteilt wurde, ist ein weiteres Problem die Kommunikation zwischen den Gruppen. 
+Um einen reibungslosen und effizienten Ablauf gewährleisten zu können, sollte diese möglichst Umfangreich sein.
 
-Ein weiteres Problem, welches durch die Aufteilung auf verschiedene Gruppen entsteht, ist die eingeschränkte Verfügbarkeit der Hardware. Da die Gruppe, welche den Hardware-Teil der Aufgabe übernimmt, diese erst bauen und anschließend auch testen muss, ist sie nur eingeschränkt verfügbar. Daher ist zur Entwicklung der Software, eine Abstrahierung der Hardware notwendig. Konkret bedeutet das, dass die Schnittstelle zur Steuerung, sowie die Daten der Sensoren simuliert werden müssen, um ein Testen des Algorithmus auch ohne Verfügbarkeit der Hardware zu ermöglichen.
+Durch die Aufteilung auf verschiedene Gruppen entsteht zusätzlich das Problem, dass die Hardware nur eingeschränkt verfügbar ist. 
+Da die Gruppe, welche den Hardware-Teil der Aufgabe übernimmt, diese erst bauen und anschließend auch testen muss, ist die Hardware, vor allem zu Beginn der Arbeit, kaum verfügbar.
+Daher ist zur Entwicklung der Software, eine Abstrahierung der Hardware notwendig. Konkret bedeutet das, dass die Schnittstelle zur Steuerung, sowie die Daten der Sensoren simuliert werden müssen, 
+um ein Testen des Algorithmus auch ohne Verfügbarkeit der Hardware zu ermöglichen.
 
 \subsection{Ziel}
 Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Algorithmus für ein Modell-Auto. Dieser soll mit Hilfe der Daten diverser Sensoren, Hindernisse
 erkennen und das Auto, unter Verwendung einer bereitgestellten Schnittstelle, um die Hindernisse herum navigieren.
+Hierbei werden Zielkoordinaten an das Fahrzeug übermittelt.
+Diese sollen vollständig autonom von dem Fahrzeug angefahren werden.
 
-%TODO: Einschränkungen des Algorithmus festhalten: Erste Idee war ja die gerade Linie, auf der sich das Fahrzeug bewegen soll.
+Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. 
+Somit ist das Entwickeln einer solchen Simulation der Hardware ein weiteres Ziel der Arbeit.
 
-Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. Somit ist das Entwickeln einer solchen Simulation der Hardware ein weiteres Ziel der Arbeit.
+\subsubsection{Rahmenbedingung}
+Ein solcher Algorithmus bietet enorm viele und umfangreiche Möglichkeiten zur Optimierung.
+Da der zeitliche Rahmen für die Beendigung der Arbeit jedoch stark begrenzt ist, ist der Funktionsumfang des Algorithmus eingeschränkt.
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Steuerung} \\
+    Der Algorithmus muss auf die Steuerungsmöglichkeiten des Autos ange\-passt sein.
+    Das bedeutet, dass der Algorithmus vor allem den Lenkwin\-kel und die Breite des Autos berücksichtigen muss.
+    Die Steuerung selbst soll über eine klar definierte Schnittstelle erfolgen.
+
+    \item \textbf{Simulation} \\
+    Die Simulation soll eine einfache Top-Down-Perspektive auf eine virtu\-elle Umgebung bieten.
+    Zudem soll es ein vituelles Auto geben, welches manuell und mittels Algorithmus gesteuert werden kann.
+    Auch hier gilt zu beachten, dass die Steuerung des simulierten Autos möglichst identisch mit der des eigentlichen Autos ist.
+    Das gilt auch für die Schnittstelle zur Steuerung, welche der Algorithmus nutzen wird.
+
+    \item \textbf{Umgebung} \\
+    Die Umgebung, in welcher der Algorithmus getestet wird, soll ein statischer, abgeschlossener Raum sein.
+    Eine dynamische Umgebung soll nicht berücksichtigt werden.
+
+    \item \textbf{Laufzeit} \\
+    Der Laufzeit des Algorithmus soll ausreichend kurz sein.
+    Das bedeutet, dass Hindernisse in unter einer halben Sekunde erkannt und entsprech\-end reagiert werden soll.
+\end{enumerate}
 
 \subsection{Umsetzung}
-Um eine umfangreiche Kommunikation zwischen den Gruppen zu ermöglichen, müssen Kommunikationswege so früh wie möglich erstellt werden. Des weiteren sollten Termine für regelmäßige Meetings festgelegt werden, um einen konstanten Austausch von Informationen zwischen den Gruppen zu gewährleisten.
+Um eine umfangreiche Kommunikation zwischen den Gruppen zu ermöglichen, müssen Kommunikationswege so früh wie möglich erstellt werden.
+Des weiteren sollten Termine für regelmäßige Meetings festgelegt werden, um einen konstanten Austausch von Informationen zwischen den Gruppen zu gewährleisten.
 
-Zur Umsetzung der Aufgabe selbst, stehen, neben einem RPLiDAR A1M8-R6 der Firma Slamtec, auch weitere Sensoren, wie Ultraschall-, Lenkwinkel- und Geschwindigkeits-Sensoren, sowie ein Raspberry PI 4 zur Verfügung.
-Bevor die eigentliche Arbeit an einem Algorithmus beginnen kann, muss die gegebene Hardware getestet werden. Zudem ist es, um das weitere Vorgehen planen zu können, notwendig, sich mit der Hardware vertraut zu machen. Zu wissen, welche Daten von den Sensoren, wann gesendet werden, ermöglicht es, präziser zu planten, wodurch die Entwicklung des Algorithmus effizienter wird.
+Zur Umsetzung der Aufgabe selbst, stehen, neben einem RPLiDAR A1M8-R6 der Firma Slamtec, auch weitere Sensoren, 
+wie Ultraschall-, Lenkwinkel- und Geschwindigkeits-Sensoren, sowie ein Raspberry PI 4 zur Verfügung.
+Bevor die eigentliche Arbeit an einem Algorithmus beginnen kann, muss die gegebene Hardware getestet werden. 
+Zudem ist es, um das weitere Vorgehen planen zu können, notwendig, sich mit der Hardware vertraut zu machen. 
+Zu wissen, welche Daten von den Sensoren, wann gesendet werden, ermöglicht es, präziser zu planen, wodurch die Entwicklung des Algorithmus effizienter wird.
 
-Nachdem verstanden wurde, wie die Hardware funktioniert, muss eine Möglichkeit, diese zu simulieren, entwickelt werden. Hierbei ist es wichtig, die, für den Algorithmus notwendige Hardware, so genau wie möglich zu simulieren. Je genauer die Simulation ist, desto unwahrscheinlicher treten Probleme bei der Zusammenführung von Hard- und Software auf.
+Nachdem verstanden wurde, wie die Hardware funktioniert, muss eine Möglichkeit, diese zu simulieren, entwickelt werden.
+Hierbei ist es wichtig, die, für den Algorithmus notwendige Hardware, so genau wie möglich zu simulieren. 
+Je genauer die Simulation ist, desto unwahrscheinlicher treten Probleme bei der Zusammenführung von Hard- und Software auf.
 
-%TODO: Weitere Schritte, die gemacht werden sollen
+Die Simulation dient jedoch nur zum testen des Algorithmus.
+Im späteren Betrieb sollen, anstelle der Daten der Simulation, die Daten der vorhandenen Sensorik verwendet werden.
+Hierzu ist die Entwicklung eines Interface, durch welches mit der Sensorik kommuniziert werden kann, notwendig.
+
+Nachdem nun realitätsnahe, simulierte Daten, sowie echte Daten, eingelesen werden können, kann die Umsetzung eines \acf{slam}-Algorithmus begonnen werden.
+Hierzu muss eine Möglichkeit entwickelt werden, mit der die vorhandenen Daten zur Erstellung einer Karte genutzt werden können.
+Des Weiteren muss das Auto innerhalb der Karte lokalisiert werden können.
+
+Als Nächstes muss der Ausweich-Algorithmus entwickelt werden.
+Dieser muss in der Lage sein, die vorhandenen Daten zu nutzen und so das Auto um Hindernisse herum zu einem gewünschten Zielort zu navigieren.
+
+Abschließend wird die Hardware und die Software vereint und getestet.
 
 \newpage
