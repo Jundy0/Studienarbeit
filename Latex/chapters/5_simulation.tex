@@ -1,15 +1,11 @@
 \section{Simulation des Ausweichalgorithmus}
 
-\begin{enumerate}
-    \item Warum simulieren?
-    \item Was simulieren?
-    \item Woher bekommen wir die Daten?
-    \item Wie werden die Daten verarbeitet?
-    \item Wie werden die Daten visualisiert?
-    \item Wie wird der Algorithmus getestet und validiert
-\end{enumerate}
+In diesem Kapitel wird beschrieben, wwarum eine Simulation hilfreich für die Entwicklung eines 
+sicherheitskritischen Algorithmus, wie zum Beispiel ein Ausweichalgorithmus, sein kann.
+Ausßerdem wird beschrieben, welche Aspekte der Simulation relevant für den Übertrag der Ergebnisse auf die Realität sind.
 
  \subsection{Was ist eine Simulation?}
+ \label{Simulation}
  Bevor damit begonnen werden kann die verschiedenen Aspekte einer Simulation zu beleuchten, ist zu klären, was eine Simulation ist.
  Nach der Aussage von A. Maria ist eine Simulation eine Ausführung eines Modells eines Systems \cite{maria1997introduction}[p. 1, ch. 2].
 Der Begriff des Modells wird ebenfalls in der Arbeit beschrieben. Ein Modell ist eine vereinfachte, funktionierende Repräsentation des Systems, das betrachtet werden soll \cite{maria1997introduction}[p. 1, ch. 1].\\
@@ -20,19 +16,28 @@ Eine Computersimulation kann auch dann genutzt werden, wenn das Erstellen eines 
 In diesen Fällen stellt die Simulation sicher, dass erste Versuche mit Algorithmen, die unabhängig vom Modell funktionieren, möglich sind. 
 Dadurch kann damit begonnen werden an Technologien und Methodiken zu arbeiten, ohne auf eine reale Umsetzung warten zu müssen.
 \subsection{Simulation im Kontext eines Ausweichalgorithmus}
-Im Rahmen dieser Arbeit ist eine Simulation geplant. Die Konstellation des Teams das am selbstfahrenden Modell-Auto beteiligt ist, 
-begünstigt den Einsatz einer Simulation. Der verfügbare Zeitraum für Hard- und Software ist gleich lang. 
-Aus diesem Grund ist es nicht möglich mit der Entwicklung des Ausweichalgorithmus zu warten, bis das reale Modell-Auto einsatzbereit ist. 
-Wie im vorheirigen Kapitel beschrieben, ist in solchen Fällen eine Simulation ein guter Weg für eine simultane Entwicklung der Algorithmik und des Modells.
-Die Simulation hilft dabei den Algorithmus zu entwickeln und in einer ersten Form zu validieren.
-Neben dem zeitlichen Faktor ist auch ein möglicher Schaden im Fehlerfall ein Grund für den Einsatz einer Simulation. Würde es in einem Test zu einem Fehler kommen, könnte das Modell-Auto je nach Szenario 
-so beschädigt werden, dass eine aufwendige Reparatur notwendig oder sogar unmöglich wäre. Dadurch würde die weitere Entwicklung verzögert werden. 
-Um dieses Szenario zu vermeiden ist es wichitg den Algorithmus mit Hilfe der Simulation so weit zu entwickeln, dass die Chance für das Eintreten eines solchen Szenarios möglichst gering ist.
-Auch für den Fall, dass das Modell am Ende nicht einsatzbereit ist, sorgt die Simulation dafür, dass der Ausweichalgorithmus zumindest im Rahmen einer Simulation überprüft und getestet werden kann. 
-Zusätzlich sorgt die Simulation für einen reduzierten Kommuniaktionsaufwand, denn die Entwicklung und Verwendung der Simulation erfolgt unabhängig vom Aufbau des Modells.\\
-Der Einsatz einer Simulation scheint in diesem Kontext eine gute und einfache Option zu sein, wie Hard- und Software parallel zueinander entwickelt werden können. Allerdings gibt es auch Faktoren die eine Simulation erschweren. 
-Der Aufbau einer Umgbeung in der der Algorithmus erprobt und entwickelt werden soll, ist grundlegend wenig herausfordernd. Allerdings muss die Umgebung so aufgebaut werden, dass für diese Umgebung Sensordaten generiert werden können,
-mit denen der Algorithmus ausgeführt werden kann. Zusätzlich müssen die simulierten Daten in Umfang und Freuquenz mit denen des späteren Modells übereinstimmen, um die Funktionalität später auf das Modell übertragen zu können. \\
+Im Rahmen dieser Arbeit hat die Implementierung einer Simulation mehrere Vorteile. 
+Es wird parallel an der Entwicklung des Autos und der zugehörigen Software gearbeitet.
+
+Da die Implementierung der Software von Grund auf neu gestartet wird, 
+wäre ein Warten auf die Fertigstellung des Autos aud zeitlichen Gründen nicht möglich.
+Die Situation ist also eine der Situationen die in \ref{Simulation} beschrieben sind, 
+in denen der Einsatz einer Simulation sinnvoll ist.
+
+Ein weiterer Grund für den Einsatz einer Simulation ist ebenfalls in \ref{Simulation} beschrieben ist, 
+ist ein möglicher Schadensfall. Das Auto ist von den Dimensionen nicht ausreichend groß, 
+um einem Menschen zu verletzten, daher wären bei der Nutzung des realen Fahrzeuges kein Personenschaden zu befürchten.
+Die Problematik in diesem Kontext ist die Anfälligkeit des Autos. 
+Das Auto ist so konstruieert, das es mit wenig Leistung auskommt und nur die Elemente verbaut sind, 
+dass es fahren kann. Aus diesem Grund wurden auf schützende Anbauteile wie Stoßdämpfer oder ähnliches verzichtet.
+Aus diesem Grund könnte eine Kollision des Fahrzeuges mit einem Hindernis problematisch. 
+Eine Kollision könnte Schäden am Fahrzeug veruursachen, die nur aufwendig, oder eventuell gar nicht repariert werden können.
+Da die Algorithmik in frühen Entwicklungsstufen kritsiche, noch unerkannte Fehler beinahlten kann,
+wäre es ein unnötiges Risiko die Software direkt auf dem Fahrzeuge auszuprobieren.
+
+Ein weiterer Grund der für den Einsatz einer Simulation spricht, ist die Abhängigkeit vom Entwicklungsfortschritt 
+des Autos. Sollte es dazu kommen, dass das Auto nicht rechtzeitig zur Verfügung steht, 
+kann die Algorithmik zumindest im Rahmen der Simulation ausprobiert werden.
 
 \subsection{Aufbau der Simulation}
 Um die Simulation für eine erste Validierung der Algorithmik nutzen zu können, ist die Voraussetzung dass die simulierte Funktionalität auch der Funktionalität entspricht, die später im realen Einsatz genutzt wird.
