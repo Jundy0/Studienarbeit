@@ -1,17 +1,18 @@
 \section{Überblick Hardware und Software}
-In diesem Kapitel wird auf die
+In diesem Kapitel wird die Hardware und Software beschriben, welche zur Bearbeitung der Studienarbeit zur Verfügung stehen.
+Zusätzlich wird die Technologie-Entscheidung erläutert und begründet.
 
 \subsection{Hardware}
 Dieser Abschnitt beschreibt die Hardware, welche für die Entwicklung des Ausweichalgorithmus relevant ist. 
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
     \item \textbf{Raspberry Pi 4 Model B} \\
     Der Raspberry Pi 4 ist ein single-board-computer, welcher im Jahr 2019 auf dem Markt erschien. 
-    Er besitzt eine ARM-basierte 64-bit CPU, welche mit 1.5GHz getaktet ist. Das Modell, welches im Rahmen unserer Studienarbeit genutzt wird, besitzt 4GB Arbeitsspeicher. 
+    Er besitzt eine ARM-basierte 64-bit CPU, welche mit 1.5GHz getaktet ist. Das Modell, welches im Rahmen unserer Studienarbeit genutzt wird, besitzt 8GB Arbeitsspeicher. 
     Außerdem verfügt der Raspberry Pi 4 über 40 \acf{gpio} Pins, welche zur Kommunikation mit den Sensoren und der Steuerungs-Schnittstelle genutzt werden können. \cite{RasPi2024}
 
     \item \textbf{Slamtec RPLiDAR A1M8-R6} \\
-    Der RPliDAR A1M8-R6 von Slamtec ist ein zweidimensionaler Laser-Scanner, welcher mittels \acf{lidar}, ein 360° Scan der Umgebung erstellen kann. \cite[p. 3]{Slamtec2020}
+    Der RPLiDAR A1M8-R6 von Slamtec ist ein zweidimensionaler Laser-Scanner, welcher mittels \acf{lidar}, ein 360° Scan der Umgebung erstellen kann. \cite[p. 3]{Slamtec2020}
     Er hat eine effektive Reichweite von 0.15 bis 12 Meter und bei einer Scan-Rate von 5.5 Scans pro Sekunde, sowie eine Scan-Frequenz von 8000 Hz, eine Auflösung von weniger als einem Grad. \cite[p. 8]{Slamtec2020}
     
     \item \textbf{Weitere Sensoren} \\
@@ -24,15 +25,51 @@ Dieser Abschnitt beschreibt die Hardware, welche für die Entwicklung des Auswei
 \subsection{Software}
 In diesem Abschnitt wird auf die Software eingegangen, welche zur Entwicklung des Algorithmus zur Verfügung steht.
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
     \item \textbf{\acf{ros}} \\
-    \ac{ros} ist eine Ansammlung von Werkzeugen und Bibliotheken, wie Treiber und Algorithmen, welche bei der Entwicklung von Roboter-Anwendungen helfen sollen. Hierbei ist ROS vollständig Open-Source und bietet zudem eine ausführliche Dokumentation, Foren und eine große Community. \cite{Ros2024}
+    \ac{ros} ist eine Ansammlung von Werkzeugen und Bibliotheken, wie Treiber und Algorithmen, welche bei der Entwicklung von Roboter-Anwendungen helfen sollen. 
+    Hierbei ist ROS vollständig Open-Source und bietet zudem eine ausführliche Dokumentation, Foren und eine große Community. \cite{Ros2024}
     Des Weiteren bietet Slamtec, der Hersteller des zur Verfügung stehenden \ac{lidar}-Sensors, eine Bibliothek, zur Nutzung des \ac{lidar}-Sensors, in Kombination mit verschiedenen Versionen des \ac{ros} an. \cite{RplidarRos2023}
 
-    \item \textbf{Slamtec RPLIDAR Public SDK} \\
-    Slamtec bietet, neben der \ac{ros}-Bibliothek, auch eine öffentlich zugängliche SDK für sämtliche RPLiDAR-Produkte an. Die SDK ist in C++ geschrieben und unter der BSD 2-clause Lizenz lizenziert. \cite{RplidarSDK2023}
+    \item \textbf{Slamtec RPLiDAR Public SDK} \\
+    Slamtec bietet, neben der \ac{ros}-Bibliothek, auch eine öffentlich zugängliche SDK für sämtliche RPLiDAR-Produkte an. 
+    Die SDK ist in C++ geschrieben und unter der BSD 2-clause Lizenz lizenziert. \cite{RplidarSDK2023}
+
+    \item \textbf{Slamtec RPLiDAR SDK Python-Ports} \\
+    Die Slamtec RPLidar Sensoren sind, aufgrund des erschwinglichen Preises, vor allem bei Einsteigern sehr beliebt.
+    Auch die Programmiersprache Python ist in den letzten Jahren immer beliebter geworden.
+    Da Slamtec selbst keine Python-SDK anbietet, entstanden über die Jahre diverse Ports der C++ SDK.
 \end{enumerate}
 
 \subsection{Technologie-Entscheidung}
+Dieser Abschnitt erläutert die Entscheidungen für die diversen Technologien, welche zur Bearbeitung des praktischen Teils der Arbeit gewählt wurden.
+\paragraph{Hardware}
+Die Auswahlmöglichkeiten der Hardware sind sehr beschränkt.
+Da die notwendigen Berechnungen einiges an Leistung benötigen, wird sich für das leistungsstärkste, verfügbare Modell des Raspberry Pi entschieden.
+Der Raspberry Pi 4 Model B bietet neben einer 64-bit CPU mit ausreichender Leistung, auch 8 GB Arbeitsspeicher und einen Formfakter der klein genug ist, um eine Integration in das Fahrzeug zu ermöglichen.
+Zusätzlich bietet er ausreichend Schnittstellen um mit den diversen Sensoren und Motoren kommunizieren zu können.
+
+Als Hauptsensor für das Messen der Umgebung steht nur der RPLiDAR A1M8-R6 von Slamtec zur Verfügung.
+Weitere Sensorik soll zwar auf dem Auto verbaut werden, jedoch erstmal nicht von der Software berücksichtigt werden.
+Der Grund hierfür ist der Zeitpunkt, zu dem die Sensorik verbaut werden kann.
+Die Verarbeitung der Daten des \ac{lidar} kann ohne Auto oder per Simulation getestet werden, wohingegen es bei der anderen Sensorik sehr stark auf die Integration in dem Fahrzeug ankommt.
+Da diese jedoch erst zum Schluss in dem Fahrzeug verbaut werden, wäre eine Software-Integration dieser Sensorik nur schwer rechtzeitig umzusetzten.
+
+\paragraph{Software}
+Maßgeblich verantwortlich für die Auswahl der Programmiersprache, ist die Auswahl der Software, welche verwendet wird um den \ac{lidar} anzusteuern.
+
+Die eine Möglichkeit, wäre das nutzen des offiziellen Slamtec RPLLiDAR \ac{ros}-Paket.
+Bei ROS handelt es sich jedoch um eine sehr umfangreiche Software. 
+Diese kommt mit vielen, für die Studienarbeit nicht relevanten, Komponenten daher.
+Des Weiteren benötigt \ac{ros} ein anderes, nicht für den Raspberry Pi optimiertes, Betriebssystem wie Ubuntu.
+Das hat zu Folge, das weitere Resourcen für das Betriebssystem benötigt werden und nicht für die notwendigen Berechnungen zur Verfügung stehen.
+
+Die Alternative zur Verwendung von \ac{ros}, ist das nutzen einer SDK.
+Die Python-Ports der SDK sind alle schon einige Jahre alt und haben teilweise keine wirklich übersichtliche Struktur.
+Die offizielle C++ SDK hingegen wird immernoch regelmäßige geupdated und bietet eine umfangreiche Dokumentation sowie einige Beispielprogramme.
+
+Um die begrenzt vorhandenen Ressourcen des Raspberry Pi optimal nutzen zu können, ist daher die Nutzung der C++ SDK und einem entsprechenden Interface die beste Lösung.
+Da die SDK in C++ geschrieben ist, macht es Sinn, die restliche Software ebenfalls in C++ zu implementieren.
+Zusätzlich verbessert die Nutzung einer kompilierten Programmiersprache wie C++ die Laufzeit der Software was die Reaktionszeit des Autos verbessert.
 
 \newpage
