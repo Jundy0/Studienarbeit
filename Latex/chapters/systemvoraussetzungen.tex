@@ -2,30 +2,33 @@
 In diesem Kapitel wird definiert welche Voraussetzungen erfüllt sein müssen, um eine korrekte Funktion der Software sicherzustellen.
 Die Algorithmik für die Ortung des Fahrzeuges befindet sich in einem frühen Entwicklungsstadium. 
 Aus diesem Grund müssen einige Bedingugnen eingehalten werden. 
+
 \subsection{Umweltvoraussetzungen}
 In diesem Abschnitt werden die Voraussetzungen an das Einsatzgebiet des Autos definiert.
+
 \begin{enumerate}[leftmargin=*]
-    \item \textbf{statische Umgebung} \\
+    \item \textbf{Statische Umgebung} \\
     Das Fahrzeug darf nur in einer statischen Umgebung autonom gefahren werden. 
     Die Objekte in der Umgebung dürfen während der Fahrt nicht bewegt werdem.
     Grund dafür ist, dass nicht bekannt ist, wie sich eine dynamsiche Umgebung auf die Präzision der Lokalisierungsalgorithmik auswirkt. 
-    \item \textbf{Abstände von Hindernissen}\\
-    \label{LiDAR-Daten}
+    
+    \item \textbf{Hindernisse} \\
     Laut Datenblatt \cite{Slamtec2020} liegen die Distanzen die der Sensor erfassen kann, zwischen 0.15 - 12 Metern.
-    Um die eine Versorgung mit validen Daten sicherzustellen, 
-    muss die Umgebung so gebaut sein, 
-    dass zu jedem Moment von mindestens drei Seiten Objekte in einem Umkreis von maximal 10 Metern vorhanden sind,
-    so dass der Lidar ausreichend viele, korrekt Werte liefert.  
-    Hintergrund der Beschränkung sind ebenfalls die unbekannten Auswirkungen auf die Lokalisierungsalgorithmik.
-    \item \textbf{Trockene Umgebung}\\
+    Um die Versorgung mit validen Daten sicherzustellen, muss die Umgebung so gebaut sein, 
+    dass zu jedem Zeitpunkt, sowohl in x-Richtung als auch in y-Richtung, Objekte mit einem Maximalen Abstand von maximal 10 Meteren vorhanden sind.
+    Des Weiteren sollte eine Mindestanzahl von 100 Punkten pro Scan geliefert werden.
+    Bei Nichteinhaltung der genannten Bedingungen ist eine Lokalisierung mittels des implementierten Algorithmus alleine ungenau.
+    
+    \item \textbf{Trockene Umgebung} \\
     Das Fahrzeug darf nur in einem vor Wasser geschützten Bereich verwendet werden.
     Hintergrund ist dass die Elektronik nicht vor eindringendem Wasser geschützt ist.
     Eindringendes Wasser könnte das Fahrzeug so beschädigen, dass es nicht mehr funktioniert.
-    \item \textbf{Höhe der Hindernisse}\\
-    Der verwendete LiDAR-Sensor liefert nur 2D-Daten. 
-    Das bedeutet, dass im aktuellen Entwicklungsstadium die Hindernisse auf der Höhe des LiDAR-Sensors sein müssen.
-    Sind die Hindernisse auf einer anderen Höhe, so können diese Hindernisse nicht vom Lidar erfasst werdem 
-    und somit auch nicht um Ausweichalgorithmus berücksichtigt werden.
+   
+    \item \textbf{Höhe der Hindernisse} \\
+    Der verwendete LiDAR-Sensor liefert 2D-Daten in einem 360 Grad Winkel. 
+    Das bedeutet, dass die Hindernisse auf der Höhe des LiDAR-Sensors sein müssen um erfasst zu werden.
+    Sind die Hindernisse unterhalb des LiDAR, so können diese Hindernisse von diesem nicht erfasst werden.
+    Dadurch können diese auch nicht um Ausweichalgorithmus berücksichtigt werden, was ein Ausweichen dieser Hindernisse unmöglich macht.
 \end{enumerate}
 
 
@@ -33,6 +36,7 @@ In diesem Abschnitt werden die Voraussetzungen an das Einsatzgebiet des Autos de
 \subsection{Einschränkungen}
 In diesem Abschnitt werden die Voraussetzungen und Einschränkungen beschrieben, 
 die berücksichtigt werden müssen, wenn die Algorithmik Weiterentwickelt wird.
+
 \begin{enumerate}[leftmargin=*]
     \item \textbf{Steuerung} \\
     Der Algorithmus muss auf die Steuerungsmöglichkeiten des Autos ange\-passt sein.
