@@ -116,3 +116,22 @@
   organization = {Shanghai Slamtec Co., Ltd.},
   address      = {Shengyin Tower, 666 Shengxia Rd., Shanghai, China},
 }
+
+
+
+@article{lidar,
+AUTHOR = {Liu, Yanjie and Wang, Chao and Wu, Heng and Wei, Yanlong and Ren, Meixuan and Zhao, Changsen},
+TITLE = {Improved LiDAR Localization Method for Mobile Robots Based on Multi-Sensing},
+JOURNAL = {Remote Sensing},
+VOLUME = {14},
+YEAR = {2022},
+NUMBER = {23},
+ARTICLE-NUMBER = {6133},
+URL = {https://www.mdpi.com/2072-4292/14/23/6133},
+ISSN = {2072-4292},
+ABSTRACT = {In this paper, we propose a localization method applicable to 3D LiDAR by improving the LiDAR localization algorithm, such as AMCL (Adaptive Monte Carlo Localization). The method utilizes multiple sensing information, including 3D LiDAR, IMU and the odometer, and can be used without GNSS. Firstly, the wheel speed odometer and IMU data of the mobile robot are multi-source fused by EKF (Extended Kalman Filter), and the sensor data obtained after multi-source fusion are used as the motion model to participate in the positional prediction of the particle set in AMCL to obtain the initial positioning information of the mobile robot. Then, the position pose difference values output by AMCL at adjacent moments are substituted into the PL-ICP algorithm as the initial position pose transformation matrix, and the 3D laser point cloud is aligned with the nonlinear system using the PL-ICP algorithm. The three-dimensional laser odometer is obtained by LM (Levenberg--Marquard) iterative solution in the PL-ICP algorithm. Finally, the initial position pose output by AMCL is corrected by the three-dimensional laser odometer, and the AMCL particles are weighted and sampled to output the final positioning result of the mobile robot. Through simulation and practical experiments, it is verified that the improved AMCL algorithm has higher positioning accuracy and stability compared to the AMCL algorithm.},
+DOI = {10.3390/rs14236133}
+}
+
+
+
