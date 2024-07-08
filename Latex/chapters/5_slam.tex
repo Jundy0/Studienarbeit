@@ -21,42 +21,47 @@ und es kann auch nicht bestimmt werdeen ob das Ziel erreicht ist.
 
 In diesem Abschnitt werden verschiedene Ansätze zur Lösung des Lokalisierungsproblems mit den Vor- und Nachteilen beschrieben.
 
-\subsubsection{Globale Ortungsverfahren}
+\subsubsection{Datenerzeugung}
+In diesem Abschnitt werden verschiedene Möglichkeiten zur generierung von Daten beschrieben, welche zur Lokalisierung eines Fahrzeugs genutzt werden können.
+
+\paragraph{Globale Ortungsverfahren} \mbox{}\\
 %% Kurze Beschreibung??
 
 \begin{enumerate}[leftmargin=*]
     \item \textbf{\acf{gps}} \\
     Für die Ortung eines Fahrzeugs kommt in der Praxis das \ac{gps} zum Einsatz. 
-    \ac{gps} arbeitet mit Satelliten, die die Position des Benutters, in diesem Fall des Fahrzeugs, bestimmen
-    und übermittlen \cite{ashby2003relativity}. Die Genauigkeit des \ac{gps} beträgt ca. 5-10 cm \cite{ashby2003relativity}.
+    \ac{gps} arbeitet mit Satelliten, die die Position des Benutters, in diesem Fall des Fahrzeugs, bestimmen und übermittlen \cite{ashby2003relativity}. 
+    Die Genauigkeit des \ac{gps} beträgt ca. 5-10 cm \cite{ashby2003relativity}.
 
     Der Vorteil der Nutzung eines \ac{gps}-Sensors ist eine globale Verfügbarkeit.
 
-    Im Einsatz für Fahrzeuge auf der Straße ist diese Genauigkeit ausreichend, da die lokalisierten Objekte deutlich größer sind und dadurch
-    trotz der Toleranzen der richtige Ort gefunden werden kann.
+    Im Einsatz für Fahrzeuge auf der Straße ist diese Genauigkeit ausreichend, 
+    da die lokalisierten Objekte deutlich größer sind und dadurch trotz der Toleranzen der richtige Ort gefunden werden kann.
     Relativ zur Fahrzeuggröße sind 5-10 cm bei einem kleinen Modellfahrzeug eine deutliche Abweeichung, die abhängig von der Umgebung des Fahrzeugs ernsthafte Konsequenzen haben kann.
 
     Eine weitere Problematik die die Verwendung von \ac{gps}-Daten mit sich bringt ist die Abhängigkeit von der Signalstärke und -verfügbarkeit. 
-    Ist das Siganl schewach, kann die Abweeichung noch größer werden. Ist kein Siganl
-    verfügbar, ist gar keine Ortung möglich.
+    Ist das Siganl schewach, kann die Abweeichung noch größer werden. 
+    Ist kein Siganl verfügbar, ist gar keine Ortung möglich.
     
     \item \textbf{Eigenes \ac{gps}} \\
     Um das Problem der Siganlverfügbarkeit zu lösen, könnte man auf die Idee kommen ein eigenes \acf{gps} aufzubauen, dass kleine Sender statt Satelliten verwendet.
     Diese Sender werden in der Umgebung platziert. 
     Auf dem Fahrzeug ist ein Empfänger moniteirt, der die Entfernungen zu den Sendern erfasst.
-    Mit dieser Technologie kann dann über Triangulation die Position des Fahrzeugs bestimmt werden. Dadurch wäre je nach Qualität von Sender und Empfänger eine höhere Präzision als 
-    5-10 cm möglich. 
+    Mit dieser Technologie kann dann über Triangulation die Position des Fahrzeugs bestimmt werden. 
+    Dadurch wäre je nach Qualität von Sender und Empfänger eine höhere Präzision als 5-10 cm möglich. 
     
-    Damit wären also beide Probleme von \ac{gps} in diesem Kontext gelöst. Aber es gibt auch einen deutlichen Nachteil. Denn vor der Verwendung des Fahrzeugs muss die Umgebung zunächst
-    mit den Sendern präpariert werden. Ein Einsatz in unbekannten Gebieten ist dadurch nicht möglich. Das ist je nach Einsatzzweck des Fahrzeuges ein größeres oder kleiners Problem.
+    Damit wären also beide Probleme von \ac{gps} in diesem Kontext gelöst. 
+    Aber es gibt auch einen deutlichen Nachteil. 
+    Denn vor der Verwendung des Fahrzeugs muss die Umgebung zunächst mit den Sendern präpariert werden. 
+    Ein Einsatz in unbekannten Gebieten ist dadurch nicht möglich. 
+    Je nach Einsatzzweck des Fahrzeuges ist das ein großes Problem.
 \end{enumerate}
 
-\subsubsection{Relative Ortungsverfahren}
+\paragraph{Relative Ortungsverfahren} \mbox{}\\
 Globale Ortungsverfahren haben den Nachteil abhängig von den Gegebenheiten der Umgebung zu sein.
 Ist in der Umgebung kein \ac{gps}-Signal verfügbar, so ist keine Lokalisierung möglich.
 Dabei ist es nicht von Bedeutung ob das Signal von Satelliten oder von selbst angebrachten Sendern in der Umgebung stammt.
-Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anhand von Differenzen in den gesammelten Daten 
-von verbauten Sensoren berechnen.
+Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anhand von Differenzen in den gesammelten Daten von verbauten Sensoren berechnen.
 
 \begin{enumerate}[leftmargin=*]
     \item \textbf{LiDAR-Sensor} \\
@@ -95,7 +100,7 @@ von verbauten Sensoren berechnen.
 
 
     \item \textbf{Ultraschall} \\
-    Ultraschallsensoren erfcassen die Umgebung mit Hilfe von Schallwellen und deren Reflektionen. 
+    Ultraschallsensoren erfassen die Umgebung mit Hilfe von Schallwellen und deren Reflektionen. 
     Diese Methode ist sehr einfach in der implementierung und sehr sparsam im Energieverbrauch. 
     Daher ist ein Einsatz auch in Fahrzeugen mit geringer Batterikapazität möglich.
     Das hat aber auch Nachteile. 
