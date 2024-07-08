@@ -21,11 +21,14 @@ und es kann auch nicht bestimmt werdeen ob das Ziel erreicht ist.
 
 In diesem Abschnitt werden verschiedene Ansätze zur Lösung des Lokalisierungsproblems mit den Vor- und Nachteilen beschrieben.
 
-\subsubsection{Datenerzeugung}
+\subsubsection{Datenquellen zur Erzeugung globaler Bewegungsdaten}
 In diesem Abschnitt werden verschiedene Möglichkeiten zur generierung von Daten beschrieben, welche zur Lokalisierung eines Fahrzeugs genutzt werden können.
 
-\paragraph{Globale Ortungsverfahren} \mbox{}\\
-%% Kurze Beschreibung??
+\paragraph{} \mbox{}\\
+Globale Verfahren zur Datenerzeugung für Lokalisierungsalgorithmen basieren darauf dass die Umgebung dafür prepariert ist.
+Das Fahrzeug kommuniziert mit Sendern die in der Umgebung verfügbar sind. 
+Mit Hilfe dieser Sender wird ein globales Netz erstellt, dass dem Fahrzeug die Berechnung der absoluten Position im 
+globalen Koordinatensystem ermöglicht.
 
 \begin{enumerate}[leftmargin=*]
     \item \textbf{\acf{gps}} \\
@@ -57,9 +60,9 @@ In diesem Abschnitt werden verschiedene Möglichkeiten zur generierung von Daten
     Je nach Einsatzzweck des Fahrzeuges ist das ein großes Problem.
 \end{enumerate}
 
-\paragraph{Relative Ortungsverfahren} \mbox{}\\
+\paragraph{Quellen für die Erzeugung relativer Bewegungsdaten} \mbox{}\\
 Globale Ortungsverfahren haben den Nachteil abhängig von den Gegebenheiten der Umgebung zu sein.
-Ist in der Umgebung kein \ac{gps}-Signal verfügbar, so ist keine Lokalisierung möglich.
+Ist in der Umgebung keine Kommunikation mit den Sendern möglich, so ist keine Lokalisierung möglich.
 Dabei ist es nicht von Bedeutung ob das Signal von Satelliten oder von selbst angebrachten Sendern in der Umgebung stammt.
 Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anhand von Differenzen in den gesammelten Daten von verbauten Sensoren berechnen.
 
