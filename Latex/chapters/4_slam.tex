@@ -22,9 +22,10 @@ und es kann auch nicht bestimmt werdeen ob das Ziel erreicht ist.
 In diesem Abschnitt werden verschiedene Ansätze zur Lösung des Lokalisierungsproblems mit den Vor- und Nachteilen beschrieben.
 
 \subsubsection{Globale Ortungsverfahren}
+%% Kurze Beschreibung??
 
-\begin{enumerate}
-    \item \textbf{\acf{gps}}\\
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{\acf{gps}} \\
     Für die Ortung eines Fahrzeugs kommt in der Praxis das \ac{gps} zum Einsatz. 
     \ac{gps} arbeitet mit Satelliten, die die Position des Benutters, in diesem Fall des Fahrzeugs, bestimmen
     und übermittlen \cite{ashby2003relativity}. Die Genauigkeit des \ac{gps} beträgt ca. 5-10 cm \cite{ashby2003relativity}.
@@ -38,7 +39,8 @@ In diesem Abschnitt werden verschiedene Ansätze zur Lösung des Lokalisierungsp
     Eine weitere Problematik die die Verwendung von \ac{gps}-Daten mit sich bringt ist die Abhängigkeit von der Signalstärke und -verfügbarkeit. 
     Ist das Siganl schewach, kann die Abweeichung noch größer werden. Ist kein Siganl
     verfügbar, ist gar keine Ortung möglich.
-    \item \textbf{Eigenes \ac{gps}}\\
+    
+    \item \textbf{Eigenes \ac{gps}} \\
     Um das Problem der Siganlverfügbarkeit zu lösen, könnte man auf die Idee kommen ein eigenes \acf{gps} aufzubauen, dass kleine Sender statt Satelliten verwendet.
     Diese Sender werden in der Umgebung platziert. 
     Auf dem Fahrzeug ist ein Empfänger moniteirt, der die Entfernungen zu den Sendern erfasst.
@@ -56,12 +58,14 @@ Dabei ist es nicht von Bedeutung ob das Signal von Satelliten oder von selbst an
 Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anhand von Differenzen in den gesammelten Daten 
 von verbauten Sensoren berechnen.
 
-\begin{enumerate}
-    \item \textbf{LiDAR-Sensor}\\
-    Bei einem LiDAR-Sensor wird die Umgebung mit Hilfe von Laserstrahlen erfasst Dabei werden Werte generiert, die die Distanz und Richtung des Objektes beinhalten. 
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{LiDAR-Sensor} \\
+    Bei einem LiDAR-Sensor wird die Umgebung mit Hilfe von Laserstrahlen erfasst.
+    Dabei werden Werte generiert, die die Distanz und Richtung des Objektes beinhalten. 
     LiDAR-Sensoren bieten den Vorteil, dass sie unabhängig von den Lichtverhältnissen der Umgebung sind \cite{lidar}. 
-    Bei LiDAR-Sensoren muss zwischen 2D- und 3D-Sensoren differenziert werden. 3D-Sensoren erfassen eine deutlich größere Datenmenge, 
-    wodurch die Verlässlichkeit der Daten erhöht wird. Dabei spielt es keine Rolle, ob der Sensor im Innen- oder Außenbereich zum Einsatz kommt \cite{lidar}. 
+    Bei LiDAR-Sensoren muss zwischen 2D- und 3D-Sensoren differenziert werden. 
+    3D-Sensoren erfassen eine deutlich größere Datenmenge, wodurch die Verlässlichkeit der Daten erhöht wird.
+    Dabei spielt es keine Rolle, ob der Sensor im Innen- oder Außenbereich zum Einsatz kommt \cite{lidar}. 
 
     Ein weiterer Vorteil von LiDAR-Sensoren ist die Datenrepräsentation.
     Die Repräsentation mit Abstand und Winkel ermnöglicht eine Verarbeitung ohne aufwendige Vorbereitung und Anpassung der Daten.
@@ -70,11 +74,11 @@ von verbauten Sensoren berechnen.
     Zum Beispiel können Wasserteilchen in der Luft die Reflektion der Laserstrahlen so verändern, dass die empfangenen Werte des Sensors nicht mit der Realität übereinstimmen.
     Auch die eingeschränkte Reichweite kann abhängig von der Umgebung ein Problem darstellen.
 
-    Bei 2D-Sensoren kann aucb die feste Höhe ein Problem sein.
-    Ist ein Hinderniss unter- oder überhalb des Sensors, aber auf Höhe anderer Farzeugteile, werdeen diese nicht erkannt und eine Kollision mit 
-    solchen Objekten kann nicht verhindert werden. 
+    Bei 2D-Sensoren kann auch die feste Höhe ein Problem sein.
+    Ist ein Hinderniss unter- oder überhalb des Sensors, aber auf Höhe anderer Farzeugteile, 
+    werden diese nicht erkannt und eine Kollision mit solchen Objekten kann nicht verhindert werden. 
 
-    \item \textbf{Kamera}\\
+    \item \textbf{Kamera} \\
     Kameras haben den Vorteil, dass alle Elemente, unabhängig von der Höhe, und auch in größeren Distanzen erkannt werden können. 
 
     Der Nachteil von Kameras ist die Abhängigkeit von der Beleuchtung der Umgebung, da diese maßgeblich den erkennabren Detailgerad beeinflusst.
@@ -83,14 +87,14 @@ von verbauten Sensoren berechnen.
     Auch die Verarbeitung der Daten ist ein Nachteil. 
     Um Kameradaten automatisiert auszuwerten müssen zunächst verschiedene Algorithmen zur Vorbereitung ausgeführt werden. 
     Die Vorbereitung benötigt Zeit, die bei anderen Verfahren bereits zur Berechnng der Posiiton genutzt werdeen kann.
-    Außerdem sind die Vorbereitungen und die Auswertung der Biler rechenintnsiv, wodurch diese als primäre Datenquelle zur Lokalisierung 
-    eher für Fahrzeuge mit hoher Rechenleistung geeignet sind.
+    Außerdem sind die Vorbereitungen und die Auswertung der Biler rechenintnsiv, 
+    wodurch diese als primäre Datenquelle zur Lokalisierung eher für Fahrzeuge mit hoher Rechenleistung geeignet sind.
 
     Ein weiterer Nachteil von Kameras ist die eingeschränkte Sichtweite. 
     Das Bild kann nur einen gewissen Teil der Umgebung aufnehmen und bietet nur durch die Kombination mehrerer Kameras eine vollständige Wahrnehmung der Umgebung.
 
 
-    \item \textbf{Ultraschall}\\
+    \item \textbf{Ultraschall} \\
     Ultraschallsensoren erfcassen die Umgebung mit Hilfe von Schallwellen und deren Reflektionen. 
     Diese Methode ist sehr einfach in der implementierung und sehr sparsam im Energieverbrauch. 
     Daher ist ein Einsatz auch in Fahrzeugen mit geringer Batterikapazität möglich.
@@ -101,10 +105,12 @@ von verbauten Sensoren berechnen.
     Daher ist der Einsatz als primäre Datenquelle für die Lokalisierung des Fahrzeuges nur bedingt geeignet.
     Die Stärken von Ultraschall liegen eher im Nahbreich.
     Ein Einsatz dieser Technologie wäre also als Zusatz zu einer anderen Quelle denkbar. 
-    Das Ziel wäre dann durch die Ultraschall-Daten die Präzision der berechneten Position durch diue primäre Datenquelle zu erhöhen. 
+    Das Ziel wäre dann durch die Ultraschall-Daten die Präzision der berechneten Position durch die primäre Datenquelle zu erhöhen. 
 \end{enumerate}
 
-
-\paragraph{ICP}
+\subsubsection{Point Cloud Registration}
+Point Cloud Registration ist ein Verfahren, welches versucht zwei Punktewolken mittels diverser Algorithmen übereinander zu legen.
+% Was ist PCR
+% Warum macht es sinn es zu nutzen
 
 \newpage
