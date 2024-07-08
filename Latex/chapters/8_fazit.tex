@@ -1,8 +1,129 @@
 \section{Fazit}
-\begin{enumerate}
-    \item Was haben wir erreicht?
-    \item Etspricht das dem erhofften Ergebnis?
-    \item Welche Einschränkungen gibt es in der Verwendung?
+Im Folgenden werden die Ergebnisse der Arbeit nochmal aufgezählt, erläutert und evaluiert.
+Des Weiteren wird auf Möglichkeiten zur Optimierung und sinnvolle Änderungen eingegangen.
+
+\subsection{Rückblick}
+In diesem Kapitel wird auf die diversen Probleme eingegangen, welche während der Bearbeitung der Studienarbeit aufkamen.
+Zusätzlich wird auch darauf eingegangen, was für Ergebnisse erzielt wurden und ob die Ziele der Arbeit erreicht sind.
+
+\paragraph{Probleme} \mbox{}\\
+In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst werden mussten.
+
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Kommunikation mit dem \ac{lidar}} \\
+    Das erste größere Problem welches gelöst werden musste, war die Kommunikation mit dem LiDAR.
+    Der \ac{lidar} kommuniziert über eine serielle Schnittstelle.
+    Zusätzlich gibt es einen Pin zur Steuerung der Motordrehzahl. \ref{fig:lidar_pins}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=12cm]{graphics/lidar_pin_layout.png}
+        \caption{RPLiDAR A1 Pins Reference Design. Source \cite[p. 12]{Slamtec2023} }
+        \label{fig:lidar_pins}
+    \end{figure}
+
+    Standardmäßig liegt dem Slamtec RPLiDAR A1M8-R6 ein Adapter bei.
+    Dieser ermöglicht es, über Standard USB-A, mittels SDK mit dem \ac{lidar} zu kommunizieren und auch den Motor des \ac{lidar} anzusteuern.
+    Bei unserem Exemplar des \ac{lidar} lag ein solcher Adapter jedoch nicht bei.
+    Anstelle des Adapters stand lediglich ein Kabel zur Verfügung, dass an den \ac{lidar} angeschlossen werden konnte.
+    Das andere Ende des Kabels war nicht terminiert, so dass die einzelnen Kabel direkt an den Pins des Raspberry Pi angeschlossen werden mussten.
+
+    Zu Beginn funtkionierte die serielle Kommunikation überhaupt nicht.
+    Es stellte sich jedoch raus, dass die Kabel lediglich an den falschen Pins des Raspberry Pi angeschlossen wurden.
+    Durch korrektes Anschließen der Kabel zur seriellen Kommunikation wurde das Problem gelöst.
+
+    Eine weitere Folge des fehlenden Adapters war, dass die Motorsteuerung mittels SDK nicht länger möglich war.
+    Um den Motor zu steuern musste ein entsprechendes PWM-Signal an dem korrekten Pin des Raspberry Pi manuell gesetzt werden.
+    Zur Vereinfachung dieses Prozess wurde ein Interface implementiert, welches den Motor bei Bedarf automatisch startet und stoppt.
+
+    \item \textbf{Simulation} \\
+    %% ToDo: Probleme bei der Simulation
+
+    \item \textbf{ICP Performance} \\
+    Ein weiteres Problem war die schlechte Performance der zuerst verwendeten Implementierung eines ICP-Algorithmus.
+    Die verwendete Implementation hatte seit sieben Jahren kein Update erhalten und entstand vermutlich als Projekt einzelner Personen.
+    Trotz der geringen Anzahl an Punkten, aus denen die einzelnen Scans bestanden, brauchte der Algorithmus teilweise mehrere Sekunden zur Berechnung der Transformationsmatrix.
+    Da der gesamte Ausweichalgorithmus eine Laufzeit von unter 500ms haben sollte, war die Laufzeit des ICP-Algorithmus zu hoch.
+    Ein erster Versuch die Laufzeit zu verbessern bestand darin, die Anzahl an Punkten zu verringern.
+    Hierzu wurde sich dazu entscheiden die n nähsten Punkte zu verwenden.
+    Das hatte jedoch zur Folge, dass das Ergebnis des Algorithmus deutlich ungenauer wurde.
+    Zudem entstand durch die geringe Anzahl an Punkten, welche sich zudem meistens nur in einem kleinen Bereich des 360° Sichtfeld des Sensors befanden, 
+    eine hohe Fehleranfälligkeit bei Bewegungen nahe des Sensors.
+    Diese entstanden vor allem dann, wenn das Fahrzeug sich einem Hinderniss näherte.
+
+    Um das Problem zu lösen wurde sich dazu entschieden die Implementation der Point Cloud Library zu nutzen. \ref{pcl}
+    Da diese open-source Bibliothek für die Arbeit mit Punktewolken gedacht ist, bietet sie verschiedenste ICP-Algorithmen,
+    welche nicht nur extrem optimiert sind, sonder auch deutlich mehr Konfigurationsmöglichkeiten als die ursprünglich verwendete Implementation bieten.
+    
+    Durch die Nutzung der PCL-Implementation konnte die Laufzeit erheblich verbessert werden
+    Somit konnte das Ziel von einer Laufzeit unter 500ms, selbst bei Nutzung von 720 Punkten pro Scan, erreicht werden.
+
+    \item \textbf{Koordinaten} \\
+    Zusätzlich zu dem Problem der Laufzeit, gab es das Problem, das die Werte für die X und Y Translation, welche der ICP-Algorithmus berechnete, ungenau waren.
+    Vor allem bei Bewegungen des Fahrzeug auf der Y-Achse unterschieden sich die berechneten Werte deutlich von den tatsächlichen Werten.
+    
+    Ausführliches Debugging ergab, dass der ICP-Algorithmus die Punktewolken nahezu perfekt übereinander legte.
+    Das Problem war jedoch, das die resultierenden Werte für X- und Y-Translation basierten auf dem lokalen Koordinatensystem des Autos.
+    Das kommt daher, dass das Auto die Scans erzeugt, diese jedoch keine Informationen über die aktuelle Rotation des Fahrzeugs, 
+    relativ zum globalen Koordinatensystem der Karte, enthalten.
+    
+    So lange sich das Auto nicht drehte und nur vorwärts oder rückwärts fuhr, stimmten die Koordinaten-Achsen des Autos mit den gloablen Koordinaten-Achsen überein.
+    Somit stimmte auch das Ergebnis des ICP-Algorithmus.
+    Fuhr das Auto jetzt aber vorwärts entlang der Y-Achse, also um 90 Grad verdreht, nahm der ICP-Algorithmus das als Bewegung auf der X-Achse war.
+    Das lag daran, dass er das lokale Koordinatensystem des Autos nutzte, bei der die X-Achse nach vorne (0 Grad) gerichtet ist,
+    Sämtliche, nach vorne gerichtete Bewegung, wurde also als Bewegung in X-Richtung interpretiert.
+
+    Das Problem wurde gelöst, indem die Punktewolken, um die Rotation des Autos zum Zeitpunkt der Erstellung der ersten Punktewolke, gedreht wurden.
+    Dies hatte zur Folge, dass das Koordinatensystem des Scans auf das globale Koordinatensystem gelegt wurde.
+    Dadurch stimmte die berechnete Translation wieder mit den realen Werten überein.
+
+    \item \textbf{ICP Genauigkeit} \\
+    Ein weiteres Problem bei der Implementierung des ICP-Algorithmus war die Genauigkeit des Ergebnis.
+    Die anfänglich eher schlechte Genauigkeit, konnte durch Anpassen der Konfigurations-Parameter erheblich verbessert werden.
+    Hierzu wurden verschiedene Werte in unterschiedliche Situationen getestet und ausgewertet.
+    Hierbei war es wichtig die Laufzeit des Algorithmus im Auge zu behalten.
+    Je enger die Parameter gesetzt werden, desto genauer ist das Ergebnis des Algorithmus, jedoch steigt dadurch auch die Menge an Iterationen und somit die Laufzeit.
+
+    Es fiel auf, das der ICP-Algorithmus, selbst mit etwas lockerer gesetzten Parametern ausreichend gute Ergebnisse liefert.
+    Nur in seltenen Fällen war ein Ergebniss suboptimal, was sich durch einen hohen Fittness-Wert des Ergebnis auszeichnete.
+    Um die Laufzeit weiter zu verbessern wurde eine interne Schleifen implementiert, welche den Fitness-Score des Ergebnis als Abbruchkriterium hat.
+    Somit wird der ICP-Algorithmus mindestens einmal durchgeführt.
+    Sollte das Ergebnis nicht genau genug sein, wird der Algorithmu ein weiteres Mal aufgerufen.
+    Diesmal mit dem vorherigen Ergebnis als Input.
+    Des weiteren werden mit jeder Iteration die Parameter enger gesetzt.
+
+    Leider kam es in seltenen Fällen dazu, dass die Berechnung auf diese Art und Weise, mehrere Sekunden dauerte.
+    Daher wurde eine maximale Anzahl an ICP-Iterationen festgelegt.
+
+    Somit ist die Laufzeit des Algorithmus weiterhin optimal, jedoch kann es dazu kommen, das einige Ergebnisse einen nicht zu vernachlässigbaren Fehler haben.
+    Auch die Ergebnisse, welche eine ausreichende Genauigkeit haben, sind nicht zu 100 Prozent genau.
+    Da mehrere Scans pro Sekunde verglichen werden, addiert sich dieser Fehler.
+    Zudem resultiert ein Fehler in der berechneten Rotation des Fahrzeugs dazu, dass das oben beschriebene Problem mit den Koordinaten-Achsen nicht mehr so gut ausgeglichen werden kann.
+    Das hat zur Folge, dass sich der Fehler exponentiell erhöht.
+
+    Eine mögliche Lösung für dieses Problem, wären die Verwendung weiterer Sensoren zum Messen der Bewegung des Fahrzeugs.
+    Durch zusätzliche Odometrie-Daten und einer Gewichtung der Ergebnisse, kann die Lokalisierung des Fahrzeugs erheblich verbessert werden.
+    Eine weitere Lösung wäre die Integration von Filtern, welche die Ergebnisse des ICP-Algorithmus filtern.
+
+    Zum jetzigen Zeitpunkt sind jedoch keine Lösungen für das Problem implemntiert.
+    Der Fehler ist, vor allem zu Beginn, vernachlässigbar und beschränkt sich auf die Position und Rotation des Fahrzeugs.
+    Da sich der \ac{lidar} auf dem Fahrzeug befindet, ist die Erkennung von Hindernissen unabhängig von der Position des Fahrzeugs.
+    Lediglich die Erstellung der Karte und somit auch die Navigation zum Zielort wird mit der Zeit ungenauer.
+
+    \item \textbf{Path Finding Lenkwinkel} \\
+
+
 \end{enumerate}
+
+\paragraph{Probleme} \mbox{}\\
+
+\begin{enumerate}[leftmargin=*]
+    \item 
+\end{enumerate}
+
+
+\subsection{Evaluation}
+
+\subsection{Ausblick}
 
 \newpage
