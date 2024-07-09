@@ -60,7 +60,7 @@ Zunächst müssend die Funktionalitäten identifiziert werden, die in der Simula
     \item Fahrzeug
 \end{enumerate}
 
-\paragraph{Sensordaten}
+\paragraph{Sensordaten} \mbox{}\\
 Die Sensordaten bilden die Grundlage für die gesamte Simulation. 
 Auf den Sensordaten basiert die Lokalisierung im Raum und das Erkennen und Ausweichen eines Hindernisses. 
 Die Simulation dieser Daten stellt damit die größte Herausforderung in der Simulation dar, 
@@ -77,7 +77,7 @@ kaum einen Einfluss auf das Ergebnis des Algorithmus haben sollte.
 
 Die genauen Auswirkungen von Abweichungen der Scan-Frequenz sind nicht bekannt, weswgen hier eine genaue Analyse notwendig wäre.
 
-\paragraph{Umgebung}
+\paragraph{Umgebung} \mbox{}\\
 Die Umgebung ist ebenfalls ein essentieller Bestandteil. 
 Denn die Umgebung muss so simuliert werden, dass diese von den Sensoren erkannt werden kann. 
 Ist das nicht der Fall, ist jede Simulation der Sensorik unbrauchbar, 
@@ -86,7 +86,7 @@ Eine 2D-Simulation der Umgebung ist ausreichend, da der LiDAR 2D-Daten liefert.
 Unter der Voraussetzung der validen Datenerzeugung auf Basis der simulierten Umgebung, 
 ist die genaue Implementierung der Umgebung nicht von Bedeutung. 
 
-\paragraph{Ausweichen}
+\paragraph{Ausweichen} \mbox{}\\
 Das Ausweichen ist der zentrale Bestandteil der Software.
 Die Implementierung in der Simulation soll auch in der Implementierung für die Steuerung des realen Autos zum Einsatz kommen.
 Der Algorithmus selbst wird nicht simuliert, aber die verwendeten Daten kommen aus der Simulation. 
@@ -98,7 +98,7 @@ Das Ziel der Visualisierung ist eine optische Validierung ob der berechnete Weg 
 Neben der Validierung des Weges kann auch die Berechnung der Fahrzeugposition in Ansätzen validiert werden, da erkennbar wird,
 ob die neue Position ungefähr dem erwarteten Wert entspricht. Die genaue Position kann durch die Visualisierung alleine nicht validiert werdem.
 
-\paragraph{Lokalisierung}
+\paragraph{Lokalisierung} \mbox{}\\
 Die Simulation der Lokalisierung ist vor allem zum Testen der Lokalisierungs-Algorithmik wichtig. 
 Der Ausweichalgorithmus kann nur korrekt arbeiten, wenn die aktuelle Position des Fahrzeuges ausreichend genau bestimmt werdem kann.
 Da die Lokalisierung in einer unbekannten Umgebung eine große Herausforderung ist, 
@@ -107,7 +107,7 @@ Dies ist möglich, da die genaue Fahrzeugposition anhand der erfassten Steurerbe
 Die Positions-Daten des simulierten Fahrzeugs können zudem als Richtwert genutzt werden
 um die Funktionalität und Genauigkeit der implementierten Lokalisierungs-Algorithmik zu testen.
 
-\paragraph{Fahrzeug}
+\paragraph{Fahrzeug} \mbox{}\\
 Das Fahrzeug ist der wichtigste Teil der Simulation.
 Es beinhaltet Daten wir Position und Rotation.
 Außerdem ist es möglich das Fahrzeug manuell oder per Algorithmus zu steuern.
@@ -120,7 +120,7 @@ Die visuelle Darstellung des Fahrzeuges ist rein kosmetisch und kann daher stark
 In diesem Abschnitt werden die einzelnen Funktionalitäten auf Umsetzbarkeit geprüft. 
 Ist eine Umsetzung möglich, kann diese Funktionalität so in der Simulation implenentiert werden, andernfalls muss eine Alternative erarbeitet werden.
 
-\paragraph{Sensordaten}
+\paragraph{Sensordaten} \mbox{}\\
 Da aktuell nur die LiDAR-Daten genutzt werden, müssen auch nur die Daten dieses Sensors simuliert werden.
 Der LiDAR rotiert um 360° und sendet in bestimmten Abständen Lichtstrahlen aus. 
 Die Höhe der gesendeten Strahlen entspricht der Höhe des LiDAR-Sensors.
@@ -134,18 +134,18 @@ oder eine angepasste Version dieser Algotithmen realisiert werden.
 
 Die Sensordaten können also gut simuliert werdem, so dass keine Probleme entstehen sollten.
 
-\paragraph{Umgebung}
+\paragraph{Umgebung} \mbox{}\\
 Die Komplexität einer simulierten Umgebung ist als gering einzuschätzen.
 Die Umgebung muss lediglich so implementiert werden, dass basiernd darauf korrekte Sensor-Daten genreriert werdem können.
 Alle anderen Details der Implementierung für die Umgebung können stark vereinfacht werden, so dass eine Umsetzung problemlos möglich sein sollte.
 
-\paragraph{Ausweichen}
+\paragraph{Ausweichen} \mbox{}\\
 Das Ausweichen um Hindernisse lässt sich in einer bekannten Umgebung mit gegebenem Ziel abstrahieren. 
 Die Abstraktion an dieser Stelle ergibt einen Path-Finding Algorithmus. 
 Für diese Art von Algorithmen gibt es bereits viele Lösungen die unterschiedliche Stärken haben.
 Basierend auf den bereits existierenden Lösungen kann ein Ausweichalgorithmus mit den genannten Einschränkungen ohne Probleme implementiert werdem. 
 
-\paragraph{Lokalisierung}
+\paragraph{Lokalisierung} \mbox{}\\
 Die Simulation der Daten, welche für die Lokalisierung genutzt werden können, ist recht simpel.
 Das liegt daran, dass es sich bei den Daten nur um Positionsdifferenz und Rotationsdifferenz handelt.
 Diese sind einfach zu ermitteln, da die Position und Rotation des simulierten Fahrzeugs einfach ausgelesen werden.
@@ -156,7 +156,7 @@ Auf Grund der fehlender Bewegungsdaten und begrenzter Performance, ist es außer
 Deshalb ist mit Abweichungen zu rechnen, die einen additiven Fehler in der berechneten Position verursachen.
 Bei der Bewegungsberechnung mittels Lokalisierungs-Algorithmus können die simulierten Daten als Referenzwert dienen.
 
-\paragraph{Fahrzeug}
+\paragraph{Fahrzeug} \mbox{}\\
 Da die Simulation des Fahrzeuges ist weniger komplex und kann problemlos umgesetzt werdem.
 Es muss lediglich beachtet werden, dass die Ansteuerung des simulierten Fahrzeugs äquivalent zu der Ansteuerung des echten Fahrzeugs ist.
 Außerdem ist auf eine korrekte Simulation des Lenkwinkels und somit der Kurvenfahrt zu achten.
