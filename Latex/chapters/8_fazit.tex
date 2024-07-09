@@ -116,7 +116,28 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
     Lediglich die Erstellung der Karte und somit auch die Navigation zum Zielort wird mit der Zeit ungenauer.
 
     \item \textbf{Ausweichalgorithmus} \\
+    Die Implementierung des Ausweichalgorithmus war ebenfalls herausfordernd.
     
+    Zur Umsetzung wird der A-Stern Path-Finding-Algorithmus verwendet.
+    Anfänglich nahm dieser keine Rücksicht auf die eingeschränkten Bewegungsmöglichkeiten des Autos.
+    Somit wurden Pfade berechnet, welche z.B. Zick-Zack-Bewegungen enthielten.
+    Da sich das Auto nicht auf der Stelle drehen kann, waren diese Pfade nicht für das Auto abfahrbar.
+
+    Dieses Problem konnte nicht vollständig behohben werden.
+    Es wurde versucht, den Winkel in dem sich die Punkte befinden, welche der Algorithmus als nächsten Schritt in Erwähgung zieht, einzuschränken.
+    Das resultierte darin, dass der Pfad nahe am Auto, den Lenkwinkel einhält und der Pfad somit abfahrbar ist.
+    Je weiter der Pfad von dem Auto entfernt ist, desto schlechter wird die Qualität.
+    Da das Auto den Pfad jedoch nach jedem Positions-Update neu berechnet, ist das ein rein optisches Problem, dass sich nicht auf die Funktionalität auswirkt.
+
+    Des Weiteren neigte der Algorithmus dazu, Pfade zu generieren, welche duch Wände führten.
+    Wie sich herausstellte, war das Problem die Darstellung der Koordinaten.
+    Die Implementierung des Algorithmus repräsentierte Punkte in der Form (x,y).
+    Die Werte, welche zeigen ob sich an einem Punkt ein Hinderniss befindet, werden jedoch in einer Matrix gespeichert.
+    Diese wird in der Form (Zeile, Spalte) angesprochen.
+    Sieht man die Matrix nun als Koordinaten-System, entsprechen die Zeilen der, nach unten gerichteten Y-Achse.
+    Die Spalten entsprechen der, nach rechts gerichteten X-Achse.
+    Somit muss, um den korrekten Wert aus der Matrix auslesen zu können, diese in der Form (y,y) angesprochen werden.
+    Ein einfaches Tauschen der Koordinaten bei der Abfrage des Matrix-Wert löste das Problem.
 \end{enumerate}
 
 \paragraph{Ergebnisse} \mbox{}\\
@@ -189,6 +210,7 @@ Die gesetzten Ziele waren zeitlich machbar.
 Ein Großteil der Ziele konnte auch umgesetzt werden.
 Jedoch kam es, aufgrund verschiedenster Probleme, zu Verzögerungen.
 Aufgrund mangelnder Zeit konnten daher einige Ziele nicht erreicht werden.
+%% Eingehen auf einzelne Ziele
 
 \paragraph{Kommunikation} \mbox{}\\
 Die Kommunikation innerhalb der Gruppe war gut.
@@ -218,8 +240,9 @@ Die Schnittstelle für die Kommunikation mit dem simulierten Auto existiert bere
 der Algorithmus ist jedoch noch nicht in der Lage diese zur Steuerung des simulierten Fahrzeugs zu verwenden.
 
 Die Schnittstelle für die Kommunikation mit dem realen Auto ist noch gar nicht implementiert.
-Da bei der Erstellung der Simulation darauf geachtet wurde, dass diese möglichst realitätsnah ist,
-sollte ein Großteil der Schnittstelle kopiert werden können, so dass lediglich kleinere Anpassung notwendig sind.
+Der Aufbau der Schnittstelle sollte von der schnittstelle des Simulierten Autos kopiert werden.
+Anstelle von Methoden-Aufrufen zur steuerung des Autos, muss die Schnittstelle für das reale Auto Pins des Raspberry Pi setzten.
+Die entsprechende Python-Implementierung der Hardware-Gruppe ist vorhanden und muss nur in C++ übersetzt werden.
 
 \paragraph{Handy-Stuerung} \mbox{}\\
 Die Übermittlung der Zielkoordinaten erfolgt bei der Simulation über einen Mausklick innerhalb der simulierten Umgebung.
@@ -233,11 +256,12 @@ Die Eingabe einer Zielkoordinaten könnte dann mittels Klick auf die Karte erfol
 Es wurden bereits zusätzliche Ultraschall-Sensoren an dem Fahrzeug verbaut.
 Eine Integration dieser in die bestehnde Logik ist eine weitere, sinnvolle Ergänzung.
 
-Da diese Sensoren unterhalb des \ac{lidar}, vorne und hinten an dem Fahrzeug angebracht sind,
+Da diese Sensoren unterhalb des \ac{lidar}, vorne an dem Fahrzeug angebracht sind,
 können sie genutzt werden um flache Hindernisse, welche sich unterhalb des \ac{lidar}-Sensors befinden, zu erkenne.
 Außerdem können sie als fail-safe dienen, falls das Fahrzeug auf ein Hindernis zusteuert, diesem aber nicht ausweicht.
+Ein solcher fail-safe dient vor allem dem Schutz der Hardware. welche fragil und teuer ist.
 
-Neben Ultraschall-Sensoren macht auch die Erweiterungen um eine Beschleunigungs-Sensor sinn.
+Neben Ultraschall-Sensoren macht auch die Erweiterungen um eine Beschleunigungs-Sensor Sinn.
 Ein solcher Sensor kann genutzt werden, um zusätzliche Bewegungsdaten zu sammeln.
 Diese können verwendet werden, um z.B. durch Gewichtung, die Ergebnisse der Lokalisierung zu verbessern.
 

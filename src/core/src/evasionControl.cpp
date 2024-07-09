@@ -78,7 +78,7 @@ void EvasionControl::update(std::shared_ptr<Eigen::MatrixXd> map, const Eigen::R
 
 bool EvasionControl::isFree(size_t x, size_t y)
 {
-    return (*this->map)(y, x) < INFLATED;
+    return (*this->map)(y, x) < INFLATED; // Y,X da bei Matrix (Zeile, Spalte) = (Y,X)
 }
 
 void EvasionControl::printPath()
