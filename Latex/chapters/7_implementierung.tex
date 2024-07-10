@@ -1,30 +1,77 @@
 \section{Implementierung}
 
+In dem folgenden Kapitel wird beschrieben, wie die Theorie aus den vorherigen Kapiteln in der Implementierung umgesetzt wurden und die Implementierung an sich beschrieben. Dabei wird zunächst der oberflächliche Aufbau der Implementierung erklärt und dann auf die einzelnen Bestandteile der Implementierung eingegangen. Zur Verdeutlichung werden außerdem noch einige Probleme, welche bei der Umsetzung der Implementierung aufgetreten sind, bzw. die für die Implementierung gelöst werden mussten, näher erklärt und die Lösungsansätze, sowie die Umsetzung in der Implementierung beschrieben. 
+
 \subsection{Aufbau der Implementierung}
 
-Der gesamte Aufbau der Implementierung ist in drei Projekte aufgeteilt: Core, Simulation und Lidar. 
-Das Core-Projekt ist eine Library, welche keine ausführbare Datei und lediglich die Implementierungen der Algorithem bzw. die Logik für das Steuern und Ausweichen des Fahrzeug enthält. 
-Das Simulation-Projekt dient für die Simulation des autonomen Fahrzeugs und die Implementierungen der Algorithem. 
-Das Lidar-Projekt enthählt den Code, welcher auf das eingentliche Fahrzeug, bzw. den Raspberry Pi des Fahrzeugs, geladen und auf diesem ausgeführt wird. 
-
-Nachfolgend werden die einzelnen Projekte näher beschrieben. 
+Der gesamte Aufbau der Implementierung ist in drei Projekte aufgeteilt: Core, Simulation und LiDAR. Das Core-Projekt ist eine Library, welche keine ausführbare Datei und lediglich die Implementierungen der Algorithmen bzw. die Logik für das Steuern und Ausweichen des Fahrzeugs enthält. Das Simulation-Projekt dient für die Simulation des autonomen Fahrzeugs und zum Testen der implementierten Algorithmen. Das LiDAR-Projekt enthält den Code, welcher auf das eigentliche Fahrzeug, bzw. den Raspberry Pi des Fahrzeugs, geladen und auf diesem ausgeführt wird. Das Simulation- und LiDAR-Projekt benutzen das Core-Projekt, um die Logik zur Steuerung des autonomen Fahrzeugs auszuführen und verwenden dazu Schnittstellen in Form von Implementierungen mehrerer Interfaces, wodurch unter anderem das Fahrzeug gesteuert und LiDAR Daten ausgelesen werden können. Nachfolgend werden die einzelnen Projekte und die Schnittstellen, in Form der Interfaces, zwischen den Projekten näher beschrieben. 
 
 \subsubsection{Core-Projekt}
 
-Wie bereits beschreiben enthält das Core-Projekt die Implementierungen der verwendeten Algorithmen und die Logik zum Steuern des Fahrzeugs. 
-Um auf Daten von Sensoren, sowie die Steuerung des Autos zuzugreifen, werden für diese Interfaces verwendet, über welche im Core-Projekt auf diese Zugegriffen werden kann. 
-Dies hat außerdem noch den vorteil, dass die Implementierung der Interfaces ausgetauscht werden kann, 
-damit nicht die eingentlichen Senosren ausgelesen und das Auto gesteuert wird, sondern nur mit einer Simulation interagiert wird. 
-Damit bei der Verwendung des Core-Projekt in einem der anderen Projekt die richtige Implementierung für die jeweiligen Interfaces verwendet werden, 
-sind diese zum einen nur in dem jeweiligen Projekt enthalten und werden zum anderen bei dem Start des Programms an das Core-Projekt übergeben. 
-Letzteres geschieht nach dem Dependency Injection Prinzp (TODO: Quelle und beschreibung DI).
+Wie bereits beschrieben enthält das Core-Projekt die Implementierungen der verwendeten Algorithmen und die Logik zum Steuern des Fahrzeugs. Damit die Algorithmen auf Daten von Sensoren, sowie die Steuerung des Autos zuzugreifen kann, werden Interfaces als Schnittstellen verwendet, welche die Funktionen für die Algorithmen bereitstellen. Diese Interfaces werden im Core-Projekt lediglich definiert und nicht implementiert. Die Implementierung der Interfaces erfolgt in den Simulation- und LiDAR-Projekt. Dort können die Interfaces so implementiert werden, dass durch Verwendung des Interfaces die richtige Aktion im jeweiligen Projekt ausgeführt wird. So stellt z. B. das Interface zum Auslesen der LiDAR Daten im Simulations-Projekt Daten, welche den aktuellen Stand der Simulation widerspiegeln, und im LiDAR-Projekt Daten, welche über die RPLiDAR SDK aus dem verbauten LiDAR ausgelesen wurden, zurückgegeben werden. Damit die Implementierungen der Interfaces an das Core-Projekt übergeben werden können und abhängig von der aktuellen Verwendung des Core-Projektes die richtige Implementierung verwendet wird, wird das Dependency Injection Design Pattern angewandt. Dieses Design Pattern besagt, dass Abhängigkeiten, wie z. B. die Logik für das Auslesen der LiDAR Daten, ausgelagert und über festgelegt Schnittstellen von einem Injector zur Verfügung gestellt werden. In diesem Projekt werden die Schnittstellen in Form der Implementierungen der Interfaces bei der Initialisierung der Klasse, welche die Abhängigkeiten, also die Interfaces, benutzt von dem aufrufendem Code übergeben, welcher in diesem Fall als Injector fungiert \cite{dependencyInjection}. 
+
+Neben den Interfaces für das Auslesen der LiDAR Daten und der Steuerung des Fahrzeugs befinden sich außerdem noch den Ausweichalgorithmus und den SLAM-Algorithmus, welcher ebenfalls durch Interfaces abstrahiert sind, damit auch diese einfach ausgetauscht werden können. Die gesamte Logik für das autonome Fahrzeug ist in der Klasse \dq SelfdrivingVehicle\dq\space gebündelt. Diese besitzt eine Methode \dq update\dq, welche in der Hauptschleife des jeweiligen Programms aufgerufen wird. Der Ablauf in der \dq update\dq\space Methode, ist:
+
+\begin{enumerate}[leftmargin=*]
+
+    \item \textbf{Auslesen der LiDAR Daten} 
+
+    Hier wird über das LiDAR Interface die aktuellen Daten des LiDARs ausgelesen und für die nächsten Schritte gespeichert.
+
+    \item \textbf{Ausführen des SLAM-Algorithmus} 
+    
+    Hierfür werden die ausgelesenen LiDAR Daten, sowie die Odometrie Daten übergeben. Je nach Implementierung der Interfaces sind die Odometrie Daten Leer, da sie nicht vorhanden sind, oder werden nicht für die Ausführung des SLAM-Algorithmus verwendet. 
+
+    \item \textbf{Ausführen des Ausweichalgorithmus}
+    
+    Dem Algorithmus wird die Karte, die Position und die Rotation des Fahrzeugs übergeben, welche im Schritt davor durch den SLAM-Algorithmus berechnet wurde. Daraus wird mit einem zuvor definierten Ziel ein Pfad berechnet, welcher um die erkannten Hindernisse fährt. Mit dieser wird dann berechnet, wie der Motor und die Lenkung gesetzt werden, damit das Fahrzeug auf diesem Pfad fährt. 
+
+    \item \textbf{Updaten der Motor- und Lenksteuerung} 
+
+    In diesem Schritt werden mit den Werten aus dem vorherigen Schritt die Steuerung für den Motor und die Lenkung geändert. Dies wird über das Interface zur Motor- und Lenksteuerung gemacht. 
+
+\end{enumerate}
+
+Da die gesamte Ausführung alle Schritte nicht jeden Durchlauf der Schleife nicht Nötig und mit der vorhandenen Hardware nicht effizient wäre, ist zusätzlich noch eine Überprüfung der Zeit, seit der letzten Ausführung, vorhanden. Die Zeitdifferenz, nach welcher die nächste Ausführung startet, kann variabel gesetzt werden, sollte aber zwischen 500 und 1000 ms betragen \[/src/core/src/selfdrivingVehicle.cpp\]. 
 
 \subsubsection{Simulation-Projekt}
 
-\subsubsection{Lidar-Projekt}
+Die Simulation dient dazu, die Logik aus dem Core-Projekt zu testen, ohne dass das eigentliche Fahrzeug benötigt wird. Damit das Fahrzeug sowohl gesteuert, als auch gesehen werden kann, was durch die Algorithmen berechnet wurde. Deshalb wurde die Simulation in zwei Fenster aufgeteilt, welche bei Ausführung des Programms zusammen geöffnet werden. Das erst Fenster, nachfolgend Control Window genannt, dient zur Steuerung des Fahrzeugs und der Simulation im allgeimen. Es stellt in Bezug auf das autonome Fahrzeug die Realität dar. Das zweite Fenster zeigt die Ergebnisse der Algorithmen. Dabei wird die Karte, die Position und Rotation des Fahrzeugs auf der Karte, sowie der berechnete Pfad mit dem aktuellen Ziel angezeigt. In Bezug auf das autonome Fahrzeug stellt dieses Fenster die Sicht des Fahrzeugs dar. Nachfolgend wird die Funktionen und die Logik der beiden Fenster genauer erläutert. Außerdem wird noch SFML vorgestellt, was für die Umsetzung der grafischen oberflächliche benutzt wurde. 
+
+\paragraph{SFML}
+
+SFML (Simple and Fast Multimedia Library) ist eine Library, mit welcher grafische Anwendungen erstellt werden können. Die Anwendung können dabei auf den gängigen Plattformen, wie Windows, Linux und MacOS laufen und können in unterschiedlichen Programmiersprachen erstellt werden, darunter auch C++ \cite{sfml}. 
+
+\paragraph{Control Window}
+
+In dem Control Window kann das simulierte Fahrzeug direkt über die \dq WASD\dq-Tasten gesteuert werden. Außerdem können weitere Hindernisse platziert und das Ziel geändert werden, zu welchem das Fahrzeug fahren soll. 
+
+\[/src/simulation/src/controlWindow.cpp\]. 
+
+\paragraph{Visualize Window}
+
+\[/src/simulation/src/visualizeWindow.cpp\]. 
+
+\subsubsection{LiDAR-Projekt}
 
 
 
-\LARGE\textbf{!!ToDo: Sehr viel fehlt noch. Kommt bald!!}\normalsize
+\subsection{Erläuterung Probleme bei Implementierung}
+
+Nachdem nun der Aufbau der Implementierung erleutert wurde, werden nun einige Probleme aufgezeigt, welche bei der Implementierung gelöst werden müssten. Dabei wird zunächst das Problem erklärt und dann die Lösung des Problems anhand des Codes aufgezeigt werden. 
+
+\subsubsection{Simulation des LiDARs}
+
+% intersection Logik
+
+\subsubsection{Umsetzung des Ausweichalgorithmus}
+
+% Obstacle infaltion
+
+% A* vs. A* mit dimension für drehung
+
+\subsubsection{Umsetzung von SLAM}
+
+TODO Justin
 
 \newpage
