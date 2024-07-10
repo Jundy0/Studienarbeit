@@ -1,6 +1,6 @@
 \section{Implementierung}
 
-In dem folgenden Kapitel wird beschrieben, wie die Theorie aus den vorherigen Kapiteln in der Implementierung umgesetzt wurden und die Implementierung an sich beschrieben. Dabei wird zunächst der oberflächliche Aufbau der Implementierung erklärt und dann auf die einzelnen Bestandteile der Implementierung eingegangen. Zur Verdeutlichung werden außerdem noch einige Probleme, welche bei der Umsetzung der Implementierung aufgetreten sind, bzw. die für die Implementierung gelöst werden mussten, näher erklärt und die Lösungsansätze, sowie die Umsetzung in der Implementierung beschrieben. 
+In dem folgenden Kapitel wird beschrieben, wie die Theorie aus den vorherigen Kapiteln in der Implementierung umgesetzt wurden und die Implementierung an sich beschrieben. Dabei wird zunächst der oberflächliche Aufbau der Implementierung erklärt und dann auf die einzelnen Bestandteile der Implementierung eingegangen. Zur Verdeutlichung werden außerdem noch Besonderheiten aus der erstellten Implementierung aufgezeigt und deren Umsetzung beschrieben. 
 
 \subsection{Aufbau der Implementierung}
 
@@ -14,7 +14,7 @@ Neben den Interfaces für das Auslesen der LiDAR Daten und der Steuerung des Fah
 
 \begin{enumerate}[leftmargin=*]
 
-    \item \textbf{Auslesen der LiDAR Daten} 
+    \item \textbf{Auslesen der LiDAR Daten}
 
     Hier wird über das LiDAR Interface die aktuellen Daten des LiDARs ausgelesen und für die nächsten Schritte gespeichert.
 
@@ -32,43 +32,150 @@ Neben den Interfaces für das Auslesen der LiDAR Daten und der Steuerung des Fah
 
 \end{enumerate}
 
-Da die gesamte Ausführung alle Schritte nicht jeden Durchlauf der Schleife nicht Nötig und mit der vorhandenen Hardware nicht effizient wäre, ist zusätzlich noch eine Überprüfung der Zeit, seit der letzten Ausführung, vorhanden. Die Zeitdifferenz, nach welcher die nächste Ausführung startet, kann variabel gesetzt werden, sollte aber zwischen 500 und 1000 ms betragen \[/src/core/src/selfdrivingVehicle.cpp\]. 
+Da die gesamte Ausführung alle Schritte nicht jeden Durchlauf der Schleife nicht Nötig und mit der vorhandenen Hardware nicht effizient wäre, ist zusätzlich noch eine Überprüfung der Zeit, seit der letzten Ausführung, vorhanden. Die Zeitdifferenz, nach welcher die nächste Ausführung startet, kann variabel gesetzt werden, sollte aber zwischen 500 und 1000 ms betragen [/src/core/src/selfdrivingVehicle.cpp]. 
 
 \subsubsection{Simulation-Projekt}
 
-Die Simulation dient dazu, die Logik aus dem Core-Projekt zu testen, ohne dass das eigentliche Fahrzeug benötigt wird. Damit das Fahrzeug sowohl gesteuert, als auch gesehen werden kann, was durch die Algorithmen berechnet wurde. Deshalb wurde die Simulation in zwei Fenster aufgeteilt, welche bei Ausführung des Programms zusammen geöffnet werden. Das erst Fenster, nachfolgend Control Window genannt, dient zur Steuerung des Fahrzeugs und der Simulation im allgeimen. Es stellt in Bezug auf das autonome Fahrzeug die Realität dar. Das zweite Fenster zeigt die Ergebnisse der Algorithmen. Dabei wird die Karte, die Position und Rotation des Fahrzeugs auf der Karte, sowie der berechnete Pfad mit dem aktuellen Ziel angezeigt. In Bezug auf das autonome Fahrzeug stellt dieses Fenster die Sicht des Fahrzeugs dar. Nachfolgend wird die Funktionen und die Logik der beiden Fenster genauer erläutert. Außerdem wird noch SFML vorgestellt, was für die Umsetzung der grafischen oberflächliche benutzt wurde. 
+Die Simulation dient dazu, die Logik aus dem Core-Projekt zu testen, ohne dass das eigentliche Fahrzeug benötigt wird. Damit das Fahrzeug sowohl gesteuert als auch gesehen werden kann, was durch die Algorithmen berechnet wurde. Deshalb wurde die Simulation in zwei Fenster aufgeteilt, welche bei Ausführung des Programms zusammen geöffnet werden. Das erst Fenster, nachfolgend Control Window genannt, dient zur Steuerung des Fahrzeugs und der Simulation im allgemein. Es stellt in Bezug auf das autonome Fahrzeug die Realität dar. Das zweite Fenster zeigt die Ergebnisse der Algorithmen. Dabei wird die Karte, die Position und Rotation des Fahrzeugs auf der Karte, sowie der berechnete Pfad mit dem aktuellen Ziel angezeigt. In Bezug auf das autonome Fahrzeug stellt dieses Fenster die Sicht des Fahrzeugs dar. Nachfolgend wird die Funktionen und die Logik der beiden Fenster genauer erläutert. Außerdem wird noch SFML vorgestellt, was für die Umsetzung der grafischen Oberflächliche benutzt wurde. 
 
-\paragraph{SFML}
+\paragraph{SFML} \mbox{} \\
 
 SFML (Simple and Fast Multimedia Library) ist eine Library, mit welcher grafische Anwendungen erstellt werden können. Die Anwendung können dabei auf den gängigen Plattformen, wie Windows, Linux und MacOS laufen und können in unterschiedlichen Programmiersprachen erstellt werden, darunter auch C++ \cite{sfml}. 
 
-\paragraph{Control Window}
+\paragraph{Control Window} \mbox{} \\
 
 In dem Control Window kann das simulierte Fahrzeug direkt über die \dq WASD\dq-Tasten gesteuert werden. Außerdem können weitere Hindernisse platziert und das Ziel geändert werden, zu welchem das Fahrzeug fahren soll. 
 
-\[/src/simulation/src/controlWindow.cpp\]. 
+TODO Timo
 
-\paragraph{Visualize Window}
+[/src/simulation/src/controlWindow.cpp]. 
 
-\[/src/simulation/src/visualizeWindow.cpp\]. 
+\paragraph{Visualize Window} \mbox{} \\
+
+TODO Timo
+
+[/src/simulation/src/visualizeWindow.cpp]. 
 
 \subsubsection{LiDAR-Projekt}
 
+TODO Time
 
+\subsection{Erläuterung der Implementierung}
 
-\subsection{Erläuterung Probleme bei Implementierung}
-
-Nachdem nun der Aufbau der Implementierung erleutert wurde, werden nun einige Probleme aufgezeigt, welche bei der Implementierung gelöst werden müssten. Dabei wird zunächst das Problem erklärt und dann die Lösung des Problems anhand des Codes aufgezeigt werden. 
+Nachdem nun der Aufbau der Implementierung erläutert wurde, werden nun einige Besonderheiten aus der Implementierung näher erläutert. 
 
 \subsubsection{Simulation des LiDARs}
 
-% intersection Logik
+Ein Teil der Simulation des autonomen Fahrzeugs ist die Simulation des LiDARs. Hierfür wird die Methode des Raycasting verwendet, bei welchem Strahlen, also Vektoren, von dem Zentrum des LiDARs in alle Richtungen ausgestrahlt werden und die Schnittpunkte mit den Hindernissen gespeichert werden. Umgesetzt wurde dies, indem der gesamte Umfang des LiDARs in 360 bzw. 720 Winkel unterteilt wurde, welche die Rays darstellen, und dann für jeden Ray die Schnittpunkte für alle Hindernisse berechnet wurden. Zusätzliche wurde auch der Rahmen des Fensters als hinzugefügt, da dieser die Wände des Raums und somit auch ein Hindernis darstellt. Da alle Hindernisse, eingeschlossen Fensterrahmen, Rechtecke sind, müssen also lediglich die Schnittpunkte zwischen einem Rechteck und einem Ray, also einer Geraden, berechnet werden. Dies kann weiter unterteilt werden in den Schnittpunkt zweier Geraden, da ein Rechteck aus vier Geraden besteht. Für diesen Zweck wurde eine Funktion erstellt, welche für diesen Fall einen Schnittpunkt berechnet, falls dieser existiert. In dieser wird zunächst überprüft, ob die beiden Geraden überhaupt einen Schnittpunkt besitzen oder ob diese parallel sind. Dies kann einfach über das Berechnen des Kreuzproduktes gemacht werden. Ist das Ergebnis des Kreuzproduktes gleich \(0\), sind die beiden Geraden parallel und es gibt keinen Schnittpunkt. Als Grundlage für eigentliche Berechnung des Schnittpunktes wurde die Formel zur Berechnung des Schnittpunktes zweier Geraden benutzt, in welcher lediglich zwei Geraden in Parameterform \((Stuetzvektor + Parameter * Richtungsvektor)\) gleichgestellt werden. Da für die Berechnung der Schnittpunkte angenommen wird, dass der LiDAR bei \((0, 0)\) liegt, kann dieser in der Gleichung weggelassen werden. 
+
+\[
+s * 
+\begin{pmatrix}
+    rayDirection_x \\ 
+    rayDirection_y
+\end{pmatrix}
+= 
+\begin{pmatrix}
+    v1_x \\ 
+    v1_y
+\end{pmatrix}
++ t * 
+\begin{pmatrix}
+    v12_x \\ 
+    v12_y
+\end{pmatrix}
+\]
+
+Aus dieser Formel wird ein lineares Gleichungssystem gemacht, welches anschließend nach dem Parameter \(t\) aufgelöst wird.
+
+\[
+t = \frac{v1_x * rayDirection_x - v1_y * rayDirection_y}{v12_x * rayDirection_x - v12_y * rayDirection_y} 
+\]
+
+Durch Einsetzen in eine der beiden Gleichungen des LGS kann auch der Parameter \(s\) berechnet werden. 
+
+\[
+s = \frac{v1_x + t * v12_x}{rayDirection_x};
+s = \frac{v1_y + t * v12_y}{rayDirection_y}
+\]
+
+Nun muss überprüft werden, ob der Punkt nicht nur auf beiden Geraden, sondern auch zwischen den beiden Punkten des Rechtecks, sowie vor dem LiDAR liegt. Dafür wird geschaut, ob der Wert von \(t\) (Parameter für die Kante des Rechtecks) zwischen \(0\) und \(1\) liegt. Außerdem wird geschaut, ob der Wert von \(s\) (Parameter für den Ray) größer oder gleich \(0\) ist. Sollte beides gegeben sein, wird der Schnittpunkt zur Liste aller Schnittpunkte des aktuellen Rays hinzugefügt [src/simulation/src/intersection.cpp]. 
+
+\begin{lstlisting}[caption={Berechnung des Schnittpunktes zweier Geraden},label={lst:schnittpunkt_zweier_geraden},language={C++}]
+bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection, const sf::Vector2f &p1, const sf::Vector2f &p2, std::vector<sf::Vector2f> &intersectionPoints)
+{
+    sf::Vector2f v1 = p1 - rayOrigin;
+    sf::Vector2f v2 = p2 - rayOrigin;
+    sf::Vector2f v12 = v2 - v1;
+
+    const float cross = crossProduct(rayDirection, v12);
+
+    if (cross == 0)
+    {
+        return false; // ray and edge are parallel
+    }
+
+    const float t = crossProduct(v1, rayDirection) / cross; // Parameter for Edge
+    const float s = rayDirection.x != 0 ? ((v1.x + t * v12.x) / rayDirection.x) : ((v1.y + t * v12.y) / rayDirection.y); // Parameter for Ray
+
+    if (t >= 0 && t <= 1 && s >= 0) // Is between points and in positive direction of Ray
+    {
+        const sf::Vector2f intersectionPoint = v1 + rayOrigin + t * v12;
+        intersectionPoints.push_back(intersectionPoint);
+
+        return true;
+    }
+
+    return false;
+}
+\end{lstlisting}
+
+Nachdem alle Schnittpunkte berechnet wurden, muss anschließend der Schnittpunkt bestimmt werden, der am nächsten am LiDAR, also dem Stützvektor des Rays, ist. Dafür wird die Liste mit den Schnittpunkten nach dem Abstand zum LiDAR sortiert, indem der quadrierte Abstand zwischen Schnittpunkt und LiDAR berechnet. Der Vorteil des quadrierten Abstandes gegenüber dem normalen Abstand ist, dass die Reihenfolge einzelner Punkte gleich bleibt, aber die Berechnung über die Wurzel vermieden wird, welche vergleichsweise aufwendig ist \cite{stackexchangeAreThereAny2012}. Nach der Sortierung kann dann das erste Element der Liste als Schnittpunkt für diesen Ray verwendet werden. Da aktuell nur die Koordinaten des Schnittpunktes bekannt sind, ein LiDAR aber nur den Winkel und die Entfernung eines Punktes kennt, müssen für die Simulation diese Werte noch berechnet werden [src/simulation/src/intersection.cpp, src/simulation/src/lidarSensorSim.cpp]. 
+
+\subsubsection{Implementierung des LiDARs mit der RPLIDAR SDK}
+
+Wie bereits in der Technologie-Entscheidung beschrieben, wird für die Ansteuerung des LiDARs die RPLIDAR SDK verwendet. Zusätzlich wird die Library pigpio beutzt, um die GPIO Pins des Raspberry Pis zu verwenden. Dies wird benötigt, da der Motor des LiDAR über ein PWM-Signal gesteuert wird [src/lidar/src/a1lidarSensor.cpp]. 
+
+TODO wie funktioniert auslesen, warum komische Werte
+
+\begin{lstlisting}[caption={Auslesen der LiDAR Daten},label={lst:auslesen_lidar},language={C++}]
+void A1LidarSensor::getScanData(lidar_point_t *data, size_t count)
+{
+    rplidar_response_measurement_node_hq_t scanData[count];
+    u_result res = drv->grabScanDataHq(scanData, count);
+
+    if (res == RESULT_OK)
+    {
+        printf("Grabbed scan data\n");
+    }
+    else
+    {
+        printf("Failed to grab scan data\n");
+        printf("Error code: %d\n", res);
+        return;
+    }
+
+    for (int i = 0; i < count; i++)
+    {
+        const double angle = scanData[i].angle_z_q14 * (90.f / 16384.f);
+        const double distance = scanData[i].dist_mm_q2 / 4000.0f;
+        data[i].radius = distance;
+        data[i].angle = angle;
+        data[i].x = distance * cos(angle);
+        data[i].y = distance * sin(angle);
+        data[i].quality = scanData[i].quality;
+        data[i].valid = scanData[i].quality > 7;
+    }
+}
+\end{lstlisting}
 
 \subsubsection{Umsetzung des Ausweichalgorithmus}
 
 % Obstacle infaltion
 
 % A* vs. A* mit dimension für drehung
+
+TODO Timo
 
 \subsubsection{Umsetzung von SLAM}
 
