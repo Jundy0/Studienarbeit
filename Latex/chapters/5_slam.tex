@@ -78,7 +78,7 @@ Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anh
     Ein weiterer Vorteil von LiDAR-Sensoren ist die Datenrepräsentation.
     Die Repräsentation mit Abstand und Winkel ermnöglicht eine Verarbeitung ohne aufwendige Vorbereitung und Anpassung der Daten.
     
-    Die Präzision von LiDAR-Semsoren kann aber zum Beispiel unter Wettereinflüssen leiden. 
+    Die Präzision von LiDAR-Sensoren kann aber zum Beispiel unter Wettereinflüssen leiden. 
     Zum Beispiel können Wasserteilchen in der Luft die Reflektion der Laserstrahlen so verändern, dass die empfangenen Werte des Sensors nicht mit der Realität übereinstimmen.
     Auch die eingeschränkte Reichweite kann abhängig von der Umgebung ein Problem darstellen.
 
@@ -118,8 +118,91 @@ Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anh
 
 \subsubsection{Point Cloud Registration}
 \label{pcl}
-Point Cloud Registration beschreibt das Problem, die Transformationsmatrix zweier Punktewolken zu bestimmen.
-% Was ist PCR
-% Warum macht es Sinn es zu nutzen
+Point Cloud Registration beschreibt ein Problem zur Schätzung der Transformation zwischen mehreren Punktewolken. \ref{fig:registrationExample}
+
+Mit Hilfe von Punktewolken können beliebig große Mengen an Punkten dargestellt werden.
+Die Wolke beinhaltet Informationen zu jedem der Punkte.
+Hierzu gehören zumindest die Koordinaten.
+Eine solche Wolke kann jedoch auch weitere Informationen wie Farbe oder Krümmung beinhalten. 
+Die Gesamtheit der Punkte inerhalb einer solchen Wolke beschreibt die Form und Oberfläche eines Objektes
+\cite[chapters 2.2]{registration2021}
+
+Registration selbst lässt sich in verschiedene Unterkategorien einteilen.
+Beschränkt sich die Transformation auf Rotation und Translation, spricht man von einer steifen Transformation bzw. Registration.
+Des Weiteren wird anhand der Quelle und Anzahl der Datensätze unterschieden.
+
+Die Punktewolken, welche Teil dieser Arbeit sind, werden mit Hilfe eines einzelnen, zwei-dimensionalen \ac{lidar}-Sensor erstellt.
+Sie enthalten ausschließlich Informationen über die X und Y Koordinaten der einzelnen Punkte.
+
+Somit spricht man bei der, im Kontext dieser Arbeit durchgeführten Point Cloud Registration, von einer paarweisen und steifen 2D Registration.
+Diese Art der Registration ist eine der simpelste, da lediglich zwei Punktewolken des selben Sensors miteinander verglichen werden 
+und ausschließlich die Translation auf den zwei Achsen sowie die Rotation berechnet werden muss.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[a][Source und Target Point Cloud]{
+        \includegraphics[width=12cm]{graphics/registration_source_target.png}
+    } \\
+    \subfloat[b][Transformierte Source Point Cloud]{
+        \includegraphics[width=8cm]{graphics/registration_alligned.png}
+    }
+    \caption{Beispiel einer starren 2D Point Cloud Registration}
+    \label{fig:registrationExample}
+\end{figure}
+
+\paragraph{Ablauf} \mbox{}\\
+Der Ablauf einer solche Registration lässt sich typischerweise mit sechs Schritten beschreiben. \ref{fig:registrationAblauf}
+\begin{enumerate}[leftmargin=*]
+    \item Datenerfassung
+    \item Schätzung der Keypoints
+    \item Schätzung der Feature-Deskriptoren
+    \item Schätzung der Korrespondenzen (Matching)
+    \item Ablehnung von Korrespondenzen
+    \item Schätzung der Transformation
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{graphics/registration_ablauf.png}
+    \caption{Typischer Ablauf einer paarweisen Registration. Quelle: \cite{pcl2023}}
+    \label{fig:registrationAblauf}
+\end{figure}
+
+\textbf{Datenerfassung} \\
+Die Datenerfassung kann auf unterschiedlichste Arten erfolgen.
+Hierbei werden zwei Sets an Daten, gesammelt.
+Die Daten werden verarbeitet und in einer Punktewolke gespeichert.
+Durch ein einheitliches Vormat wird sichergestellt, dass die Punkte korrekt weiterverarbeitet werden.
+
+\textbf{Schätzung der Keypoints} \\
+Die Schätzung von Keypoints ist von enormer Wichtigkeit.
+Sie dient der Verringerung notwendiger Rechenleistung.
+
+Möchte man zwei Scans mit jeweils 100 Tausend Punkten vergleichen, gibt es 10 Miliarden mögliche Korrespondenzen.
+Um die Zahl der Korrespondenzen zu verringern, werden Keypoints in des Scans gesucht.
+
+Ein Keypoint beschreibt einen Punkt, welcher spezielle Eigenschaften innerhalb der Szene haben.
+Eine Beispiel hierfür wäre eine Ecke.
+
+Die Keypoints werden im weiteren Verlauf für die Berechnungen genutzt, wodurch sich die Anzahl an Punkten drastisch senkt.
+Im Optimalfall ist das Ergebnis genau das selbe, benötigt aber deutlich weniger Rechenleistung und somit Zeit.
+
+\textbf{Schätzung der Feature-Deskriptoren} \\
+Je nach Anwendungszweck sind Koordinaten nicht ausreichend um einen Punkt zu beschreiben.
+Feature-Deskriptoren oder Point-Feature Repräsentationen sind eine Form der erweiterten Beschreibung eines Punktes.
+
+Durch miteinbeziehen der umliegenden Punkte, können Informationen über die Form und Beschaffenheit der Fläche gesammelt werden.
+Diese können widerum in den Feature-Deskriptoren gespeichert werden.
+Die simpelste Form eines solchen Feature-Deskriptor wäre die Normale der Fläche unter dem Punkt.
+
+\textbf{Schätzung der Korrespondenzen} \\
+Die zwei vorhandenen Sets von Feature-Deskriptoren, welche aus den Keypoints berechnet wurden, 
+können nun verwendet werden um Korrespondenzen zu schätzen.
+Bei kleineren Datensets kann es auch Sinn machen, die Keypoint- und Feature-Deskriptor-Schätzung auszulassen
+und die Korrespondenzen nur mittels Koordinaten der Punkte zu schätzen.
+
+Eine Korrespondenz beschreibt zwei Punkte oder Feature-Deskriptoren aus verschiedenen Datensätzen, welche den gleichen Punkt im Raum repräsentieren.
+
+\textbf{}
 
 \newpage
