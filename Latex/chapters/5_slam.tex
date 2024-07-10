@@ -7,9 +7,6 @@ Bei dem \ac{slam}-Problem handelt es sich um das Problem, eine Karte einer unbek
 Gleichzeitig soll die aktuelle Position des Roboters in dieser Karte ermittelt und dargestellt werden.
 Hierzu wird ausschließlich die Sensorik des Roboters genutzt.
 
-\subsubsection{Mathematische Betrachtung}
-
-
 \subsection{Mapping}
 %% Occupancy Grid
 
@@ -151,7 +148,7 @@ und ausschließlich die Translation auf den zwei Achsen sowie die Rotation berec
 \end{figure}
 
 \paragraph{Ablauf} \mbox{}\\
-Der Ablauf einer solche Registration lässt sich typischerweise mit sechs Schritten beschreiben. \ref{fig:registrationAblauf}
+Der Ablauf einer solche Registration beinhaltet, wie in \ref{fig:registrationAblauf} beschrieben, typischerweise sechs Schritte.
 \begin{enumerate}[leftmargin=*]
     \item Datenerfassung
     \item Schätzung der Keypoints
@@ -168,13 +165,14 @@ Der Ablauf einer solche Registration lässt sich typischerweise mit sechs Schrit
     \label{fig:registrationAblauf}
 \end{figure}
 
-\textbf{Datenerfassung} \\
+Datenerfassung: \\
 Die Datenerfassung kann auf unterschiedlichste Arten erfolgen.
 Hierbei werden zwei Sets an Daten, gesammelt.
 Die Daten werden verarbeitet und in einer Punktewolke gespeichert.
 Durch ein einheitliches Vormat wird sichergestellt, dass die Punkte korrekt weiterverarbeitet werden.
+\newline
 
-\textbf{Schätzung der Keypoints} \\
+Schätzung der Keypoints: \\
 Die Schätzung von Keypoints ist von enormer Wichtigkeit.
 Sie dient der Verringerung notwendiger Rechenleistung.
 
@@ -186,23 +184,63 @@ Eine Beispiel hierfür wäre eine Ecke.
 
 Die Keypoints werden im weiteren Verlauf für die Berechnungen genutzt, wodurch sich die Anzahl an Punkten drastisch senkt.
 Im Optimalfall ist das Ergebnis genau das selbe, benötigt aber deutlich weniger Rechenleistung und somit Zeit.
+\newline
 
-\textbf{Schätzung der Feature-Deskriptoren} \\
+Schätzung der Feature-Deskriptoren: \\
 Je nach Anwendungszweck sind Koordinaten nicht ausreichend um einen Punkt zu beschreiben.
 Feature-Deskriptoren oder Point-Feature Repräsentationen sind eine Form der erweiterten Beschreibung eines Punktes.
 
 Durch miteinbeziehen der umliegenden Punkte, können Informationen über die Form und Beschaffenheit der Fläche gesammelt werden.
 Diese können widerum in den Feature-Deskriptoren gespeichert werden.
 Die simpelste Form eines solchen Feature-Deskriptor wäre die Normale der Fläche unter dem Punkt.
+\newline
 
-\textbf{Schätzung der Korrespondenzen} \\
+Schätzung der Korrespondenzen: \\
 Die zwei vorhandenen Sets von Feature-Deskriptoren, welche aus den Keypoints berechnet wurden, 
 können nun verwendet werden um Korrespondenzen zu schätzen.
 Bei kleineren Datensets kann es auch Sinn machen, die Keypoint- und Feature-Deskriptor-Schätzung auszulassen
 und die Korrespondenzen nur mittels Koordinaten der Punkte zu schätzen.
 
 Eine Korrespondenz beschreibt zwei Punkte oder Feature-Deskriptoren aus verschiedenen Datensätzen, welche den gleichen Punkt im Raum repräsentieren.
+\newline
 
-\textbf{}
+Ablehnung von Korrespondenzen: \\
+Nachdem die Korrespondenzen geschätzt wurden, müssen schlechte Korrespondenzen verworfen werden.
+
+Hierzu gibt es diverse Algorithmen, worunter der RANSAC Algorithmus am weitesten verbreitet ist.
+Eine weitere Möglichkeit die Anzahl an Korrespondenzen zu senken, 
+ist das Filtern von Korrespondenzen die zwar den gleichen Source-Punkt,
+aber unterschiedlichen Punkten im Ziel-Datensatz korrespondieren.
+Hierbei kann die Korrespondenz mit der kleinsten Distanz gewählt werden.
+Die anderen Korrespondenzen werden verworfen.
+\newline
+
+Schätzung der Transformation: \\
+In einem Finalen Schritt wird die Transformationsmatrix geschätzt.
+Diese Matrix beschreibt die Translation und Rotation, 
+welche notwendig ist um die Punktewolke A zur Punktewolke B zu transformieren.
+
+Die Schätzung der Transformation passiert mittels, auf den Korrespondenzen basierenden, Metriken.
+Ein Beispiel für eine solche Metrik ist die mittlere qudratische Abweichung der Korrespondenzen.
+Die Punktewolke wird transformiert und die Metriken ausgewertet.
+Dieser Vorgang wird solange wiederholt bis ein Abbruch-Kriterium erfüllt ist.
+Ein solches Abbruch-Kriterium ist z.B. das Unterschreiten eines Grenzwertes für die mittlere Qudratische Abweichung.
+Auch eine Überschreitung einer bestimmten Anzahl an Iterationen kann zum Abbruch führen.
+
+\paragraph{Point Cloud Registration im Rahmen dieser Arbeit} \mbox{}\\
+Die Datensätze dieser Arbeit sind mit unter 1000 Punkten recht klein.
+Somit ist eine Schätzung von Keypoints wenig Sinnvoll und teilweise auch nicht umsetzbar.
+
+In der Theorie verringert das Berechnen von Feature-Deskriptoren die Laufzeit und verbessert das Ergebnis.
+Selbst durchgeführten Tests ergaben jedoch, dass die Laufzeit sich verschlechterte 
+und das Ergbenis auch ohne die Nutzung von Feature-Deskriptoren ausreichend genau ist.
+Das lässt sich durch die geringe Anzahl an Punkten innerhalb unserer Datensätze und der Nutzung von lediglich zwei Dimensionen erklären.
+Eine solche Berechnung ist also, im Rahmen der Arbeit, ebenfalls wenig Sinnvoll.
+
+Für die Schätzung der Korrespondenzen sowie der Ablehnung schlechter Korrespondenzen 
+und der Schätzung der Transformationsmatrix wird eine Implementierung des \acf{icp}-Algorithmus der \acf{pcl} verwendet.
+Die \ac{pcl} ist eine C++ Bibliothek, die ein effizientes Arbeiten mit Punktewolken ermöglicht
+und diverse Algorithmen für unterschiedlichste Operationen mitbringt.
+Genauere Infos zur Implementierung des \ac{icp}-Algorithmus Kapitel \ref(slamImplementierung).
 
 \newpage
