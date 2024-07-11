@@ -8,13 +8,70 @@ Gleichzeitig soll die aktuelle Position des Roboters in dieser Karte ermittelt u
 Hierzu wird ausschließlich die Sensorik des Roboters genutzt.
 
 \subsection{Mapping}
-%% Occupancy Grid
+Damit das Fahrzeug Hindernisse umfahren kann, muss es die Position der Hindernisse reltiv zu seiner eigenen kennen.
+Hierzu können aktuelle Daten der Sensorik verwendet werden.
+Durch das ausschließliche Nutzen der Daten in Echtzeit, wird der Bereich, in dem ein Pfad berechnet werden kann, jedoch stark eingeschränkt.
+Eine sinnvolle Lösung zur Vergrößerung des Radius der bekannten Umgebung, ist die Konstruktion einer Karte.
+Dies ermöglicht das Speichern von Informationen aus vorherigen Scans.
+
+Für den Aufbau einer solchen Karte gibt es verschiedene Ansätze, welche im Folgenden näher beleuchtet werden.
+
+\paragraph{Matrix} \mbox{}\\
+Da es sich, aufgrund des verwendeten \ac{lidar}-Sensors, in dieser Arbeit um eine 2D-Karte handelt, 
+ist der simpelste Weg eine Karte umzusetzten eine einfache Matrix.
+In dieser steht für jede Koordinate der Karte eine 1, -1 oder 0.
+
+Die Matrix wird mit 0 gefüllt.
+Erkennt die Sensorik ein Hinderniss an einer Koordinate (X,Y), wird der Wert an der Stelle in der Matrix auf 1 gesetzt.
+Die Werte zwischen dem Hinderniss und der aktuellen Position des Sensors können auf -1 gesetzt werden,
+da keine Hindernisse in diesem Bereich erkannt wurden.
+Somit kann, solange die Position des Fahrzeugs bekannt ist, die Karte Scan für Scan gefüllt werden.
+
+\paragraph{Grid Map} \mbox{}\\
+Im Falle dieser Arbeit, werden sämtliche Distanzen in Millimetern angegeben.
+Jedes Feld der Matrix entspricht also einem 1x1 Millimeter großem Quadrat der Umgebung.
+Jedoch hat die Sensorik eine begrenzte Auflösung.
+Die gescannten Punkte können also, vor allem bei größeren Entfernungen, viele Millimeter oder Zentimeter voneinander entfernt sein.
+In Folge dessen kann es dazu führen, dass eine Wand als viele einzelne Punkte erkannt wird.
+
+Zur Lösung dieses Problems kann ein Grid mit niedrigerer Auflösung verwendet werden.
+Die Berechnungen finden somit weiter in Millimetern statt, die Karte selbst wird jedoch als Grid in einer niedrigeren Auflösung gespeichert.
+Hat das Grid zum Beispiel eine Auflösung von 1x1 Zentimeter, werden gescannte Punkte auf Zentimeter gerundet bevor die Information in der Karte gespeichert wird.
+
+\paragraph{Wahrscheinlichkeiten}
+Eine weitere sinnvolle Ergänzung ist die Verwendung von Wahrscheinlichkeiten.
+Anstelle von 1, -1 und 0 werden auch sämtliche Werte dazwischen genutzt.
+
+Wird ein Hinderniss erkannt, wird der entsprechende Wert im Grid nicht auf 1 gesetzt.
+Stattdessen wird der Wert mit jedem mal wo ein Hinderniss in dem Grid erkannt wird, leicht erhöht.
+Gleichzietig wird der Wert leicht verringert, wenn ein Punkt in dem Grid als frei erkannt wird.
+Zusätzlich werden Schwellenwerte definiert, die festlegen, ab wann ein Feld des Grids als belegt oder frei gilt.
+
+Das Ergebnis ist eine Occupancy Grid Map, welche eine geringere Auflösung als die gesamte Karte hat.
+In ihr werden Informationen über den Status des Teils der Karte gepseichert, welche von dem Feld der Grid Map repräsentiert wird.
+\ref{fig:gridMap}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[a][Simulierte Umgebung]{
+        \includegraphics[width=10cm]{graphics/umgebung.png}
+    } \\
+    \subfloat[b][Occupancy Grid Map]{
+        \includegraphics[width=10cm]{graphics/map.png}
+    }
+    \caption{Umgebung auf Occupancy Grid Map abegbildet}
+    \label{fig:gridMap}
+\end{figure}
+
+Wie in der Abbildung \ref{fig:gridMap} zu sehen ist, wird die Umgebung (a) gescannt und in eine Grid Map (b) abgebildet.
+Die Map selbst ist mit 2000mm x 2000mm doppelt so groß wie die Umgebung, das Grid hat jedoch nur eine Auflösung von 500px x 500px.
+Das bedeutet, dass jeder Pixel des Grid ein 4mm x 4mm Quadrat der Map darstellt.
 
 \subsection{Lokalisierung}
 Das selbstfahrende Fahrzeug soll in der Lage sein ein vorgegebenes Ziel zu erreichen. 
-Um diese Aufgabe zu meistern ist die Lokalisierung des Fahrzeuges eine zentrale Aufgabe. 
-Denn ohne das Wissen über den aktuellen Standort kann kein Weg zum Ziel berechnet werden 
-und es kann auch nicht bestimmt werdeen ob das Ziel erreicht ist.
+Daher ist neben dem Mapping auch die Lokalisierung des Fahrzeuges eine zentrale Aufgabe. 
+Denn ohne das Wissen über die aktuelle Position auf der Karte kann kein Weg zum Ziel berechnet werden
+und es kann auch nicht bestimmt werden ob das Ziel erreicht ist.
 
 In Folgenden werden verschiedene Ansätze zur Lösung des Lokalisierungsproblems mit den Vor- und Nachteilen beschrieben.
 
@@ -241,6 +298,6 @@ Für die Schätzung der Korrespondenzen sowie der Ablehnung schlechter Korrespon
 und der Schätzung der Transformationsmatrix wird eine Implementierung des \acf{icp}-Algorithmus der \acf{pcl} verwendet.
 Die \ac{pcl} ist eine C++ Bibliothek, die ein effizientes Arbeiten mit Punktewolken ermöglicht
 und diverse Algorithmen für unterschiedlichste Operationen mitbringt.
-Genauere Infos zur Implementierung des \ac{icp}-Algorithmus Kapitel \ref(slamImplementierung).
+Genauere Infos zur Implementierung des \ac{icp}-Algorithmus Kapitel \ref{slamImplementierung}.
 
 \newpage
