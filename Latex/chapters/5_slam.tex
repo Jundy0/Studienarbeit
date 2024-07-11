@@ -226,7 +226,7 @@ Der Ablauf einer solche Registration beinhaltet, wie in \ref{fig:registrationAbl
 Datenerfassung: \\
 Die Datenerfassung kann auf unterschiedlichste Arten erfolgen.
 Hierbei werden zwei Sets an Daten, gesammelt.
-Die Daten werden verarbeitet und in einer Punktewolke gespeichert.
+Die Daten werden verarbeitet und in einer Punktewolke gespeichert. \ref{fig:registrationExample}
 Durch ein einheitliches Vormat wird sichergestellt, dass die Punkte korrekt weiterverarbeitet werden.
 \newline
 
@@ -240,6 +240,13 @@ Um die Zahl der Korrespondenzen zu verringern, werden Keypoints in des Scans ges
 Ein Keypoint beschreibt einen Punkt, welcher spezielle Eigenschaften innerhalb der Szene haben.
 Eine Beispiel hierfür wäre eine Ecke.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12cm]{graphics/keypoint.png}
+    \caption{Keypoint Extraktion mittels Normal Aligned Radial Feature Algorithmus. Quelle: \cite{keypoints2023}}
+    \label{fig:keypoints}
+\end{figure}
+
 Die Keypoints werden im weiteren Verlauf für die Berechnungen genutzt, wodurch sich die Anzahl an Punkten drastisch senkt.
 Im Optimalfall ist das Ergebnis genau das selbe, benötigt aber deutlich weniger Rechenleistung und somit Zeit.
 \newline
@@ -250,8 +257,16 @@ Feature-Deskriptoren oder Point-Feature Repräsentationen sind eine Form der erw
 
 Durch miteinbeziehen der umliegenden Punkte, können Informationen über die Form und Beschaffenheit der Fläche gesammelt werden.
 Diese können widerum in den Feature-Deskriptoren gespeichert werden.
-Die simpelste Form eines solchen Feature-Deskriptor wäre die Normale der Fläche unter dem Punkt.
-\newline
+Die simpelste Form eines solchen Feature-Deskriptor wäre die Normale der Fläche unter dem Punkt. \ref{fig:normals}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{graphics/normals.png}
+    \caption{Beispiel für eine 2D Normalen Extraktion. 
+             Die Normale der Fläche unterhalb des roten Punkt wird mittels Nachbarpunkten bestimmt.
+             Quelle: \cite{normals2023}}
+    \label{fig:normals}
+\end{figure}
 
 Schätzung der Korrespondenzen: \\
 Die zwei vorhandenen Sets von Feature-Deskriptoren, welche aus den Keypoints berechnet wurden, 
