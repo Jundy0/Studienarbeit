@@ -213,7 +213,200 @@ Aufgrund mangelnder Zeit konnten daher einige Ziele nicht erreicht werden.
 %% Eingehen auf einzelne Ziele
 
 \begin{enumerate}[leftmargin=*]
-    \item TODO: Metriken der Ziele aus Kapitel 2 aufgreifen
+    \item \textbf{Simulation einer Umgebung}
+    
+    \textbf{Angewandte Metrik:}
+
+    Kann eine Umgebung generiert werden? $\to$ Ja oder Nein
+
+    \textbf{Beschreibung des Ergebnisses:}
+
+    Es ist möglich eine Umgebung mit verschiedenen Hindernissen zu erstellen. 
+    Hindernisse können auch zur Laufzeit hinzugefügt werden. 
+
+    \textbf{Metrik erfüllt:}
+    
+    \begin{itemize}
+        \item \textbf{Simulation:} Ja
+        \item \textbf{Realität:} keine Angabe
+    \end{itemize}
+
+    \textbf{Übertrag auf die Realität}
+
+    Bei diesem Ziel macht ein Übertrag auf die Realität keinen Sinn, da die Umgebung nicht implementiert werden muss.
+    \item \textbf{Erkennung von Hindernissen}
+
+    \textbf{Angewandte Metrik:}
+
+    Werden alle Hindernisse erkannt? $\to$ Ja oder Nein
+
+    \textbf{Beschreibung des Ergebnisses:}
+
+    In der Simulation werden alle Hindernisse korrekt erkannt, auch wenn diese erst zur Laufzeit hinzugefügt werden. 
+    % Wäre hier ein Bild hilfreich?     
+
+    \textbf{Metrik erfüllt:}
+    \begin{itemize}
+        \item \textbf{Simulation:} Ja
+        \item \textbf{Realität:} vermutlich Ja
+    \end{itemize}
+    
+    \textbf{Übertrag auf die Realität:}
+
+    Der LiDAR generiert 2D-Daten. Da die Simulation ebenfalls nur 2D ist und auch nicht von äußeren Einflüssen betroffen ist,
+    sind die Umwelteinflüsse und Begebenheiten in der Implementierung nicht von Bedeutung.
+    In der Realität ist darauf zu achten, dass die Umgebung den in Kapitel \ref{umwelt} beschriebenen Voraussetzungen entspricht. 
+    Da die Implementierung des LiDAR-Sensors in der Simulation dem verwendeten Modell nachempfunden ist, 
+    sollten Hindernisse in einer korrekten Umgebung ebenfalls erkannt werden.
+
+
+    \item \textbf{Festlegen eines Zielpunktes}
+
+    \textbf{Angewandte Metrik:}
+
+    Kann ein Zielpunkt definiert werden? $\to$ Ja oder Nein
+
+    \textbf{Beschreibung des Ergebnisses:}
+
+    In der Simulation ist es möglich zur Laufzeit einen Zielpunkt zu setzen. 
+    % Wäre hier ein Bild hilfreich?     
+
+    \textbf{Metrik erfüllt:}
+    \begin{itemize}
+        \item \textbf{Simulation:} Ja
+        \item \textbf{Realität:} vermutlich Ja
+    \end{itemize}
+    
+    \textbf{Übertrag auf die Realität:}
+    Der Zielpunkt wird über Koordinaten abgebildet. 
+    Diese Koordinaten können in der Simulation auch außerhalb des Bereiches liegen, der vom LiDAR bereits erfasst wurde.
+    Eine vorausgehende \glqq Erkundungsfahrt\grqq ist also nicht notwendig.
+    Allerdings ist darauf zu achten, dass in der Simulation die Umgebung bekannt ist und darauf geachtet werden kann,
+    das Ziel nicht innerhalb eines Hindernisses zu setzen.
+    In der Realität sind die Koordinaten der Umgebung unbekannt. 
+    Das Ziel könnte also in einem Hindernis platziert sein.
+    Deshalb muss noch eine Lösung implementiert werden, die erkennt, ob sich ein Ziel innerhalb eines Hindernisses befindet.
+
+
+    \item \textbf{Simulation eines Umgebungssensors}
+
+    \textbf{Angewandte Metrik:}
+
+    Kann ein Sensor simuliert werden? $\to$ Ja oder Nein
+
+    \textbf{Beschreibung des Ergebnisses:}
+
+    Die Verwendung von Raycasting ermöglicht die Simulation eines LiDAR-Sensors.      
+
+    \textbf{Metrik erfüllt:}
+    \begin{itemize}
+        \item \textbf{Simulation:} Ja
+        \item \textbf{Realität:} Keine Angabe
+    \end{itemize}
+    
+    \textbf{Übertrag auf die Realität:}
+
+    Bei diesem Ziel macht ein Übertrag auf die Realität keinen Sinn, da der LiDAR-Sensor nicht implementiert werden muss.
+
+    \item \textbf{Lokalisierung des Fahrzeugs}
+
+    \textbf{Angewandte Metrik:}
+
+    Für die Lokalisierung bezieht sich die Metrik auf Präzision und Geschwindigkeit. 
+    Beide Elemente sind abhängig von den gewählten Hard- und Softwarekomponenten. 
+
+    \textbf{Beschreibung des Ergebnisses:}
+
+    Wie bereits beschrieben, ist die Lokalisierung des Fahrzeuges basierend auf den LiDAR-Daten noch nicht fehlerfrei.
+    Aus diesem Grund wurde für dieses Ziel keine Metrik definiert. 
+    Die Definition einer Metrik macht Sinn, wenn sichergestellt ist, dass der Algorithmus zuverlässig arbeitet.
+    Dann kann daran gearbeitet werden, theoretische Höchstwerte der Präzision und Geschwindigkeit der genutzten Technik zu erheben.
+    Auf der Basis dieser Werte kann überlegt werden, welche Grenzwerte ausreichend sind, um die Zuverlässigkeit zu gewährleisten.    
+
+    \textbf{Metrik erfüllt:}
+    \begin{itemize}
+        \item \textbf{Simulation:} Keine Angabe
+        \item \textbf{Realität:} Keine Angabe
+    \end{itemize}
+    
+    \textbf{Übertrag auf die Realität:}
+
+    Da noch keine brauchbaren Ergebnisse in Bezug auf die Lokalisierung erzielt wurden, 
+    kann auch kein Übertrag von Erfahrungen aus der Simulation auf die Realität erfolgen.
+
+    Es muss an einer Möglichkeit gearbeitet werden den additiven Fehler zu korrigieren. 
+    Danach können erste Überlegungen für passende Metriken folgen.
+    
+    \item \textbf{Berechnung der Route}
+
+    \textbf{Angewandte Metriken:}
+
+    \begin{itemize}
+        \item Führt die Route vom Fahrzeug zum Zielpunkt $\to$ Ja oder Nein
+        \item Werden alle, in der Karte des Fahrzeuges bekannten, Hindernisse umfahren $\to$ Ja oder Nein
+        \item Kann die gesamte Route mit dem Fahrzeug abgefahren werden? $\to$ Ja oder Nein
+        \item Wie lange dauert die Berechnung der Route. Berechnungsdauer < 100ms
+    \end{itemize}
+    
+    \textbf{Beschreibung des Ergebnisses:}
+
+    Es wird eine Route berechnet, diese beinhaltet Start- und Zielpunkt der Route. 
+    Außerdem werden alle Hindernisse umfahren, die auf der Strecke liegen.
+    Die Berechnung der Route dauert in der Simulation ca. 500ms
+
+    Es gibt aber ein Problem mit der Route. 
+    Nicht alle Richtungswechsel werden korrekt berechnet. 
+    Nahe am Fahrzeug sind die Richtungswechsel kurvenförmig und der Kurvenradius des Fahrzeuges wird berücksichtigt.
+    Ab einem gewissen Abstand sind die Richtungswechsel eckig und daher nicht vollständig fahrbar.
+
+       
+
+    \textbf{Metrik erfüllt:}
+    \begin{itemize}
+        \item \textbf{Simulation:} Ja - Ja - Nein - Nein
+        \item \textbf{Realität:} Ja - Ja - Nein - keine Angabe
+    \end{itemize}
+    
+    \textbf{Übertrag auf die Realität:}
+    
+    Die Implementierung der Routenberechnung ist unabhängig davon, ob die Daten aus der Simulation oder aus der Realität kommen.
+    Daher sollten die Erfahrungen und Ergebnisse der Simulation auf die Realität übertragen werden können.
+
+    Vermutung zur Problematik mit der Route:
+
+    Die Route des Fahrzeuges wird laufend neu berechnet. Daher bewegt sich auch der Teil der Route, der mit dem Auto genutzt werden kann, 
+    mit dem Auto mit. Daher sollte die Veränderung der Route hin zu einem eckigen Verlauf kein Problem darstellen. Allerdings kann das nicht garantiert werden.
+    Daher sollte dieses Problem in der Implementierung des Algorithmus zur Routenberechnung analysiert und behoben werden,
+    bevor damit das Modellauto gesteuert wird. 
+    Außerdem muss die Performance der Lösung noch optimiert werden, da bei laufender Neuberechnung der Route eine Dauer von 500ms nur für die Route zu lange ist.
+
+    \item \textbf{Steuerung des Fahrzeuges}
+
+    \textbf{Angewandte Metrik:}
+
+    Kann das Auto angesteuert werden? $\to$ Ja oder Nein
+
+    \textbf{Beschreibung des Ergebnisses:}
+
+    Für die Ansteuerung des Fahrzeuges gibt es eine Schnittstelle für die Simulation, die allerdings noch nicht verwendet wird.
+    Für das reale Auto gibt es eine Python-Implementierung, die eine Steuerung mit einem Controller arbeitet. 
+    Eine Steuerung durch die Software ist noch nicht möglich.
+
+    \textbf{Metrik erfüllt:}
+    \begin{itemize}
+        \item \textbf{Simulation:} Nein
+        \item \textbf{Realität:} Nein
+    \end{itemize}
+    
+    \textbf{Übertrag auf die Realität:}
+
+    Um das Modellauto zu steuern, muss überlegt werden, ob die Performance von Python für diese Anwendung ausreichend ist, 
+    oder ob ein Übertrag der Elemente, die für eine autonome Fahrweise relevant sind, in C++ Sinn ergibt. 
+    In den Überlegungen dieser Arbeit hätten wir uns aufgrund der Performance für die C++-Implementierung entschieden.
+
+    Die maximalen Werte, die in der Python-Implementierung definiert sind und mit Skalierungsfaktoren verrechnet werden, 
+    sind empirisch ermittelt worden. Diese Werte sollten bei ersten Versuchen eventuell etwas nach unten korrigiert werden,
+    um nicht die ersten Versuche die maximalen Fähigkeiten auszureizen.
 \end{enumerate}
 
 \paragraph{Kommunikation} \mbox{}\\
