@@ -51,7 +51,7 @@ Das Ergebnis ist eine Occupancy Grid Map, welche eine geringere Auflösung als d
 In ihr werden Informationen über den Status des Teils der Karte gepseichert, welche von dem Feld der Grid Map repräsentiert wird.
 
 Aufgrund der Simplizität und einfachen Umsetzung wurde sich dazu entschieden, eine solche Occupancy Grid zum Mapping zu verwenden.
-\ref{fig:gridMap}
+Siehe Abbildung \ref{fig:gridMap}
 
 \begin{figure}[H]
     \centering
@@ -173,7 +173,7 @@ Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anh
 
 \subsubsection{Point Cloud Registration}
 \label{pcl}
-Point Cloud Registration beschreibt ein Problem zur Schätzung der Transformation zwischen mehreren Punktewolken. \ref{fig:registrationExample}
+Point Cloud Registration beschreibt ein Problem zur Schätzung der Transformation zwischen mehreren Punktewolken. Siehe Abbildung \ref{fig:registrationExample}
 
 Mit Hilfe von Punktewolken können beliebig große Mengen an Punkten dargestellt werden.
 Die Wolke beinhaltet Informationen zu jedem der Punkte.
@@ -206,7 +206,7 @@ und ausschließlich die Translation auf den zwei Achsen sowie die Rotation berec
 \end{figure}
 
 \paragraph{Ablauf} \mbox{}\\
-Der Ablauf einer solche Registration beinhaltet, wie in \ref{fig:registrationAblauf} beschrieben, typischerweise sechs Schritte.
+Der Ablauf einer solche Registration beinhaltet, wie in Abbildung \ref{fig:registrationAblauf} beschrieben, typischerweise sechs Schritte.
 \begin{enumerate}[leftmargin=*]
     \item Datenerfassung
     \item Schätzung der Keypoints
@@ -226,7 +226,7 @@ Der Ablauf einer solche Registration beinhaltet, wie in \ref{fig:registrationAbl
 Datenerfassung: \\
 Die Datenerfassung kann auf unterschiedlichste Arten erfolgen.
 Hierbei werden zwei Sets an Daten, gesammelt.
-Die Daten werden verarbeitet und in einer Punktewolke gespeichert. \ref{fig:registrationExample}
+Die Daten werden verarbeitet und in einer Punktewolke gespeichert. Siehe Abbildung \ref{fig:registrationExample}
 Durch ein einheitliches Vormat wird sichergestellt, dass die Punkte korrekt weiterverarbeitet werden.
 \newline
 
@@ -257,14 +257,14 @@ Feature-Deskriptoren oder Point-Feature Repräsentationen sind eine Form der erw
 
 Durch miteinbeziehen der umliegenden Punkte, können Informationen über die Form und Beschaffenheit der Fläche gesammelt werden.
 Diese können widerum in den Feature-Deskriptoren gespeichert werden.
-Die simpelste Form eines solchen Feature-Deskriptor wäre die Normale der Fläche unter dem Punkt. \ref{fig:normals}
+Die simpelste Form eines solchen Feature-Deskriptor wäre die Normale der Fläche unter dem Punkt. Siehe Abbildung \ref{fig:normals}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=10cm]{graphics/normals.png}
     \caption{Beispiel für eine 2D Normalen Extraktion. 
              Die Normale der Fläche unterhalb des roten Punkt wird mittels Nachbarpunkten bestimmt.
-             Quelle: \cite{normals2023}}
+             Quelle: \cite{normals2024}}
     \label{fig:normals}
 \end{figure}
 
@@ -272,7 +272,7 @@ Schätzung der Korrespondenzen: \\
 Die zwei vorhandenen Sets von Feature-Deskriptoren, welche aus den Keypoints berechnet wurden, 
 können nun verwendet werden um Korrespondenzen zu schätzen.
 Bei kleineren Datensets kann es auch Sinn machen, die Keypoint- und Feature-Deskriptor-Schätzung auszulassen
-und die Korrespondenzen nur mittels Koordinaten der Punkte zu schätzen.
+und die Korrespondenzen nur mittels Koordinaten der Punkte zu schätzen. Siehe Abbildung \ref{fig:icpA}
 
 Eine Korrespondenz beschreibt zwei Punkte oder Feature-Deskriptoren aus verschiedenen Datensätzen, welche den gleichen Punkt im Raum repräsentieren.
 \newline
@@ -300,6 +300,22 @@ Dieser Vorgang wird solange wiederholt bis ein Abbruch-Kriterium erfüllt ist.
 Ein solches Abbruch-Kriterium ist z.B. das Unterschreiten eines Grenzwertes für die mittlere Qudratische Abweichung.
 Auch eine Überschreitung einer bestimmten Anzahl an Iterationen kann zum Abbruch führen.
 
+\begin{figure}[H]
+    \subfloat[a][Schätzung von Korrespondenzen]{
+        \includegraphics[width=10cm]{graphics/icp_1.png}
+        \label{fig:icpA}
+    } \\
+    \subfloat[b][Ablehnung schnlechter Korrespondenzen]{
+        \includegraphics[width=10cm]{graphics/icp_2.png}
+        \label{fig:icpB}
+    } \\
+    \subfloat[c][Transformieren der Source-Wolke]{
+        \includegraphics[width=10cm]{graphics/icp_3.png}
+        \label{fig:icpC}
+    }
+    \caption{Beispiel für den Ablauf einer \acf{icp}-Iteration. Quelle: \cite[chapters 3]{icp2015}}
+\end{figure}
+
 \paragraph{Point Cloud Registration im Rahmen dieser Arbeit} \mbox{}\\
 Durch die Möglichkeit, Bewegung ausschließlich anhand zweier Scans zu berechnen, 
 bietet sich die Nutzung der Point Cloud Registration im Rahmen dieser Arbeit an.
@@ -314,7 +330,7 @@ Das lässt sich durch die geringe Anzahl an Punkten innerhalb unserer Datensätz
 Eine solche Berechnung ist also, im Rahmen der Arbeit, ebenfalls wenig Sinnvoll.
 
 Für die Schätzung der Korrespondenzen sowie der Ablehnung schlechter Korrespondenzen 
-und der Schätzung der Transformationsmatrix wird eine Implementierung des \acf{icp}-Algorithmus der \acf{pcl} verwendet.
+und der Schätzung der Transformationsmatrix wird eine Implementierung des \ac{icp}-Algorithmus der \acf{pcl} verwendet.
 Die \ac{pcl} ist eine C++ Bibliothek, die ein effizientes Arbeiten mit Punktewolken ermöglicht
 und diverse Algorithmen für unterschiedlichste Operationen mitbringt.
 Genauere Infos zur Implementierung des \ac{icp}-Algorithmus Kapitel \ref{slamImplementierung}.
