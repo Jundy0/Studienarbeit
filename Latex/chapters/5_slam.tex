@@ -38,7 +38,7 @@ Zur Lösung dieses Problems kann ein Grid mit niedrigerer Auflösung verwendet w
 Die Berechnungen finden somit weiter in Millimetern statt, die Karte selbst wird jedoch als Grid in einer niedrigeren Auflösung gespeichert.
 Hat das Grid zum Beispiel eine Auflösung von 1x1 Zentimeter, werden gescannte Punkte auf Zentimeter gerundet bevor die Information in der Karte gespeichert wird.
 
-\paragraph{Wahrscheinlichkeiten}
+\paragraph{Wahrscheinlichkeiten} \mbox{}\\
 Eine weitere sinnvolle Ergänzung ist die Verwendung von Wahrscheinlichkeiten.
 Anstelle von 1, -1 und 0 werden auch sämtliche Werte dazwischen genutzt.
 
@@ -180,7 +180,7 @@ Die Wolke beinhaltet Informationen zu jedem der Punkte.
 Hierzu gehören zumindest die Koordinaten.
 Eine solche Wolke kann jedoch auch weitere Informationen wie Farbe oder Krümmung beinhalten. 
 Die Gesamtheit der Punkte inerhalb einer solchen Wolke beschreibt die Form und Oberfläche eines Objektes
-\cite[chapters 2.2]{registration2021}
+\cite[ch. 2.2]{registration2021}
 
 Registration selbst lässt sich in verschiedene Unterkategorien einteilen.
 Beschränkt sich die Transformation auf Rotation und Translation, spricht man von einer steifen Transformation bzw. Registration.
@@ -198,7 +198,7 @@ und ausschließlich die Translation auf den zwei Achsen sowie die Rotation berec
     \subfloat[a][Source und Target Point Cloud]{
         \includegraphics[width=12cm]{graphics/registration_source_target.png}
     } \\
-    \subfloat[b][Transformierte Source Point Cloud]{
+    \subfloat[b][Transformierte Source Point Cloud über die Target Point Cloud gelegt]{
         \includegraphics[width=8cm]{graphics/registration_alligned.png}
     }
     \caption{Beispiel einer starren 2D Point Cloud Registration}
@@ -206,7 +206,8 @@ und ausschließlich die Translation auf den zwei Achsen sowie die Rotation berec
 \end{figure}
 
 \paragraph{Ablauf} \mbox{}\\
-Der Ablauf einer solche Registration beinhaltet, wie in Abbildung \ref{fig:registrationAblauf} beschrieben, typischerweise sechs Schritte.
+Der Ablauf einer solche Registration beinhaltet, wie in \cite{pcl2023} beschrieben, typischerweise sechs Schritte. 
+Siehe Abbildung \ref{fig:registrationAblauf}
 \begin{enumerate}[leftmargin=*]
     \item Datenerfassung
     \item Schätzung der Keypoints
@@ -226,8 +227,10 @@ Der Ablauf einer solche Registration beinhaltet, wie in Abbildung \ref{fig:regis
 Datenerfassung: \\
 Die Datenerfassung kann auf unterschiedlichste Arten erfolgen.
 Hierbei werden zwei Sets an Daten, gesammelt.
-Die Daten werden verarbeitet und in einer Punktewolke gespeichert. Siehe Abbildung \ref{fig:registrationExample}
-Durch ein einheitliches Vormat wird sichergestellt, dass die Punkte korrekt weiterverarbeitet werden.
+Die Daten werden verarbeitet und in einer Punktewolke gespeichert. 
+Siehe Abbildung \ref{fig:registrationExample}
+
+Durch ein einheitliches Format wird sichergestellt, dass die Punkte korrekt weiterverarbeitet werden.
 \newline
 
 Schätzung der Keypoints: \\
@@ -279,6 +282,7 @@ Eine Korrespondenz beschreibt zwei Punkte oder Feature-Deskriptoren aus verschie
 
 Ablehnung von Korrespondenzen: \\
 Nachdem die Korrespondenzen geschätzt wurden, müssen schlechte Korrespondenzen verworfen werden.
+Siehe Abbildung \ref{fig:icpB}
 
 Hierzu gibt es diverse Algorithmen, worunter der RANSAC Algorithmus am weitesten verbreitet ist.
 Eine weitere Möglichkeit die Anzahl an Korrespondenzen zu senken, 
@@ -296,6 +300,8 @@ welche notwendig ist um die Punktewolke A zur Punktewolke B zu transformieren.
 Die Schätzung der Transformation passiert mittels, auf den Korrespondenzen basierenden, Metriken.
 Ein Beispiel für eine solche Metrik ist die mittlere qudratische Abweichung der Korrespondenzen.
 Die Punktewolke wird transformiert und die Metriken ausgewertet.
+Siehe Abbildung \ref{fig:icpC}
+
 Dieser Vorgang wird solange wiederholt bis ein Abbruch-Kriterium erfüllt ist.
 Ein solches Abbruch-Kriterium ist z.B. das Unterschreiten eines Grenzwertes für die mittlere Qudratische Abweichung.
 Auch eine Überschreitung einer bestimmten Anzahl an Iterationen kann zum Abbruch führen.
@@ -313,7 +319,7 @@ Auch eine Überschreitung einer bestimmten Anzahl an Iterationen kann zum Abbruc
         \includegraphics[width=10cm]{graphics/icp_3.png}
         \label{fig:icpC}
     }
-    \caption{Beispiel für den Ablauf einer \acf{icp}-Iteration. Quelle: \cite[chapters 3]{icp2015}}
+    \caption{Beispiel für den Ablauf einer \acf{icp}-Iteration. Quelle: \cite[ch. 3]{icp2015}}
 \end{figure}
 
 \paragraph{Point Cloud Registration im Rahmen dieser Arbeit} \mbox{}\\
