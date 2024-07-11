@@ -49,6 +49,8 @@ Zusätzlich werden Schwellenwerte definiert, die festlegen, ab wann ein Feld des
 
 Das Ergebnis ist eine Occupancy Grid Map, welche eine geringere Auflösung als die gesamte Karte hat.
 In ihr werden Informationen über den Status des Teils der Karte gepseichert, welche von dem Feld der Grid Map repräsentiert wird.
+
+Aufgrund der Simplizität und einfachen Umsetzung wurde sich dazu entschieden, eine solche Occupancy Grid zum Mapping zu verwenden.
 \ref{fig:gridMap}
 
 \begin{figure}[H]
@@ -154,7 +156,6 @@ Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anh
 
     Ein weiterer Nachteil von Kameras ist die eingeschränkte Sichtweite. 
     Das Bild kann nur einen gewissen Teil der Umgebung aufnehmen und bietet nur durch die Kombination mehrerer Kameras eine vollständige Wahrnehmung der Umgebung.
-
 
     \item \textbf{Ultraschall} \\
     Ultraschallsensoren erfassen die Umgebung mit Hilfe von Schallwellen und deren Reflektionen. 
@@ -285,6 +286,9 @@ Ein solches Abbruch-Kriterium ist z.B. das Unterschreiten eines Grenzwertes für
 Auch eine Überschreitung einer bestimmten Anzahl an Iterationen kann zum Abbruch führen.
 
 \paragraph{Point Cloud Registration im Rahmen dieser Arbeit} \mbox{}\\
+Durch die Möglichkeit, Bewegung ausschließlich anhand zweier Scans zu berechnen, 
+bietet sich die Nutzung der Point Cloud Registration im Rahmen dieser Arbeit an.
+
 Die Datensätze dieser Arbeit sind mit unter 1000 Punkten recht klein.
 Somit ist eine Schätzung von Keypoints wenig Sinnvoll und teilweise auch nicht umsetzbar.
 
