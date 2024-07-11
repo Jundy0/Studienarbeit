@@ -4,23 +4,23 @@ In dem folgenden Kapitel wird beschrieben, wie die Theorie aus den vorherigen Ka
 
 \subsection{Aufbau der Implementierung}
 
-Der gesamte Aufbau der Implementierung ist in drei Projekte aufgeteilt: Core, Simulation und LiDAR. Das Core-Projekt ist eine Library, welche keine ausführbare Datei und lediglich die Implementierungen der Algorithmen bzw. die Logik für das Steuern und Ausweichen des Fahrzeugs enthält. Das Simulation-Projekt dient für die Simulation des autonomen Fahrzeugs und zum Testen der implementierten Algorithmen. Das LiDAR-Projekt enthält den Code, welcher auf das eigentliche Fahrzeug, bzw. den Raspberry Pi des Fahrzeugs, geladen und auf diesem ausgeführt wird. Das Simulation- und LiDAR-Projekt benutzen das Core-Projekt, um die Logik zur Steuerung des autonomen Fahrzeugs auszuführen und verwenden dazu Schnittstellen in Form von Implementierungen mehrerer Interfaces, wodurch unter anderem das Fahrzeug gesteuert und LiDAR Daten ausgelesen werden können. Nachfolgend werden die einzelnen Projekte und die Schnittstellen, in Form der Interfaces, zwischen den Projekten näher beschrieben. 
+Der gesamte Aufbau der Implementierung ist in drei Projekte aufgeteilt: Core, Simulation und \ac{lidar}. Das Core-Projekt ist eine Library, welche keine ausführbare Datei und lediglich die Implementierungen der Algorithmen bzw. die Logik für das Steuern und Ausweichen des Fahrzeugs enthält. Das Simulation-Projekt dient für die Simulation des autonomen Fahrzeugs und zum Testen der implementierten Algorithmen. Das \ac{lidar}-Projekt enthält den Code, welcher auf das eigentliche Fahrzeug, bzw. den Raspberry Pi des Fahrzeugs, geladen und auf diesem ausgeführt wird. Das Simulation- und \ac{lidar}-Projekt benutzen das Core-Projekt, um die Logik zur Steuerung des autonomen Fahrzeugs auszuführen und verwenden dazu Schnittstellen in Form von Implementierungen mehrerer Interfaces, wodurch unter anderem das Fahrzeug gesteuert und \ac{lidar} Daten ausgelesen werden können. Nachfolgend werden die einzelnen Projekte und die Schnittstellen, in Form der Interfaces, zwischen den Projekten näher beschrieben. 
 
 \subsubsection{Core-Projekt}
 
-Wie bereits beschrieben enthält das Core-Projekt die Implementierungen der verwendeten Algorithmen und die Logik zum Steuern des Fahrzeugs. Damit die Algorithmen auf Daten von Sensoren, sowie die Steuerung des Autos zuzugreifen kann, werden Interfaces als Schnittstellen verwendet, welche die Funktionen für die Algorithmen bereitstellen. Diese Interfaces werden im Core-Projekt lediglich definiert und nicht implementiert. Die Implementierung der Interfaces erfolgt in den Simulation- und LiDAR-Projekt. Dort können die Interfaces so implementiert werden, dass durch Verwendung des Interfaces die richtige Aktion im jeweiligen Projekt ausgeführt wird. So stellt z. B. das Interface zum Auslesen der LiDAR Daten im Simulations-Projekt Daten, welche den aktuellen Stand der Simulation widerspiegeln, und im LiDAR-Projekt Daten, welche über die RPLiDAR SDK aus dem verbauten LiDAR ausgelesen wurden, zurückgegeben werden. Damit die Implementierungen der Interfaces an das Core-Projekt übergeben werden können und abhängig von der aktuellen Verwendung des Core-Projektes die richtige Implementierung verwendet wird, wird das Dependency Injection Design Pattern angewandt. Dieses Design Pattern besagt, dass Abhängigkeiten, wie z. B. die Logik für das Auslesen der LiDAR Daten, ausgelagert und über festgelegt Schnittstellen von einem Injector zur Verfügung gestellt werden. In diesem Projekt werden die Schnittstellen in Form der Implementierungen der Interfaces bei der Initialisierung der Klasse, welche die Abhängigkeiten, also die Interfaces, benutzt von dem aufrufendem Code übergeben, welcher in diesem Fall als Injector fungiert \cite{dependencyInjection}. 
+Wie bereits beschrieben enthält das Core-Projekt die Implementierungen der verwendeten Algorithmen und die Logik zum Steuern des Fahrzeugs. Damit die Algorithmen auf Daten von Sensoren, sowie die Steuerung des Autos zuzugreifen kann, werden Interfaces als Schnittstellen verwendet, welche die Funktionen für die Algorithmen bereitstellen. Diese Interfaces werden im Core-Projekt lediglich definiert und nicht implementiert. Die Implementierung der Interfaces erfolgt in den Simulation- und \ac{lidar}-Projekt. Dort können die Interfaces so implementiert werden, dass durch Verwendung des Interfaces die richtige Aktion im jeweiligen Projekt ausgeführt wird. So stellt z. B. das Interface zum Auslesen der \ac{lidar} Daten im Simulations-Projekt Daten, welche den aktuellen Stand der Simulation widerspiegeln, und im \ac{lidar}-Projekt Daten, welche über die RPLiDAR SDK aus dem verbauten \ac{lidar} ausgelesen wurden, zurückgegeben werden. Damit die Implementierungen der Interfaces an das Core-Projekt übergeben werden können und abhängig von der aktuellen Verwendung des Core-Projektes die richtige Implementierung verwendet wird, wird das Dependency Injection Design Pattern angewandt. Dieses Design Pattern besagt, dass Abhängigkeiten, wie z. B. die Logik für das Auslesen der \ac{lidar} Daten, ausgelagert und über festgelegt Schnittstellen von einem Injector zur Verfügung gestellt werden. In diesem Projekt werden die Schnittstellen in Form der Implementierungen der Interfaces bei der Initialisierung der Klasse, welche die Abhängigkeiten, also die Interfaces, benutzt von dem aufrufendem Code übergeben, welcher in diesem Fall als Injector fungiert \cite{dependencyInjection}. 
 
-Neben den Interfaces für das Auslesen der LiDAR Daten und der Steuerung des Fahrzeugs befinden sich außerdem noch den Ausweichalgorithmus und den SLAM-Algorithmus, welcher ebenfalls durch Interfaces abstrahiert sind, damit auch diese einfach ausgetauscht werden können. Die gesamte Logik für das autonome Fahrzeug ist in der Klasse \dq SelfdrivingVehicle\dq\space gebündelt. Diese besitzt eine Methode \dq update\dq, welche in der Hauptschleife des jeweiligen Programms aufgerufen wird. Der Ablauf in der \dq update\dq\space Methode, ist:
+Neben den Interfaces für das Auslesen der \ac{lidar} Daten und der Steuerung des Fahrzeugs befinden sich außerdem noch den Ausweichalgorithmus und den SLAM-Algorithmus, welcher ebenfalls durch Interfaces abstrahiert sind, damit auch diese einfach ausgetauscht werden können. Die gesamte Logik für das autonome Fahrzeug ist in der Klasse \dq SelfdrivingVehicle\dq\space gebündelt. Diese besitzt eine Methode \dq update\dq, welche in der Hauptschleife des jeweiligen Programms aufgerufen wird. Der Ablauf in der \dq update\dq\space Methode, ist:
 
 \begin{enumerate}[leftmargin=*]
 
-    \item \textbf{Auslesen der LiDAR Daten}
+    \item \textbf{Auslesen der \ac{lidar} Daten}
 
-    Hier wird über das LiDAR Interface die aktuellen Daten des LiDARs ausgelesen und für die nächsten Schritte gespeichert.
+    Hier wird über das \ac{lidar} Interface die aktuellen Daten des \ac{lidar}s ausgelesen und für die nächsten Schritte gespeichert.
 
     \item \textbf{Ausführen des SLAM-Algorithmus} 
     
-    Hierfür werden die ausgelesenen LiDAR Daten, sowie die Odometrie Daten übergeben. Je nach Implementierung der Interfaces sind die Odometrie Daten Leer, da sie nicht vorhanden sind, oder werden nicht für die Ausführung des SLAM-Algorithmus verwendet. 
+    Hierfür werden die ausgelesenen \ac{lidar} Daten, sowie die Odometrie Daten übergeben. Je nach Implementierung der Interfaces sind die Odometrie Daten Leer, da sie nicht vorhanden sind, oder werden nicht für die Ausführung des SLAM-Algorithmus verwendet. 
 
     \item \textbf{Ausführen des Ausweichalgorithmus}
     
@@ -32,33 +32,33 @@ Neben den Interfaces für das Auslesen der LiDAR Daten und der Steuerung des Fah
 
 \end{enumerate}
 
-Da die gesamte Ausführung alle Schritte nicht jeden Durchlauf der Schleife nicht Nötig und mit der vorhandenen Hardware nicht effizient wäre, ist zusätzlich noch eine Überprüfung der Zeit, seit der letzten Ausführung, vorhanden. Die Zeitdifferenz, nach welcher die nächste Ausführung startet, kann variabel gesetzt werden, sollte aber zwischen 500 und 1000 ms betragen [/src/core/src/selfdrivingVehicle.cpp]. 
+Da die gesamte Ausführung alle Schritte nicht jeden Durchlauf der Schleife nicht Nötig und mit der vorhandenen Hardware nicht effizient wäre, ist zusätzlich noch eine Überprüfung der Zeit, seit der letzten Ausführung, vorhanden. Die Zeitdifferenz, nach welcher die nächste Ausführung startet, kann variabel gesetzt werden, sollte aber zwischen 500 und 1000 ms betragen [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/selfdrivingVehicle.cpp}{src/core/src/selfdrivingVehicle.cpp}]. 
 
 \subsubsection{Simulation-Projekt}
 
 Die Simulation dient dazu, die Logik aus dem Core-Projekt zu testen, ohne dass das eigentliche Fahrzeug benötigt wird. Damit das Fahrzeug sowohl gesteuert als auch gesehen werden kann, was durch die Algorithmen berechnet wurde. Deshalb wurde die Simulation in zwei Fenster aufgeteilt, welche bei Ausführung des Programms zusammen geöffnet werden. Das erst Fenster, nachfolgend Control Window genannt, dient zur Steuerung des Fahrzeugs und der Simulation im allgemein. Es stellt in Bezug auf das autonome Fahrzeug die Realität dar. Das zweite Fenster zeigt die Ergebnisse der Algorithmen. Dabei wird die Karte, die Position und Rotation des Fahrzeugs auf der Karte, sowie der berechnete Pfad mit dem aktuellen Ziel angezeigt. In Bezug auf das autonome Fahrzeug stellt dieses Fenster die Sicht des Fahrzeugs dar. Nachfolgend wird die Funktionen und die Logik der beiden Fenster genauer erläutert. Außerdem wird noch SFML vorgestellt, was für die Umsetzung der grafischen Oberflächliche benutzt wurde. 
 
-\paragraph{SFML} \mbox{} \\
+\paragraph{SFML} \mbox{}
 
 SFML (Simple and Fast Multimedia Library) ist eine Library, mit welcher grafische Anwendungen erstellt werden können. Die Anwendung können dabei auf den gängigen Plattformen, wie Windows, Linux und MacOS laufen und können in unterschiedlichen Programmiersprachen erstellt werden, darunter auch C++ \cite{sfml}. 
 
-\paragraph{Control Window} \mbox{} \\
+\paragraph{Control Window} \mbox{}
 
 In dem Control Window kann das simulierte Fahrzeug direkt über die \dq WASD\dq-Tasten gesteuert werden. Außerdem können weitere Hindernisse platziert und das Ziel geändert werden, zu welchem das Fahrzeug fahren soll. 
 
 TODO Timo
 
-[/src/simulation/src/controlWindow.cpp]. 
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/controlWindow.cpp}{src/simulation/src/controlWindow.cpp}]. 
 
-\paragraph{Visualize Window} \mbox{} \\
+\paragraph{Visualize Window} \mbox{}
 
 TODO Timo
 
-[/src/simulation/src/visualizeWindow.cpp]. 
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/visualizeWindow.cpp}{src/simulation/src/visualizeWindow.cpp}]. 
 
 \subsubsection{LiDAR-Projekt}
 
-TODO Time
+TODO Timo
 
 \subsection{Erläuterung der Implementierung}
 
@@ -66,7 +66,7 @@ Nachdem nun der Aufbau der Implementierung erläutert wurde, werden nun einige B
 
 \subsubsection{Simulation des LiDARs}
 
-Ein Teil der Simulation des autonomen Fahrzeugs ist die Simulation des LiDARs. Hierfür wird die Methode des Raycasting verwendet, bei welchem Strahlen, also Vektoren, von dem Zentrum des LiDARs in alle Richtungen ausgestrahlt werden und die Schnittpunkte mit den Hindernissen gespeichert werden. Umgesetzt wurde dies, indem der gesamte Umfang des LiDARs in 360 bzw. 720 Winkel unterteilt wurde, welche die Rays darstellen, und dann für jeden Ray die Schnittpunkte für alle Hindernisse berechnet wurden. Zusätzliche wurde auch der Rahmen des Fensters als hinzugefügt, da dieser die Wände des Raums und somit auch ein Hindernis darstellt. Da alle Hindernisse, eingeschlossen Fensterrahmen, Rechtecke sind, müssen also lediglich die Schnittpunkte zwischen einem Rechteck und einem Ray, also einer Geraden, berechnet werden. Dies kann weiter unterteilt werden in den Schnittpunkt zweier Geraden, da ein Rechteck aus vier Geraden besteht. Für diesen Zweck wurde eine Funktion erstellt, welche für diesen Fall einen Schnittpunkt berechnet, falls dieser existiert. In dieser wird zunächst überprüft, ob die beiden Geraden überhaupt einen Schnittpunkt besitzen oder ob diese parallel sind. Dies kann einfach über das Berechnen des Kreuzproduktes gemacht werden. Ist das Ergebnis des Kreuzproduktes gleich \(0\), sind die beiden Geraden parallel und es gibt keinen Schnittpunkt. Als Grundlage für eigentliche Berechnung des Schnittpunktes wurde die Formel zur Berechnung des Schnittpunktes zweier Geraden benutzt, in welcher lediglich zwei Geraden in Parameterform \((Stuetzvektor + Parameter * Richtungsvektor)\) gleichgestellt werden. Da für die Berechnung der Schnittpunkte angenommen wird, dass der LiDAR bei \((0, 0)\) liegt, kann dieser in der Gleichung weggelassen werden. 
+Ein Teil der Simulation des autonomen Fahrzeugs ist die Simulation des \ac{lidar}s. Hierfür wird die Methode des Raycasting verwendet, bei welchem Strahlen, also Vektoren, von dem Zentrum des \ac{lidar}s in alle Richtungen ausgestrahlt werden und die Schnittpunkte mit den Hindernissen gespeichert werden. Umgesetzt wurde dies, indem der gesamte Umfang des \ac{lidar}s in 360 bzw. 720 Winkel unterteilt wurde, welche die Rays darstellen, und dann für jeden Ray die Schnittpunkte für alle Hindernisse berechnet wurden. Zusätzliche wurde auch der Rahmen des Fensters als hinzugefügt, da dieser die Wände des Raums und somit auch ein Hindernis darstellt. Da alle Hindernisse, eingeschlossen Fensterrahmen, Rechtecke sind, müssen also lediglich die Schnittpunkte zwischen einem Rechteck und einem Ray, also einer Geraden, berechnet werden. Dies kann weiter unterteilt werden in den Schnittpunkt zweier Geraden, da ein Rechteck aus vier Geraden besteht. Für diesen Zweck wurde eine Funktion erstellt, welche für diesen Fall einen Schnittpunkt berechnet, falls dieser existiert. In dieser wird zunächst überprüft, ob die beiden Geraden überhaupt einen Schnittpunkt besitzen oder ob diese parallel sind. Dies kann einfach über das Berechnen des Kreuzproduktes gemacht werden. Ist das Ergebnis des Kreuzproduktes gleich \(0\), sind die beiden Geraden parallel und es gibt keinen Schnittpunkt. Als Grundlage für eigentliche Berechnung des Schnittpunktes wurde die Formel zur Berechnung des Schnittpunktes zweier Geraden benutzt, in welcher lediglich zwei Geraden in Parameterform \((Stuetzvektor + Parameter * Richtungsvektor)\) gleichgestellt werden. Da für die Berechnung der Schnittpunkte angenommen wird, dass der \ac{lidar} bei \((0, 0)\) liegt, kann dieser in der Gleichung weggelassen werden. 
 
 \[
 s * 
@@ -99,7 +99,7 @@ s = \frac{v1_x + t * v12_x}{rayDirection_x};
 s = \frac{v1_y + t * v12_y}{rayDirection_y}
 \]
 
-Nun muss überprüft werden, ob der Punkt nicht nur auf beiden Geraden, sondern auch zwischen den beiden Punkten des Rechtecks, sowie vor dem LiDAR liegt. Dafür wird geschaut, ob der Wert von \(t\) (Parameter für die Kante des Rechtecks) zwischen \(0\) und \(1\) liegt. Außerdem wird geschaut, ob der Wert von \(s\) (Parameter für den Ray) größer oder gleich \(0\) ist. Sollte beides gegeben sein, wird der Schnittpunkt zur Liste aller Schnittpunkte des aktuellen Rays hinzugefügt [src/simulation/src/intersection.cpp]. 
+Nun muss überprüft werden, ob der Punkt nicht nur auf beiden Geraden, sondern auch zwischen den beiden Punkten des Rechtecks, sowie vor dem \ac{lidar} liegt. Dafür wird geschaut, ob der Wert von \(t\) (Parameter für die Kante des Rechtecks) zwischen \(0\) und \(1\) liegt. Außerdem wird geschaut, ob der Wert von \(s\) (Parameter für den Ray) größer oder gleich \(0\) ist. Sollte beides gegeben sein, wird der Schnittpunkt zur Liste aller Schnittpunkte des aktuellen Rays hinzugefügt [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/intersection.cpp}{src/simulation/src/intersection.cpp}]. 
 
 \begin{lstlisting}[caption={Berechnung des Schnittpunktes zweier Geraden},label={lst:schnittpunkt_zweier_geraden},language={C++}]
 bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection, const sf::Vector2f &p1, const sf::Vector2f &p2, std::vector<sf::Vector2f> &intersectionPoints)
@@ -130,13 +130,11 @@ bool intersects(const sf::Vector2f &rayOrigin, const sf::Vector2f &rayDirection,
 }
 \end{lstlisting}
 
-Nachdem alle Schnittpunkte berechnet wurden, muss anschließend der Schnittpunkt bestimmt werden, der am nächsten am LiDAR, also dem Stützvektor des Rays, ist. Dafür wird die Liste mit den Schnittpunkten nach dem Abstand zum LiDAR sortiert, indem der quadrierte Abstand zwischen Schnittpunkt und LiDAR berechnet. Der Vorteil des quadrierten Abstandes gegenüber dem normalen Abstand ist, dass die Reihenfolge einzelner Punkte gleich bleibt, aber die Berechnung über die Wurzel vermieden wird, welche vergleichsweise aufwendig ist \cite{stackexchangeAreThereAny2012}. Nach der Sortierung kann dann das erste Element der Liste als Schnittpunkt für diesen Ray verwendet werden. Da aktuell nur die Koordinaten des Schnittpunktes bekannt sind, ein LiDAR aber nur den Winkel und die Entfernung eines Punktes kennt, müssen für die Simulation diese Werte noch berechnet werden [src/simulation/src/intersection.cpp, src/simulation/src/lidarSensorSim.cpp]. 
+Nachdem alle Schnittpunkte berechnet wurden, muss anschließend der Schnittpunkt bestimmt werden, der am nächsten am \ac{lidar}, also dem Stützvektor des Rays, ist. Dafür wird die Liste mit den Schnittpunkten nach dem Abstand zum \ac{lidar} sortiert, indem der quadrierte Abstand zwischen Schnittpunkt und \ac{lidar} berechnet. Der Vorteil des quadrierten Abstandes gegenüber dem normalen Abstand ist, dass die Reihenfolge einzelner Punkte gleich bleibt, aber die Berechnung über die Wurzel vermieden wird, welche vergleichsweise aufwendig ist \cite{stackexchangeAreThereAny2012}. Nach der Sortierung kann dann das erste Element der Liste als Schnittpunkt für diesen Ray verwendet werden. Da aktuell nur die Koordinaten des Schnittpunktes bekannt sind, ein \ac{lidar} aber nur den Winkel und die Entfernung eines Punktes kennt, müssen für die Simulation diese Werte noch berechnet werden [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/intersection.cpp}{src/simulation/src/intersection.cpp}, \href{}{src/simulation/src/lidarSensorSim.cpp}]. 
 
 \subsubsection{Implementierung des LiDARs mit der RPLIDAR SDK}
 
-Wie bereits in der Technologie-Entscheidung beschrieben, wird für die Ansteuerung des LiDARs die RPLIDAR SDK verwendet. Zusätzlich wird die Library pigpio beutzt, um die GPIO Pins des Raspberry Pis zu verwenden. Dies wird benötigt, da der Motor des LiDAR über ein PWM-Signal gesteuert wird [src/lidar/src/a1lidarSensor.cpp]. 
-
-TODO wie funktioniert auslesen, warum komische Werte
+Wie bereits in der Technologie-Entscheidung beschrieben, wird für die Ansteuerung des \ac{lidar}s die RPLIDAR SDK verwendet. Zusätzlich wird die Library pigpio benutzt, um die \ac{gpio} Pins des Raspberry Pis zu verwenden. Dies wird benötigt, da der Motor des \ac{lidar} über ein PWM-Signal gesteuert wird. Nach dem Auslesen müssen die erhaltenen Werte vor der Weiterverwendung noch zu den richtigen Werten konvertiert werden. Zur einfacheren Übertragung werden die Werte für den Winkel und den Abstand bei der SDK als unsigned 16 bit bzw. 32 bit Integer gespeichert. Um die Werte wieder in eine Kommazahl zu konvertieren, wird der Abstand durch \(4000\) und der Winkel mal \(90\) und durch \(16384\) (eine 1 um 14 Stellen nach links geshifted) geteilt \cite{RplidarSDK2023}. Mit den konvertierten Werten kann nun auch der \(x\) und \(y\) Wert des Punktes über \(cos\) und \(sin\) gerechnet werden [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/lidar/src/a1lidarSensor.cpp}{src/lidar/src/a1lidarSensor.cpp}]. 
 
 \begin{lstlisting}[caption={Auslesen der LiDAR Daten},label={lst:auslesen_lidar},language={C++}]
 void A1LidarSensor::getScanData(lidar_point_t *data, size_t count)
@@ -169,17 +167,141 @@ void A1LidarSensor::getScanData(lidar_point_t *data, size_t count)
 }
 \end{lstlisting}
 
-\subsubsection{Umsetzung des Ausweichalgorithmus}
-
-% Obstacle infaltion
-
-% A* vs. A* mit dimension für drehung
-
-TODO Timo
-
 \subsubsection{Umsetzung von SLAM}
 \label{slamImplementierung}
 
 TODO Justin
+
+\subsubsection{Umsetzung des Ausweichalgorithmus}
+
+Ein wichtiger Teil des autonomen Fahrzeugs ist Umfahren oder Ausweichen von Hindernissen. In dieser Arbeit wird hierfür ein Pathfinding-Algorithmus verwendet, welcher mit der Karte, Position und Rotation des Fahrzeugs, welche durch SLAM mit den \ac{lidar} Daten generiert wurde, sowie einem Zielpunkt, einem Pfad um die erkannten Hindernisse findet. Aktuell wird hierfür der A*-Pathfinding-Algorithmus verwendet. Dieser arbeitet mit einer Liste an Punkten, welche die abgelaufenen Punkte beinhaltet. Außerdem wird drei Arten von Kosten gearbeitet, welche einem Punkt zugewiesen werden und den Aufwand für den Pfad widerspiegeln, wenn dieser Punkt im Pfad enthalten ist:
+
+\begin{enumerate}[leftmargin=*]
+
+\item \textbf{g-Cost: die bisherigen Kosten}
+
+Die Kosten, die benötigt werden, um zu diesem Punkt zu gelangen. 
+
+\item \textbf{h-Cost: die geschätzten Kosten}
+
+Die Kosten, die voraussichtlich noch zum Ziel auftreten. Hierfür wird eine Heuristik-Funktion zur Berechnung der Kosten verwendet. Diese rechnet den Abstand zwischen dem aktuellen Punkt und dem Ziel aus. Hierfür wird in der Regel die Euklidische Distanz (Luftlinie) oder die Manhattan Distanz (Summe der absoluten Differenzen) verwendet. 
+
+\item \textbf{f-Cost: die gesamten Kosten}
+
+Die Kosten, die entstehen, wenn g-Cost und h-Cost summiert werden. 
+
+\end{enumerate}
+
+Bei einer Schleife wird der Punkt mit dem niedrigsten f-Cost aus der Liste genommen und überprüft, ob dieser dem Ziel entspricht. Sollte dies der Fall sein, kann der Algorithmus abbrechen und den Pfad rekonstruieren. Entspricht der Punkt nicht dem Ziel, werden die Nachbarn des Punktes zur Liste hinzugefügt, falls an diese keine Hindernisse sind. Für die Nachbarn werde die Kosten berechnet, wobei für g-Cost die g-Cost des aktuellen Punktes genommen und um eins erhöht wird. Außerdem wird der aktuelle Punkt als Parent-Punkt alle Nachbarn gesetzt. Die Schleife wird nun so lange wiederholt, bis keine Einträge mehr in der Liste sind oder der Punkt für das Ziel gefunden ist. Um den Pfad zu rekonstruieren wir von dem Ziel die jeweiligen Parent-Punkte nachgefahren, bis der Startpunkt erreicht wurde \cite{TODO Quelle A*}. 
+
+Umgesetzt wurde der Algorithmus mit einer Priority Queue, welche immer das Element mit der geringsten f-Cost zurückgibt. Außerdem wird jeweils eine Matrix für f-Cost, g-Cost und das Festhalten der Parent-Punkten benutzt. In der Schleife werden Nachbarn nur zur Priority Queue hinzugefügt, wenn dies innerhalb der Karte und der Wert an diesem Punkt kleiner als \(PROB\_OCC\) ist, was bedeutet, dass dort wahrscheinlich kein Hindernis vorhanden ist. Da ein Punkt auch über mehrere Punkte angefahren werden kann, wird der Punkt nur in die Priority Queue hinzugefügt, wenn der g-Cost größer ist, als der aktuell in der Matrix hinterlegte Wert [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/evasionAStar.cpp}{src/core/src/evasionAStar.cpp}]. 
+
+\begin{lstlisting}[caption={Pathfinding mit A*},label={lst:astar-pathfinding},language={C++}]
+void EvasionAStar::execute()
+{
+    size_t rows = this->map->rows();
+    size_t cols = this->map->cols();
+    auto cmp = [](std::pair<double, Eigen::RowVector2d> left, std::pair<double, Eigen::RowVector2d> right)
+    { return left.first > right.first; };
+    std::priority_queue<std::pair<double, Eigen::RowVector2d>, std::vector<std::pair<double, Eigen::RowVector2d>>, decltype(cmp)> openSet(cmp);
+
+    Eigen::MatrixXd gScore = Eigen::MatrixXd::Constant(rows, cols, INF);
+    Eigen::MatrixXd fScore = Eigen::MatrixXd::Constant(rows, cols, INF);
+    Eigen::Matrix<Eigen::RowVector2d, Eigen::Dynamic, Eigen::Dynamic> parent(rows, cols);
+
+    openSet.push({0, this->origin});
+    gScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = 0;
+    fScore(ROUND(this->origin.x()), ROUND(this->origin.y())) = this->heuristic(this->origin, this->destination);
+    parent(ROUND(this->origin.x()), ROUND(this->origin.y())) = {-1, -1};
+
+    while (!openSet.empty())
+    {
+        Eigen::RowVector2d current = openSet.top().second;
+        openSet.pop();
+
+        if (current == this->destination)
+        {
+            while (current != Eigen::RowVector2d(-1, -1))
+            {
+                this->path.push_back(current);
+                current = parent(ROUND(current.x()), ROUND(current.y()));
+            }
+
+            std::reverse(this->path.begin(), this->path.end());
+
+            return;
+        }
+
+        std::vector<Eigen::RowVector2d> neighbors = {
+            current + Eigen::RowVector2d(-1, 0),
+            current + Eigen::RowVector2d(1, 0),
+            current + Eigen::RowVector2d(0, -1),
+            current + Eigen::RowVector2d(0, 1),
+        };
+
+        for (const auto &neighbor : neighbors)
+        {
+            size_t x = ROUND(neighbor.x());
+            size_t y = ROUND(neighbor.y());
+
+            if (x >= 0 && x < rows && y >= 0 && y < cols && this->isFree(x, y))
+            {
+                double tentativeGCost = gScore(ROUND(current.x()), ROUND(current.y())) + 1;
+
+                if (tentativeGCost < gScore(x, y))
+                {
+                    parent(x, y) = current;
+                    gScore(x, y) = tentativeGCost;
+                    fScore(x, y) = gScore(x, y) + this->heuristic(neighbor, this->destination);
+                    openSet.push({fScore(x, y), neighbor});
+                }
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+\paragraph{Obstacle Inflation} \mbox{}
+
+Damit das autonome Fahrzeug auch wirklich den Weg fahren kann und z. B. nicht bei einer Lücke zwischen zwei Hindernissen stecken bleibt, wird eine Methode benutzt, bei welcher die Hindernisse künstlich vergrößert werden. Diese Methode wird auch Obstacle Inflation genannt. Angewendet wird diese Methode, indem vor dem eigentlich Pathfinding-Algorithmus durch dir Karte iteriert wird und bei allen Punkten in der Karte, die einen Wert größer als \(PROB\_OCC\) haben, also an welchen sich wahrscheinlich ein Hindernis befindet, die umliegenden Punkte den künstlichen Wert \(INFLATED\) bekommen. Dabei gilt \(PROB\_OCC > INFLATED > 0\). Dieser Wert darf aber nur für Punkte gegeben werden, die einen Wert kleiner als \(PROB\_OCC\) haben, also an welchen sich wahrscheinlich kein Hindernis befindet. Ansonsten würde die Information über das Vorkommen er richtigen Hindernisse verloren gehen \cite{fernandesOrientationEnhancedAstar2015}. Damit nun der Pfad nicht durch die künstlichen Hindernisse geht, muss bei der Ausführung des Pathfinding-Algorithmus in der Überprüfung, ob der Punkt belegt ist, geschaut werden, ob der Wert an dem Punkt größer \(INFLATED\) und nicht mehr größer \(PROB\_OCC\) ist [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/evasionControl.cpp}{src/core/src/evasionControl.cpp}]. 
+
+\begin{lstlisting}[caption={Obstacles Inflation},label={lst:inflateObstacles},language={C++}]
+void EvasionControl::inflateObstacles()
+{
+    const size_t rows = this->map->rows();
+    const size_t cols = this->map->cols();
+
+    for (size_t i = 0; i < rows; ++i)
+    {
+        for (size_t j = 0; j < cols; ++j)
+        {
+            if ((*this->map)(i, j) >= PROB_OCC)
+            {
+                for (int x = -VEHICLE_RADIUS; x <= VEHICLE_RADIUS; ++x)
+                {
+                    const int circleValue = std::round(VEHICLE_RADIUS * std::cos(std::abs(x) * M_PI / (2 * VEHICLE_RADIUS)));
+                    for (int y = -circleValue; y <= circleValue; ++y)
+                    {
+                        int nx = i + x;
+                        int ny = j + y;
+                        if (nx >= 0 && ny >= 0 && nx < rows && ny < cols && (*this->map)(nx, ny) < PROB_OCC)
+                        {
+                            (*this->map)(nx, ny) = INFLATED;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+\end{lstlisting}
+
+\paragraph{Natürliches Fahrtverhalten} \mbox{}
+
+TODO Timo
+
+\paragraph{Ansteuerung des autonomen Fahrzeugs} \mbox{}
+
+TODO Timo
 
 \newpage
