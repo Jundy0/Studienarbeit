@@ -27,8 +27,68 @@ erkennen und das Auto, unter Verwendung einer bereitgestellten Schnittstelle, um
 Hierbei werden Zielkoordinaten an das Fahrzeug übermittelt.
 Diese sollen vollständig autonom von dem Fahrzeug angefahren werden.
 
-Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. 
+Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, 
+ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. 
 Somit ist das Entwickeln einer solchen Simulation der Hardware ein weiteres Ziel der Arbeit.
+An dieser Stelle werden noch nicht für alle Ziele Metriken definiert. Denn manche Ziele sind abhängig von den gewählten Komponenten für Hard- und Software. 
+
+Diese Ziele sind wage definiert, weswegen die Definition von Teilzielen die Evaluation erlichtert.
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Simulation einer Umgebung0}\\
+    In der Simulation sollen Hindernisse generiert werden können, die von einem simulierten Sensor erfasst werden können.
+
+    \textbf{Metrik:} 
+    \begin{itemize}
+        \item Kann eine Umgebung generiert werden? $\to$ Ja oder Nein
+    \end{itemize}
+    \item \textbf{Erkennung von Hindernissen}\\
+    Die Software muss in der Lage sein alle Hindernisse erkennen die den Spezifikationen, 
+    die für die Anpassung an die technischen Gegebenheiten getroffen werden, 
+    entsprechen.
+
+    \textbf{Metrik:} 
+    \begin{itemize}
+        \item Werden alle Hindernisse erkannt? $\to$ Ja oder Nein
+    \end{itemize}
+    \item \textbf{Festlegen eines Zielpunktes}\\
+    Um einen Ausweichalgorithmus zu testen, ist die Festlegung eines Zielpunktes unumgägnglich. 
+    Denn durch den Zielpunkt ist klar definiert wo das Auto ankommen soll und welche Hindernisse auf dem Weg zwischen Fahrzeug und Ziel liegen.
+
+    \textbf{Metrik:} 
+    \begin{itemize}
+        \item Kann ein Zielpunkt definiert werden? $\to$ Ja oder Nein
+    \end{itemize}
+    \item \textbf{Simulation eines Umgebungssensors}\\
+    Um die Hindernisse in der Umgebung zu erkennen, soll ein Sensor simuliert werden, der die Hindernisse erfasst und für die weitere Verarbeitung verfügbar macht.
+
+    \textbf{Metrik:}
+    \begin{itemize}
+        \item Kann ein Sensor simuliert werden? $\to$ Ja oder Nein
+    \end{itemize}
+    \item \textbf{Lokalisierung des Fahrzeugs}\\
+    Um eine Route für das Fahrzeug berechnen zu können, muss eine Algorithmik zur Lokalisierung des Fahrzeugs implementiert werden.
+
+    \textbf{Metrik:} Für die Lokalisierung bezeht sich die Metrik auf Präzision und Geschwindigkeit. 
+    Beide Elemente sind abhängig von den gewählten Hard- und Softwarekomponenten. 
+    \item \textbf{Berechnung der Route}\\
+    Damit das Fahrzeug den festgelegten Zielpunkt erreichen kann, muss eine Route berechent werden, die um alle erkannten Hindernisse herum führt.
+    
+    \textbf{Metriken:}
+
+    \begin{itemize}
+        \item Führt die Route vom Fahrzeug zum Zielpunkt
+        \item Werden alle, in der Karte des Fahrzeuges bekannten, Hindernisse umfahren
+        \item Wie lange dauert die Berechnung der Route. Diese Metrik ist abhängig von den gewählten Hard- und Softwarekomponenten.
+    \end{itemize}
+
+    \item \textbf{Steuerung des Fahrzeuges}\\
+    Um das Auto entlang der berechneten Route zu bewegen, muss es von der Software angesteuert werdeb können.
+
+    \textbf{Metrik:}
+    \begin{itemize}
+        \item Kann das Auto angesteuert werden? $\to$ Ja oder Nein
+    \end{itemize}
+\end{enumerate}
 
 \subsection{Umsetzung}
 Um eine umfangreiche Kommunikation zwischen den Gruppen zu ermöglichen, müssen Kommunikationswege so früh wie möglich erstellt werden.
