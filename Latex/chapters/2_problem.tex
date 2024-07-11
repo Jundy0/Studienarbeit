@@ -21,20 +21,21 @@ Da die Gruppe, welche den Hardware-Teil der Aufgabe übernimmt, diese erst bauen
 Daher ist zur Entwicklung der Software, eine Abstrahierung der Hardware notwendig. Konkret bedeutet das, dass die Schnittstelle zur Steuerung, sowie die Daten der Sensoren simuliert werden müssen, 
 um ein Testen des Algorithmus auch ohne Verfügbarkeit der Hardware zu ermöglichen.
 
-\subsection{Ziel}
-Das Hauptziel der Arbeit ist die Entwicklung und Implementierung eines Algorithmus für ein Modell-Auto. Dieser soll mit Hilfe der Daten diverser Sensoren, Hindernisse
-erkennen und das Auto, unter Verwendung einer bereitgestellten Schnittstelle, um die Hindernisse herum navigieren.
-Hierbei werden Zielkoordinaten an das Fahrzeug übermittelt.
-Diese sollen vollständig autonom von dem Fahrzeug angefahren werden.
+\subsection{Ziele der Arbeit}
+In diesem Abschnitt werden die Ziele der Arbeit und deren Metriken beschrieben.
 
-Da der Hardware-Teil der Arbeit von einer anderen Gruppe an Studenten übernommen wird, 
-ist es notwendig, die Hardware zu abstrahieren um so ein Testen des Algorithmus möglich zu machen. 
-Somit ist das Entwickeln einer solchen Simulation der Hardware ein weiteres Ziel der Arbeit.
-An dieser Stelle werden noch nicht für alle Ziele Metriken definiert. Denn manche Ziele sind abhängig von den gewählten Komponenten für Hard- und Software. 
+Das Ziel auf das hingearbeitet wird, ist die Implementierung eines Algorithmus für ein Modell-Fahrzeug. 
+Durch den Algorithmus soll es möglich sein, das Fahrzeug autonom durch die Umgebung zu einem Zielpunkt zu steuern.
 
-Diese Ziele sind wage definiert, weswegen die Definition von Teilzielen die Evaluation erlichtert.
+Da das Auto selbst parallel von einer anderen Gruppe gebaut wird, steht es erst zu einem späteren Zeitpunkt zur Verfügung. 
+Daher ist die Entwicklung einer Simulation ein erster Zwischenschritt. 
+
+Um den Fortschritt des Projekts und die Ergebnisse messen zu können, werden Metriken für verschiedene Bereiche definiert.
+Die Erfüllung von Zielmetriken ist teilweise abhängig von der Wahl der Hard- und Softwarekomponenten.
+Aus diesem Grund werden an dieser Stelle zunächst die Metriken definiert, die unabhängig von externen Faktoren erfüllt werden können. 
+
 \begin{enumerate}[leftmargin=*]
-    \item \textbf{Simulation einer Umgebung0}\\
+    \item \textbf{Simulation einer Umgebung}\\
     In der Simulation sollen Hindernisse generiert werden können, die von einem simulierten Sensor erfasst werden können.
 
     \textbf{Metrik:} 
