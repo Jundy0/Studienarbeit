@@ -1,8 +1,8 @@
 \section{Simulation des Ausweichalgorithmus}
 
-In diesem Kapitel wird beschrieben, wwarum eine Simulation hilfreich für die Entwicklung eines 
+In diesem Kapitel wird beschrieben, warum eine Simulation hilfreich für die Entwicklung eines 
 sicherheitskritischen Algorithmus, wie zum Beispiel ein Ausweichalgorithmus, sein kann.
-Ausßerdem wird beschrieben, welche Aspekte der Simulation relevant für den Übertrag der Ergebnisse auf die Realität sind.
+Außerdem wird beschrieben, welche Aspekte der Simulation relevant für den Übertrag der Ergebnisse auf die Realität sind.
 
 \subsection{Was ist eine Simulation?}
 \label{Simulation}
@@ -14,7 +14,7 @@ In der Simulationstechnik gibt es unterschiedliche Arten von Simulation.
 In diesem Kontext von Bedeutung ist die Unterscheidung zwischen realer Simulation und Computersimulation. 
 Reale Simulationen kommen zum Einsatz, wenn durch einen Fehler keine Gefahr für Personen und Umwelt besteht.
 Außerdem kann es sein, dass ein Nachstellen der Umweltbedingungen so komplex ist, dass eine Nachbildung am Computer nicht ausreichend möglich oder zeitlich zu aufwendig ist. 
-Computersimulationen kommen dann zum Einsatz, wenn ein Fehler schädliche Folgen für Perosnen und Umwelt herbeiführen könnten und sich die Einflussfaktoren auf das System am Computer nachahmen lassen \cite{Britannica2023}. 
+Computersimulationen kommen dann zum Einsatz, wenn ein Fehler schädliche Folgen für Personen und Umwelt herbeiführen könnten und sich die Einflussfaktoren auf das System am Computer nachahmen lassen \cite{Britannica2023}. 
 Eine Computersimulation kann auch dann genutzt werden, wenn das Erstellen eines realen Modells nicht möglich oder nicht rentabel ist. 
 Ein weiterer Anwendungsfall einer Computersimulation tritt ein, wenn das reale Modell noch in der Entwicklungsphase ist. 
 In diesen Fällen stellt die Simulation sicher, dass erste Versuche mit Algorithmen, die unabhängig vom Modell funktionieren, möglich sind. 
@@ -31,27 +31,27 @@ Ein weiterer Grund für den Einsatz einer Simulation ist ebenfalls in \ref{Simul
 ist ein möglicher Schadensfall. Das Auto ist von den Dimensionen nicht ausreichend groß, 
 um einem Menschen zu verletzten, daher wären bei der Nutzung des realen Fahrzeuges kein Personenschaden zu befürchten.
 Die Problematik in diesem Kontext ist die Anfälligkeit des Autos. 
-Das Auto ist so konstruieert, das es mit wenig Leistung auskommt und nur die Elemente verbaut sind, dass es fahren kann. 
+Das Auto ist so konstruiert, das es mit wenig Leistung auskommt und nur die Elemente verbaut sind, dass es fahren kann. 
 Aus diesem Grund wurden auf schützende Anbauteile wie Stoßdämpfer oder ähnliches verzichtet.
 Deshalb könnte eine Kollision des Fahrzeuges mit einem Hindernis problematisch. 
 Eine Kollision könnte Schäden am Fahrzeug verursachen, die nur aufwendig, oder eventuell gar nicht repariert werden können.
-Da die Algorithmik in frühen Entwicklungsstufen kritsiche, noch unerkannte Fehler beinahlten kann,
+Da die Algorithmik in frühen Entwicklungsstufen kritische, noch unerkannte Fehler beinhalten kann,
 wäre es ein unnötiges Risiko die Software direkt auf dem Fahrzeuge auszuprobieren.
 
-Ein weiterer Grund der für den Einsatz einer Simulation spricht, ist die Abhängigkeit vom Entwicklungsfortschritt des Autos. 
+Ein weiterer Grund, der für den Einsatz einer Simulation spricht, ist die Abhängigkeit vom Entwicklungsfortschritt des Autos. 
 Sollte es dazu kommen, dass das Auto nicht rechtzeitig zur Verfügung steht, 
 kann die Algorithmik zumindest mit Hilfe der Simulation ausprobiert werden.
 
 \subsection{Aufbau der Simulation}
 Um die Ergebnisse und Erfahrungen der Simulation nutzen zu können, ist es wichtig, dass die Inhalte der Simulation möglichst nah an die Realität herankommen.
 Jede vorhandene Abweichung resultiert in erhöhtem Risiko. 
-Ziel ist es eine Umgebung und ein Fahrzeug zu simulieren, um so die notwendigen Daten zu erhalten die der Ausweich-Algorithmus benötigt.
+Ziel ist es eine Umgebung und ein Fahrzeug zu simulieren, um so die notwendigen Daten zu erhalten, die der Ausweichalgorithmus benötigt.
 Dabei sollen Eigenschaften des Fahrzeuges, wie der maximale Lenkwinkel, berücksichtigt werden, um eine möglichst realitätsnahe Simulation zu erhalten.   
 
-Um eine Simulation zu implenentieren, ist zu klären, ob diese Funktionalität in einer Simulation realitätsnah möglich ist, oder ob eine vereinfachte Version simuliert werden muss.
+Um eine Simulation zu implementieren, ist zu klären, ob diese Funktionalität in einer Simulation realitätsnah möglich ist, oder ob eine vereinfachte Version simuliert werden muss.
 
 \subsubsection{Kritische Funktionalitäten}
-Zunächst müssend die Funktionalitäten identifiziert werden, die in der Simulation Probleme veruursachen könnten.
+Zunächst müssend die Funktionalitäten identifiziert werden, die in der Simulation Probleme verursachen könnten.
 \begin{enumerate}
     \item Sensordaten
     \item Umgebung 
@@ -71,14 +71,14 @@ Außerdem bedeutet eine Abweichung in der Datenstruktur eine notwendige Anpassun
 die nicht notwendig wäre, wenn die Datenstruktur übereinstimmen würde.
 Gibt es Unterschiede in der Scan-Frequenz sind die Auswirkungen weniger problematisch. 
 Ist die Scan-Frequenz langsamer als in der Simulation, kann dies durch eine langsamere Geschwindigkeit des Fahrzeuges kompensiert werden.
-Eine Scan-Frequenz, die die Geschwindigkeit der Berechnungen überschreitet, kann durch das auslassen von einzelnen Scans kompensiert werden.
+Eine Scan-Frequenz, die die Geschwindigkeit der Berechnungen überschreitet, kann durch das Auslassen von einzelnen Scans kompensiert werden.
 Die Bewegung des Fahrzeuges zwischen zwei Scans ist so gering, dass das Ignorieren von zum Beispiel jedem zweiten Scan,
 kaum einen Einfluss auf das Ergebnis des Algorithmus haben sollte. 
 
-Die genauen Auswirkungen von Abweichungen der Scan-Frequenz sind nicht bekannt, weswgen hier eine genaue Analyse notwendig wäre.
+Die genauen Auswirkungen von Abweichungen der Scan-Frequenz sind nicht bekannt, weswegen hier eine genaue Analyse notwendig wäre.
 
 \paragraph{Umgebung} \mbox{}\\
-Die Umgebung ist ebenfalls ein essentieller Bestandteil. 
+Die Umgebung ist ebenfalls ein essenzieller Bestandteil. 
 Denn die Umgebung muss so simuliert werden, dass diese von den Sensoren erkannt werden kann. 
 Ist das nicht der Fall, ist jede Simulation der Sensorik unbrauchbar, 
 da dann keine Daten für den Ausweichalgorithmus zur Verfügung stehen und dann auch der simulierte LiDAR keine validen Daten liefert.
@@ -90,20 +90,20 @@ ist die genaue Implementierung der Umgebung nicht von Bedeutung.
 Das Ausweichen ist der zentrale Bestandteil der Software.
 Die Implementierung in der Simulation soll auch in der Implementierung für die Steuerung des realen Autos zum Einsatz kommen.
 Der Algorithmus selbst wird nicht simuliert, aber die verwendeten Daten kommen aus der Simulation. 
-Außerdem wird der Output des Algorithmus in der Simulation Visualisiert. 
-Daher ist es notwendig, den Output in einer Form zu generieren, dass er in der Simulation Visualisiert werdem kann.
+Außerdem wird der Output des Algorithmus in der Simulation visualisiert. 
+Daher ist es notwendig, den Output in einer Form zu generieren, dass er in der Simulation visualisiert werden kann.
 Zum Output gehört die aktuelle Fahrzeugposition und der berechnete Weg zum Ziel.
 
-Das Ziel der Visualisierung ist eine optische Validierung ob der berechnete Weg tatsächlich um die Hindernisse führt. 
+Das Ziel der Visualisierung ist eine optische Validierung, ob der berechnete Weg tatsächlich um die Hindernisse führt. 
 Neben der Validierung des Weges kann auch die Berechnung der Fahrzeugposition in Ansätzen validiert werden, da erkennbar wird,
-ob die neue Position ungefähr dem erwarteten Wert entspricht. Die genaue Position kann durch die Visualisierung alleine nicht validiert werdem.
+ob die neue Position ungefähr dem erwarteten Wert entspricht. Die genaue Position kann durch die Visualisierung alleine nicht validiert werden.
 
 \paragraph{Lokalisierung} \mbox{}\\
 Die Simulation der Lokalisierung ist vor allem zum Testen der Lokalisierungs-Algorithmik wichtig. 
-Der Ausweichalgorithmus kann nur korrekt arbeiten, wenn die aktuelle Position des Fahrzeuges ausreichend genau bestimmt werdem kann.
+Der Ausweichalgorithmus kann nur korrekt arbeiten, wenn die aktuelle Position des Fahrzeuges ausreichend genau bestimmt werden kann.
 Da die Lokalisierung in einer unbekannten Umgebung eine große Herausforderung ist, 
 kann die Simulation genutzt werden, um zuverlässige Daten für den Algorithmus zu bekommen. 
-Dies ist möglich, da die genaue Fahrzeugposition anhand der erfassten Steurerbefehle für das simulierte Fahrzeug bestimmt werden kann.
+Dies ist möglich, da die genaue Fahrzeugposition anhand der erfassten Steuerbefehle für das simulierte Fahrzeug bestimmt werden kann.
 Die Positions-Daten des simulierten Fahrzeugs können zudem als Richtwert genutzt werden
 um die Funktionalität und Genauigkeit der implementierten Lokalisierungs-Algorithmik zu testen.
 
@@ -118,7 +118,7 @@ Die visuelle Darstellung des Fahrzeuges ist rein kosmetisch und kann daher stark
 \label{pr}
 
 In diesem Abschnitt werden die einzelnen Funktionalitäten auf Umsetzbarkeit geprüft. 
-Ist eine Umsetzung möglich, kann diese Funktionalität so in der Simulation implenentiert werden, andernfalls muss eine Alternative erarbeitet werden.
+Ist eine Umsetzung möglich, kann diese Funktionalität so in der Simulation implementiert werden, andernfalls muss eine Alternative erarbeitet werden.
 
 \paragraph{Sensordaten} \mbox{}\\
 Da aktuell nur die LiDAR-Daten genutzt werden, müssen auch nur die Daten dieses Sensors simuliert werden.
@@ -127,37 +127,37 @@ Die Höhe der gesendeten Strahlen entspricht der Höhe des LiDAR-Sensors.
 Wie in \ref{hardware_uebersicht} beschrieben, können Hindernisse mit einer Distanz zwischen 0.15 - 12 Metern akkurat identifiziert werden. 
 Das Datenformat und die Frequenz, mit welcher die Datensätze generiert werden, können dem Datenblatt \cite{Slamtec2020} entnommen werden.
 
-Die Frequenz kann entsprechend simuliert werden und die Daten entsprechend dem Datenblatt genreriert werden. 
+Die Frequenz kann entsprechend simuliert werden und die Daten entsprechend dem Datenblatt generiert werden. 
 Um den Distanzbereich des realen Sensors zu simulieren ist eine entsprechende Skalierung der Simulation notwendig.
-Die Distanzen vom Fahrzeug bis zu den Hindernissen können über etablierte Algotithmen, wie zum Beispiel Ray-Casting, 
-oder eine angepasste Version dieser Algotithmen realisiert werden.
+Die Distanzen vom Fahrzeug bis zu den Hindernissen können über etablierte Algorithmen, wie zum Beispiel Ray-Casting, 
+oder eine angepasste Version dieser Algorithmen realisiert werden.
 
-Die Sensordaten können also gut simuliert werdem, so dass keine Probleme entstehen sollten.
+Die Sensordaten können also gut simuliert werden, sodass keine Probleme entstehen sollten.
 
 \paragraph{Umgebung} \mbox{}\\
 Die Komplexität einer simulierten Umgebung ist als gering einzuschätzen.
-Die Umgebung muss lediglich so implementiert werden, dass basiernd darauf korrekte Sensor-Daten genreriert werdem können.
-Alle anderen Details der Implementierung für die Umgebung können stark vereinfacht werden, so dass eine Umsetzung problemlos möglich sein sollte.
+Die Umgebung muss lediglich so implementiert werden, dass basierend darauf korrekte Sensor-Daten generiert werden können.
+Alle anderen Details der Implementierung für die Umgebung können stark vereinfacht werden, sodass eine Umsetzung problemlos möglich sein sollte.
 
 \paragraph{Ausweichen} \mbox{}\\
 Das Ausweichen um Hindernisse lässt sich in einer bekannten Umgebung mit gegebenem Ziel abstrahieren. 
 Die Abstraktion an dieser Stelle ergibt einen Path-Finding Algorithmus. 
-Für diese Art von Algorithmen gibt es bereits viele Lösungen die unterschiedliche Stärken haben.
-Basierend auf den bereits existierenden Lösungen kann ein Ausweichalgorithmus mit den genannten Einschränkungen ohne Probleme implementiert werdem. 
+Für diese Art von Algorithmen gibt es bereits viele Lösungen die unterschiedlichen Stärken haben.
+Basierend auf den bereits existierenden Lösungen kann ein Ausweichalgorithmus mit den genannten Einschränkungen ohne Probleme implementiert werden. 
 
 \paragraph{Lokalisierung} \mbox{}\\
 Die Simulation der Daten, welche für die Lokalisierung genutzt werden können, ist recht simpel.
 Das liegt daran, dass es sich bei den Daten nur um Positionsdifferenz und Rotationsdifferenz handelt.
 Diese sind einfach zu ermitteln, da die Position und Rotation des simulierten Fahrzeugs einfach ausgelesen werden.
-Somit stellt die Generierung der Bewegungsdaten kein Problem da.
+Somit stellt die Generierung der Bewegungsdaten kein Problem dar.
 
 Diese Daten können jedoch nur im Rahmen der Simulation verwendet werden.
-Auf Grund der fehlender Bewegungsdaten und begrenzter Performance, ist es außerhalb der Simulation nicht möglich zu jeder Zeit die genaue Bewegung zu berechnen. 
+Aufgrund der fehlender Bewegungsdaten und begrenzter Performance,ist es außerhalb der Simulation nicht möglich zu jeder Zeit die genaue Bewegung zu berechnen. 
 Deshalb ist mit Abweichungen zu rechnen, die einen additiven Fehler in der berechneten Position verursachen.
 Bei der Bewegungsberechnung mittels Lokalisierungs-Algorithmus können die simulierten Daten als Referenzwert dienen.
 
 \paragraph{Fahrzeug} \mbox{}\\
-Da die Simulation des Fahrzeuges ist weniger komplex und kann problemlos umgesetzt werdem.
+Da die Simulation des Fahrzeuges ist weniger komplex und kann problemlos umgesetzt werden.
 Es muss lediglich beachtet werden, dass die Ansteuerung des simulierten Fahrzeugs äquivalent zu der Ansteuerung des echten Fahrzeugs ist.
 Außerdem ist auf eine korrekte Simulation des Lenkwinkels und somit der Kurvenfahrt zu achten.
 
