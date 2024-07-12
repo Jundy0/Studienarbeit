@@ -43,7 +43,8 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
     Da ein solcher Sensor mit Lichtstrahlen arbeitet, erschien eine Umsetzung mittels Ray Castig am sinnvollsten.
     Die Simulation der Umgebung und den darin enthaltenen Hindernissen funktionierte bereits.
     Jedoch gab es Probleme bei der Berechnung der Schnittpunkte der simulierten Lichtstrahlen und den Hindernissen.
-    %ToDo: Wie wurde das Problem gelöst
+    Durch eine fehlerhafte Umstellung der Formel entstand ein Bug, wodurch manche Schnittpunkte nicht korrekt berechnet wurden.
+    Durch umfangreiches Debugging konnte der Fehler in der Formel gefunden und behoben werden.
 
     \item \textbf{\ac{icp} Performance} \\
     Ein weiteres Problem war die schlechte Performance der zuerst verwendeten Implementierung eines \acf{icp}-Algorithmus.
@@ -58,8 +59,8 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
     Diese entstanden vor allem dann, wenn das Fahrzeug sich einem Hinderniss näherte.
 
     Um das Problem zu lösen wurde sich dazu entschieden die Implementation der Point Cloud Library zu nutzen. \ref{pcl}
-    Da diese open-source Bibliothek für die Arbeit mit Punktewolken gedacht ist, bietet sie verschiedenste \ac{icp}-Algorithmen,
-    welche nicht nur extrem optimiert sind, sonder auch deutlich mehr Konfigurationsmöglichkeiten als die ursprünglich verwendete Implementation bieten.
+    Da diese open-source Bibliothek für die Arbeit mit Punktewolken gedacht ist, bietet sie verschiedene \ac{icp}-Algorithmen,
+    welche nicht nur optimiert sind, sondern auch deutlich mehr Konfigurationsmöglichkeiten als die ursprünglich verwendete Implementation bieten.
     
     Durch die Nutzung der PCL-Implementation konnte die Laufzeit erheblich verbessert werden
     Somit konnte das Ziel von einer Laufzeit unter 500ms, selbst bei Nutzung von 720 Punkten pro Scan, erreicht werden.
@@ -73,15 +74,38 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
     Das kommt daher, dass das Auto die Scans erzeugt, diese jedoch keine Informationen über die aktuelle Rotation des Fahrzeugs, 
     relativ zum globalen Koordinatensystem der Karte, enthalten.
     
-    So lange sich das Auto nicht drehte und nur vorwärts oder rückwärts fuhr, stimmten die Koordinaten-Achsen des Autos mit den gloablen Koordinaten-Achsen überein.
+    So lange sich das Auto nicht drehte und nur vorwärts oder rückwärts fuhr, stimmten die Koordinaten-Achsen des Autos mit den gloablen Koordinaten-Achsen überein. 
     Somit stimmte auch das Ergebnis des \ac{icp}-Algorithmus.
-    Fuhr das Auto jetzt aber vorwärts entlang der Y-Achse, also um 90 Grad verdreht, nahm der \ac{icp}-Algorithmus das als Bewegung auf der X-Achse war.
+    Siehe Abbildung \ref{fig:coordinatesFixA}
+
+    Fuhr das Auto jetzt aber vorwärts entlang der Y-Achse, also um 90 Grad verdreht
+    nahm der \ac{icp}-Algorithmus das als Bewegung auf der X-Achse war. 
+    Sieh Abbildung \ref{fig:coordinatesFixB}
     Das lag daran, dass er das lokale Koordinatensystem des Autos nutzte, bei der die X-Achse nach vorne (0 Grad) gerichtet ist,
     Sämtliche, nach vorne gerichtete Bewegung, wurde also als Bewegung in X-Richtung interpretiert.
 
+    \begin{figure}[H]
+        \centering
+        \subfloat[a][Umgebung und Source- und Target-Wolke bei Bewegung vorwärts entlang der X-Achse]{
+            \includegraphics[width=12cm]{graphics/movement_x.png}
+            \label{fig:coordinatesFixA}
+        }
+        \\
+        \subfloat[b][Umgebung und Source- und Target-Wolke bei Bewegung vorwärts entlang der Y-Achse]{
+            \includegraphics[width=12cm]{graphics/movement_y.png}
+            \label{fig:coordinatesFixB}
+        }
+        \\
+        \subfloat[c][Source und Target Punktewolke - Bewegung entlang der Y-Achse nach Implementierung des Fix]{
+            \includegraphics[width=6cm]{graphics/movement_y_cloud_fixed.png}
+            \label{fig:coordinatesFixC}
+        }
+        \caption{Vergleich der Bewegung in X und Y Richtung vor und nach dem Fix.}
+    \end{figure}
+
     Das Problem wurde gelöst, indem die Punktewolken, um die Rotation des Autos zum Zeitpunkt der Erstellung der ersten Punktewolke, gedreht wurden.
     Dies hatte zur Folge, dass das Koordinatensystem des Scans auf das globale Koordinatensystem gelegt wurde.
-    Dadurch stimmte die berechnete Translation wieder mit den realen Werten überein.
+    Dadurch stimmte die berechnete Translation wieder mit den realen Werten überein. Siehe Abbildung \ref{fig:coordinatesFixC}
 
     \item \textbf{\ac{icp} Genauigkeit} \\
     Ein weiteres Problem bei der Implementierung des \ac{icp}-Algorithmus war die Genauigkeit des Ergebnis.
@@ -123,12 +147,29 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
     Anfänglich nahm dieser keine Rücksicht auf die eingeschränkten Bewegungsmöglichkeiten des Autos.
     Somit wurden Pfade berechnet, welche z.B. Zick-Zack-Bewegungen enthielten.
     Da sich das Auto nicht auf der Stelle drehen kann, waren diese Pfade nicht für das Auto abfahrbar.
+    Siehe Abbildung \ref{fig:pathWithoutFix}.
 
     Dieses Problem konnte nicht vollständig behohben werden.
     Es wurde versucht, den Winkel in dem sich die Punkte befinden, welche der Algorithmus als nächsten Schritt in Erwähgung zieht, einzuschränken.
-    Das resultierte darin, dass der Pfad nahe am Auto, den Lenkwinkel einhält und der Pfad somit abfahrbar ist.
-    Je weiter der Pfad von dem Auto entfernt ist, desto schlechter wird die Qualität.
-    Da das Auto den Pfad jedoch nach jedem Positions-Update neu berechnet, ist das ein rein optisches Problem, dass sich nicht auf die Funktionalität auswirkt.
+    Das resultierte darin, dass der Pfad nahe am Auto, den Lenkwinkel berücksichtigt.
+    Durch Fehler in der Logik verhält sich der Pfad jedoch nach kurzer Zeit unvorhersehbar.
+    Siehe Abbildung \ref{fig:pathWithFix}.
+
+    Dadurch entstehen unmögliche Pfade weshalb die neue Logik, zum aktuellen Zeitpunk, noch rein experimentell und für die Anwendung ungeeignet ist.
+
+    \begin{figure}[H]
+        \centering
+        \subfloat[a][Berechneter Pfad mit der alten Logik]{
+            \includegraphics[width=12cm]{graphics/path_without_fix.png}
+            \label{fig:pathWithoutFix}
+        }
+        \\
+        \subfloat[b][Berechneter Pfad mit der neuen Logik]{
+            \includegraphics[width=12cm]{graphics/path_with_fix.png}
+            \label{fig:pathWithFix}
+        }
+        \caption{Vergleich der Pfadberechnung vor und nach dem Versuch eines Fix}
+    \end{figure}
 
     Des Weiteren neigte der Algorithmus dazu, Pfade zu generieren, welche duch Wände führten.
     Wie sich herausstellte, war das Problem die Darstellung der Koordinaten.
@@ -156,9 +197,9 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
     Der \ac{lidar}-Sensor kann ebenfalls realitätsnah simuliert werden.
     Die Anzahl an Punkten pro Scan lässt sich variabel einstellen.
     Die Scan-Daten des Sensors lassen sich entweder manuell per Knopfdruck in einer Datei speichern, 
-    oder per Methode in Form einer Matrix auslesen.
+    oder über eine Schnittstelle in Form einer Matrix auslesen.
     Die hierbei ausgelesene Matrix hat die gleiche Datenstruktur wie die Matrix, 
-    die als Ergebnis eines Scans mit dem realen Sensor zurückgegeben wird.
+    die als Ergebnis eines Scans mit dem realen Sensor über dessen Schnittstelle zurückgegeben wird.
 
     \item \textbf{Map-Erstellung} \\
     Die Sensordaten können genutzt werden um eine Map aufzubauen.
@@ -415,7 +456,7 @@ umgesetzt werden muss, da das Verhalten der Simulation nicht für alle Bereiche 
 
 \paragraph{Kommunikation} \mbox{}\\
 Die Kommunikation innerhalb der Gruppe war gut.
-Regelmäßige Meetings und absprachen sorgten für einen größtenteils reibungslosen Ablauf.
+Regelmäßige Meetings und Absprachen sorgten für einen größtenteils reibungslosen Ablauf.
 
 Die Kommunikation mit der anderen Gruppe hingegen war eher mangelhaft.
 Meetings wurden selten gehalten und das Kommunizieren wichtiger Informationen dauerte teilweise viel zu lange.
