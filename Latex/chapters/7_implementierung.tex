@@ -10,7 +10,7 @@ Der gesamte Aufbau der Implementierung ist in drei Projekte aufgeteilt: Core, Si
 
 Wie bereits beschrieben enthält das Core-Projekt die Implementierungen der verwendeten Algorithmen und die Logik zum Steuern des Fahrzeugs. Damit die Algorithmen auf Daten von Sensoren, sowie die Steuerung des Autos zuzugreifen kann, werden Interfaces als Schnittstellen verwendet, welche die Funktionen für die Algorithmen bereitstellen. Diese Interfaces werden im Core-Projekt lediglich definiert und nicht implementiert. Die Implementierung der Interfaces erfolgt in den Simulation- und \ac{lidar}-Projekt. Dort können die Interfaces so implementiert werden, dass durch Verwendung des Interfaces die richtige Aktion im jeweiligen Projekt ausgeführt wird. So stellt z. B. das Interface zum Auslesen der \ac{lidar} Daten im Simulations-Projekt Daten, welche den aktuellen Stand der Simulation widerspiegeln, und im \ac{lidar}-Projekt Daten, welche über die RPLiDAR SDK aus dem verbauten \ac{lidar} ausgelesen wurden, zurückgegeben werden. Damit die Implementierungen der Interfaces an das Core-Projekt übergeben werden können und abhängig von der aktuellen Verwendung des Core-Projektes die richtige Implementierung verwendet wird, wird das Dependency Injection Design Pattern angewandt. Dieses Design Pattern besagt, dass Abhängigkeiten, wie z. B. die Logik für das Auslesen der \ac{lidar} Daten, ausgelagert und über festgelegt Schnittstellen von einem Injector zur Verfügung gestellt werden. In diesem Projekt werden die Schnittstellen in Form der Implementierungen der Interfaces bei der Initialisierung der Klasse, welche die Abhängigkeiten, also die Interfaces, benutzt von dem aufrufendem Code übergeben, welcher in diesem Fall als Injector fungiert \cite{dependencyInjection}. 
 
-Neben den Interfaces für das Auslesen der \ac{lidar} Daten und der Steuerung des Fahrzeugs befinden sich außerdem noch den Ausweichalgorithmus und den SLAM-Algorithmus, welcher ebenfalls durch Interfaces abstrahiert sind, damit auch diese einfach ausgetauscht werden können. Die gesamte Logik für das autonome Fahrzeug ist in der Klasse \dq SelfdrivingVehicle\dq\space gebündelt. Diese besitzt eine Methode \dq update\dq, welche in der Hauptschleife des jeweiligen Programms aufgerufen wird. Der Ablauf in der \dq update\dq\space Methode, ist:
+Neben den Interfaces für das Auslesen der \ac{lidar} Daten und der Steuerung des Fahrzeugs befinden sich außerdem noch den Ausweichalgorithmus und den SLAM-Algorithmus, welcher ebenfalls durch Interfaces abstrahiert sind, damit auch diese einfach ausgetauscht werden können. Die gesamte Logik für das autonome Fahrzeug ist in der Klasse \textit{SelfdrivingVehicle} gebündelt. Diese besitzt eine Methode \textit{update}, welche in der Hauptschleife des jeweiligen Programms aufgerufen wird. Der Ablauf in der \textit{update} Methode, ist:
 
 \begin{enumerate}[leftmargin=*]
 
@@ -36,7 +36,7 @@ Da die gesamte Ausführung alle Schritte nicht jeden Durchlauf der Schleife nich
 
 \subsubsection{Simulation-Projekt}
 
-Die Simulation dient dazu, die Logik aus dem Core-Projekt zu testen, ohne dass das eigentliche Fahrzeug benötigt wird. Damit das Fahrzeug sowohl gesteuert als auch gesehen werden kann, was durch die Algorithmen berechnet wurde. Deshalb wurde die Simulation in zwei Fenster aufgeteilt, welche bei Ausführung des Programms zusammen geöffnet werden. Das erst Fenster, nachfolgend Control Window genannt, dient zur Steuerung des Fahrzeugs und der Simulation im allgemein. Es stellt in Bezug auf das autonome Fahrzeug die Realität dar. Das zweite Fenster zeigt die Ergebnisse der Algorithmen. Dabei wird die Karte, die Position und Rotation des Fahrzeugs auf der Karte, sowie der berechnete Pfad mit dem aktuellen Ziel angezeigt. In Bezug auf das autonome Fahrzeug stellt dieses Fenster die Sicht des Fahrzeugs dar. Nachfolgend wird die Funktionen und die Logik der beiden Fenster genauer erläutert. Außerdem wird noch SFML vorgestellt, was für die Umsetzung der grafischen Oberflächliche benutzt wurde. 
+Die Simulation dient dazu, die Logik aus dem Core-Projekt zu testen, ohne dass das eigentliche Fahrzeug benötigt wird. Damit das Fahrzeug sowohl gesteuert als auch gesehen werden kann, was durch die Algorithmen berechnet wurde. Deshalb wurde die Simulation in zwei Fenster aufgeteilt, welche bei Ausführung des Programms zusammen geöffnet werden. Das erst Fenster, nachfolgend Control Window genannt, dient zur Steuerung des Fahrzeugs und der Simulation im allgemein. Es stellt in Bezug auf das autonome Fahrzeug die Realität dar. Das zweite Fenster zeigt die Ergebnisse der Algorithmen. Dabei wird die Karte, die Position und Rotation des Fahrzeugs auf der Karte, sowie der berechnete Pfad mit dem aktuellen Ziel angezeigt. In Bezug auf das autonome Fahrzeug stellt dieses Fenster die Sicht des Fahrzeugs dar. Die Hauptschleife der Simulation, welche das Control und Visualize Window aufruft, ist in einem Simulation-Manager enthalten. Dieser dient zusätzlich auch als Einstiegs- und Endpunkt der gesamten Simulation [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/simulationManager.cpp}{src/simulation/src/simulationManager.cpp}]. Nachfolgend wird die Funktionen und die Logik der beiden Fenster genauer erläutert. Außerdem wird noch SFML vorgestellt, was für die Umsetzung der grafischen Benutzeroberflächliche benutzt wurde. Der gesamte Ablauf der Simulation, mit Verwendung des Core-Projektes kann im Anhang \ref{fig:simulation_sequence_diagram} eingesehen werden. 
 
 \paragraph{SFML} \mbox{}
 
@@ -44,17 +44,15 @@ SFML (Simple and Fast Multimedia Library) ist eine Library, mit welcher grafisch
 
 \paragraph{Control Window} \mbox{}
 
-In dem Control Window kann das simulierte Fahrzeug direkt über die \dq WASD\dq-Tasten gesteuert werden. Außerdem können weitere Hindernisse platziert und das Ziel geändert werden, zu welchem das Fahrzeug fahren soll. 
+In dem Control Window kann das simulierte Fahrzeug direkt über die \textit{WASD}-Tasten gesteuert werden. Außerdem können weitere Hindernisse platziert und das Ziel geändert werden, zu welchem das Fahrzeug fahren soll. Die Hindernisse können durch gedrückthalten der linken Maustaste und ziehen der Maus in der gewünschten Größe an dem gewünschten Ort platziert werden. Das Ziel kann ebenfalls durch das Benutzen der linken Maustaste an eine neue Postion platziert werden. Die beiden Funktionen können nicht gleichzeitig gemacht werden, weshalb durch Drücken der Leertaste zwischen den beiden Funktionen gewechselt werden muss. 
 
-TODO Timo
-
-[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/controlWindow.cpp}{src/simulation/src/controlWindow.cpp}]. 
+Das Control Window enthält zwei Methoden \textit{update} und \textit{render}, welche in der Hauptschleife des Simulation-Managers aufgerufen werden. In der \textit{update} Methode werden zunächst Events des Benutzers, wie die Steuerung des Fahrzeugs oder Schließen des Fensters, angerufen und verarbeitet. Danach wird die \textit{update} Methode des \textit{SelfdrivingVehicle} aus dem Core-Projekt aufgerufen, wodurch die Logik des autonomen Fahrzeugs ausgeführt wird. Da aktuell die Simulation ausgeführt wird, wird hierbei der simulierte \ac{lidar} verwendet und das simulierte Fahrzeug gesteuert. In der \textit{render} Methode werden die visuellen Komponenten, wie das Fahrzeug, die Hindernisse oder die Rays des simulierten Lidars, auf dem Fenster, über SFML, dargestellt [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/controlWindow.cpp}{src/simulation/src/controlWindow.cpp}]. 
 
 \paragraph{Visualize Window} \mbox{}
 
-TODO Timo
+Über das Visualizer Window werden die Ergebnisse ausgeführten Logik des autonomen Fahrzeugs angezeigt. Dazu gehören die Karte, die Position und Rotion des Fahrzeugs, welche durch den SLAM-Algorithmus berechnet wurden, und das Ziel mit dem berechneten Pfad, welcher durch den Ausweichalgorithmus anhand der aktuellen Karte, Position und Rotion berechnet wurden. 
 
-[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/visualizeWindow.cpp}{src/simulation/src/visualizeWindow.cpp}]. 
+Wie auch das Control Window, besitzt das Visualize Window eine \textit{update} und \textit{render} Methode, welche auch in der Hauptschleife des Simulation-Managers aufgerufen werden. In der \textit{update} Methode werden lediglich die Events des Benutzers abgerufen und verarbeitet und in der \textit{render} Methode werden die wieder die visuellen Komponenten dargestellt [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/simulation/src/visualizeWindow.cpp}{src/simulation/src/visualizeWindow.cpp}]. 
 
 \subsubsection{LiDAR-Projekt}
 
@@ -192,7 +190,7 @@ Die Kosten, die entstehen, wenn g-Cost und h-Cost summiert werden.
 
 \end{enumerate}
 
-Bei einer Schleife wird der Punkt mit dem niedrigsten f-Cost aus der Liste genommen und überprüft, ob dieser dem Ziel entspricht. Sollte dies der Fall sein, kann der Algorithmus abbrechen und den Pfad rekonstruieren. Entspricht der Punkt nicht dem Ziel, werden die Nachbarn des Punktes zur Liste hinzugefügt, falls an diese keine Hindernisse sind. Für die Nachbarn werde die Kosten berechnet, wobei für g-Cost die g-Cost des aktuellen Punktes genommen und um eins erhöht wird. Außerdem wird der aktuelle Punkt als Parent-Punkt alle Nachbarn gesetzt. Die Schleife wird nun so lange wiederholt, bis keine Einträge mehr in der Liste sind oder der Punkt für das Ziel gefunden ist. Um den Pfad zu rekonstruieren wir von dem Ziel die jeweiligen Parent-Punkte nachgefahren, bis der Startpunkt erreicht wurde \cite{TODO Quelle A*}. 
+Bei einer Schleife wird der Punkt mit dem niedrigsten f-Cost aus der Liste genommen und überprüft, ob dieser dem Ziel entspricht. Sollte dies der Fall sein, kann der Algorithmus abbrechen und den Pfad rekonstruieren. Entspricht der Punkt nicht dem Ziel, werden die Nachbarn des Punktes zur Liste hinzugefügt, falls an diese keine Hindernisse sind. Für die Nachbarn werde die Kosten berechnet, wobei für g-Cost die g-Cost des aktuellen Punktes genommen und um eins erhöht wird. Außerdem wird der aktuelle Punkt als Parent-Punkt alle Nachbarn gesetzt. Die Schleife wird nun so lange wiederholt, bis keine Einträge mehr in der Liste sind oder der Punkt für das Ziel gefunden ist. Um den Pfad zu rekonstruieren wir von dem Ziel die jeweiligen Parent-Punkte nachgefahren, bis der Startpunkt erreicht wurde \cite{hartFormalBasisHeuristic1968}. 
 
 Umgesetzt wurde der Algorithmus mit einer Priority Queue, welche immer das Element mit der geringsten f-Cost zurückgibt. Außerdem wird jeweils eine Matrix für f-Cost, g-Cost und das Festhalten der Parent-Punkten benutzt. In der Schleife werden Nachbarn nur zur Priority Queue hinzugefügt, wenn dies innerhalb der Karte und der Wert an diesem Punkt kleiner als \(PROB\_OCC\) ist, was bedeutet, dass dort wahrscheinlich kein Hindernis vorhanden ist. Da ein Punkt auch über mehrere Punkte angefahren werden kann, wird der Punkt nur in die Priority Queue hinzugefügt, wenn der g-Cost größer ist, als der aktuell in der Matrix hinterlegte Wert [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/evasionAStar.cpp}{src/core/src/evasionAStar.cpp}]. 
 
@@ -298,9 +296,13 @@ void EvasionControl::inflateObstacles()
 
 \paragraph{Natürliches Fahrtverhalten} \mbox{}
 
+Die aktuelle Implementierung des A*-Algorithmus, ergibt zwar einen Pfad, welcher nicht über Hindernisse und, durch Ostacle Inflation, zu nah an einem Hindernis vorbeigeht, jedoch ist der resultierende Pfad für das autonome Fahrzeug dennoch nicht befahrbar. Das liegt daran, dass die jeweilige aktuelle Ausrichtung des Fahrzeugs nicht beachtet wird und dadurch ein Pfad resultiert, bei welchem das Fahrzeug sich auf der Stelle drehen müsste. Da dies nicht möglich ist, muss eine Optimierung des Algorithmus vorgenommen werden. Diese Optimierung kann gemacht werden, indem 
+
 TODO Timo
 
 \paragraph{Ansteuerung des autonomen Fahrzeugs} \mbox{}
+
+Nachdem ein valider Pfad erstellt wurde, muss dieser mit Fahrzeug abgefahren wurde. 
 
 TODO Timo
 
