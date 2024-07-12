@@ -1,5 +1,5 @@
 \section{Überblick Hardware und Software}
-In diesem Kapitel wird die Hardware und Software beschriben, welche zur Bearbeitung der Studienarbeit zur Verfügung stehen.
+In diesem Kapitel wird die Hardware und Software beschrieben, welche zur Bearbeitung der Studienarbeit zur Verfügung stehen.
 Zusätzlich wird die Technologie-Entscheidung erläutert und begründet.
 
 \subsection{Hardware}
@@ -8,8 +8,8 @@ Dieser Abschnitt beschreibt die Hardware, welche für die Entwicklung des Auswei
 
 \begin{enumerate}[leftmargin=*]
     \item \textbf{Raspberry Pi 4 Model B} \\
-    Der Raspberry Pi 4 ist ein single-board-computer, welcher im Jahr 2019 auf dem Markt erschien. 
-    Er besitzt eine ARM-basierte 64-bit CPU, welche mit 1.5GHz getaktet ist. Das Modell, welches im Rahmen unserer Studienarbeit genutzt wird, besitzt 8GB Arbeitsspeicher. 
+    Der Raspberry Pi 4 ist ein Single-Board-Computer, welcher im Jahr 2019 auf dem Markt erschien. 
+    Er besitzt eine ARM-basierte 64-Bit CPU, welche mit 1.5GHz getaktet ist. Das Modell, welches im Rahmen unserer Studienarbeit genutzt wird, besitzt 8 GB Arbeitsspeicher. 
     Außerdem verfügt der Raspberry Pi 4 über 40 \acf{gpio} Pins, welche zur Kommunikation mit den Sensoren und der Steuerungs-Schnittstelle genutzt werden können. \cite{RasPi2024}
 
     \item \textbf{Slamtec RPLiDAR A1M8-R6} \\
@@ -17,9 +17,9 @@ Dieser Abschnitt beschreibt die Hardware, welche für die Entwicklung des Auswei
     Er hat eine effektive Reichweite von 0.15 bis 12 Meter und bei einer Scan-Rate von 5.5 Scans pro Sekunde, sowie eine Scan-Frequenz von 8000 Hz, eine Auflösung von weniger als einem Grad. \cite[p. 8]{Slamtec2020}
     
     \item \textbf{Weitere Sensoren} \\
-    Da der \ac{lidar}-Sensor nur zweidimensionale Scans macht, können Hindernisse, welche kleiner wie die Scan-Höhe des \ac{lidar} sind, von diesem nicht erfasst werden. 
+    Da der \ac{lidar}-Sensor nur zweidimensionale Scans macht, können Hindernisse, welche kleiner als die Scan-Höhe des \ac{lidar} sind, von diesem nicht erfasst werden. 
     Daher sind weitere Sensoren, wie z.B. Ultraschall-Sensoren notwendig, um auch niedrige Hindernisse erkennen zu können. 
-    Außerdem wäre eine Sensor zur Bestimmung des aktuellen Lenkwinkels und ein weiterer Sensor zum Bestimmen der aktuellen Geschwindigkeit sinnvoll. 
+    Außerdem wäre ein Sensor zur Bestimmung des aktuellen Lenkwinkels und ein weiterer Sensor zum Bestimmen der aktuellen Geschwindigkeit sinnvoll. 
     Die Daten dieser Sensoren könnten bei der Ermittlung der Position im Raum von Nutzen sein. 
 \end{enumerate}
 
@@ -48,30 +48,30 @@ Dieser Abschnitt erläutert die Entscheidungen für die diversen Technologien, w
 \paragraph{Hardware} \mbox{}\\
 Die Auswahlmöglichkeiten der Hardware sind sehr beschränkt.
 Da die notwendigen Berechnungen einiges an Leistung benötigen, wird sich für das leistungsstärkste, verfügbare Modell des Raspberry Pi entschieden.
-Der Raspberry Pi 4 Model B bietet neben einer 64-bit CPU mit ausreichender Leistung, auch 8 GB Arbeitsspeicher und einen Formfakter der klein genug ist, um eine Integration in das Fahrzeug zu ermöglichen.
+Der Raspberry Pi 4 Model B bietet neben einer 64-Bit CPU mit ausreichender Leistung, auch 8 GB Arbeitsspeicher und einen Formfaktor der klein genug ist, um eine Integration in das Fahrzeug zu ermöglichen.
 Zusätzlich bietet er ausreichend Schnittstellen um mit den diversen Sensoren und Motoren kommunizieren zu können.
 
 Als Hauptsensor für das Messen der Umgebung steht nur der RPLiDAR A1M8-R6 von Slamtec zur Verfügung.
 Weitere Sensorik soll zwar auf dem Auto verbaut werden, jedoch erstmal nicht von der Software berücksichtigt werden.
 Der Grund hierfür ist der Zeitpunkt, zu dem die Sensorik verbaut werden kann.
 Die Verarbeitung der Daten des \ac{lidar} kann ohne Auto oder per Simulation getestet werden, wohingegen es bei der anderen Sensorik sehr stark auf die Integration in dem Fahrzeug ankommt.
-Da diese jedoch erst zum Schluss in dem Fahrzeug verbaut werden, wäre eine Software-Integration dieser Sensorik nur schwer rechtzeitig umzusetzten.
+Da diese jedoch erst zum Schluss in dem Fahrzeug verbaut werden, wäre eine Software-Integration dieser Sensorik nur schwer rechtzeitig umzusetzen.
 
 \paragraph{Software} \mbox{}\\
 Maßgeblich verantwortlich für die Auswahl der Programmiersprache, ist die Auswahl der Software, welche verwendet wird um den \ac{lidar} anzusteuern.
 
-Die eine Möglichkeit, wäre das nutzen des offiziellen Slamtec RPLLiDAR \ac{ros}-Paket.
+Die eine Möglichkeit wäre das Nutzen des offiziellen Slamtec RPLLiDAR \ac{ros}-Paket.
 Bei ROS handelt es sich jedoch um eine sehr umfangreiche Software. 
 Diese kommt mit vielen, für die Studienarbeit nicht relevanten, Komponenten daher.
 Des Weiteren benötigt \ac{ros} ein anderes, nicht für den Raspberry Pi optimiertes, Betriebssystem wie Ubuntu.
-Das hat zu Folge, das weitere Resourcen für das Betriebssystem benötigt werden und nicht für die notwendigen Berechnungen zur Verfügung stehen.
+Das hat zu Folge, das weitere Ressourcen für das Betriebssystem benötigt werden und nicht für die notwendigen Berechnungen zur Verfügung stehen.
 
-Die Alternative zur Verwendung von \ac{ros}, ist das nutzen einer SDK.
+Die Alternative zur Verwendung von \ac{ros}, ist das Nutzen einer SDK.
 Die Python-Ports der SDK sind alle schon einige Jahre alt und haben teilweise keine wirklich übersichtliche Struktur.
-Die offizielle C++ SDK hingegen wird immernoch regelmäßige geupdated und bietet eine umfangreiche Dokumentation sowie einige Beispielprogramme.
+Die offizielle C++ SDK hingegen wird immer noch regelmäßige upgedatet und bietet eine umfangreiche Dokumentation sowie einige Beispielprogramme.
 
 Um die begrenzt vorhandenen Ressourcen des Raspberry Pi optimal nutzen zu können, ist daher die Nutzung der C++ SDK und einem entsprechenden Interface die beste Lösung.
-Da die SDK in C++ geschrieben ist, macht es Sinn, die restliche Software ebenfalls in C++ zu implementieren.
+Da die SDK in C++ geschrieben ist, ergibt es Sinn, die restliche Software ebenfalls in C++ zu implementieren.
 Zusätzlich verbessert die Nutzung einer kompilierten Programmiersprache wie C++ die Laufzeit der Software was die Reaktionszeit des Autos verbessert.
 
 \newpage
