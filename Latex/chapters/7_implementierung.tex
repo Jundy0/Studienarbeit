@@ -168,11 +168,45 @@ void A1LidarSensor::getScanData(lidar_point_t *data, size_t count)
 \subsubsection{Umsetzung von SLAM}
 \label{slamImplementierung}
 
-TODO Justin
+Zur Umsetzung einer Lösung des \ac{slam} Problems, welches in Kapitel \ref{slam} beschrieben wurde, sind zwei Implementierungen notwendig.
+Zum Einen die Implementierung einer Möglichkeit eine Karte der unbekannten Umgebung aufzuabauen 
+und zum Anderen die Implementierung einer Möglichkeit die Position des Fahrzeugs innerhalb dieser Karte zu bestimmen.
+
+Die gesamte Inplementierung wird durch den \textit{SlamHandler} vom Rest des Codes abstrahiert.
+Somit wird für jedes Update lediglich die update Funktion des \textit{SlamHandler} durch das \textit{SelfdrivingVehicle} aufgerufen.
+Das entsprechende Sequenzdiagramm befindet sich im Anhang. \ref{fig:slam_sequence_diagram}
+
+\paragraph{\textit{Particle}-Klasse} \mbox{}
+Ursprünglich war geplant \ac{slam} mittels eines Partikel Filter umzusetzten.
+Ein Beispiel für einen solchen Filter ist der FastSLAM-Algorithmus \cite{montemerlo2002fastslam}.
+Dieser Plan wurde jedoch, aufgrund der hohen Komplexität eines solchen Filters und der begrenzten Rechenleistung und Zeit, verworfen.
+
+Im aktuellen Stand wird somit nur ein einzelnes Partikel bei der Initialisierung des \textit{SlamHandler} erstellt.
+Das \textit{Particle}-Objekt repräsentiert den aktuellen Zustand des Roboters.
+In ihm werden Position, Rotation und Karte, sowie eine Instanz des \textit{PclHandler} gespeichert.
+
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/particle.cpp}{src/core/src/particle.cpp}]
+
+Neben Get-Methoden für die Karte, Position und Rotation gibt es Methoden zum Aktualisieren des Partikels.
+Diese aktualisieren sowohl die Karte, als auch die Position und Rotation des Partikels.
+Auf den Ablauf wird in dem Kapitel \ref{position_update} eingegangen.
+
+\paragraph{Erstellung einer Karte}
+Wie bereits in Kapitel \ref{mapping} beschrieben, wird für den Aufbau der Karte eine Occupancy Grid Map verwendet.
+Hierzu gibt es die entsprechende Klasse \textit{OccupancyGrid}.
+
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/occupancyGrid.cpp}{src/core/src/occupancyGrid.cpp}]
+
+
+
+\paragraph{Aktualisierung der Position und Rotation}
+\label{position_update}%TODO
+
+
 
 \subsubsection{Umsetzung des Ausweichalgorithmus}
 
-Ein wichtiger Teil des autonomen Fahrzeugs ist Umfahren oder Ausweichen von Hindernissen. In dieser Arbeit wird hierfür ein Pathfinding-Algorithmus verwendet, welcher mit der Karte, Position und Rotation des Fahrzeugs, welche durch SLAM mit den \ac{lidar} Daten generiert wurde, sowie einem Zielpunkt, einem Pfad um die erkannten Hindernisse findet. Aktuell wird hierfür der A*-Pathfinding-Algorithmus verwendet. Dieser arbeitet mit einer Liste an Punkten, welche die abgelaufenen Punkte beinhaltet. Außerdem wird drei Arten von Kosten gearbeitet, welche einem Punkt zugewiesen werden und den Aufwand für den Pfad widerspiegeln, wenn dieser Punkt im Pfad enthalten ist:
+Ein wichtiger Teil des autonomen Fahrzeugs ist Umfahren oder Ausweichen von Hindernissen. In dieser Arbeit wird hierfür ein Pathfinding-Algorithmus verwendet, welcher mit der Karte, Position und Rotation des Fahrzeugs, welche durch SLAM mit den \ac{lidar} Daten generiert wurde, sowie einem Zielpunkt, einem Pfad um die erkannten Hindernisse findet. Aktuell wird hierfür der A*-Pathfinding-Algorithmus verwendet. Dieser arbeitet mit einer Liste an Punkten, welche die abgelaufenen Punkte beinhaltet. Außerdem wird mit drei Arten von Kosten gearbeitet, welche einem Punkt zugewiesen werden und den Aufwand für den Pfad widerspiegeln, wenn dieser Punkt im Pfad enthalten ist:
 
 \begin{enumerate}[leftmargin=*]
 
