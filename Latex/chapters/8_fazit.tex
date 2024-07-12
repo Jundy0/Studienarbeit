@@ -6,13 +6,12 @@ Des Weiteren wird auf Möglichkeiten zur Optimierung und sinnvolle Änderungen e
 In diesem Kapitel wird auf die diversen Probleme eingegangen, welche während der Bearbeitung der Studienarbeit aufkamen.
 Zusätzlich wird auch darauf eingegangen, was für Ergebnisse erzielt wurden und ob die Ziele der Arbeit erreicht sind.
 
-\paragraph{Probleme} \mbox{}\\
-\label{probleme}
-In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst werden mussten.
+\paragraph{Probleme} \label{probleme}\mbox{}\\
+In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht wurden zu lösen.
 
 \begin{enumerate}[leftmargin=*]
     \item \textbf{Kommunikation mit dem \ac{lidar}} \\
-    Das erste größere Problem welches gelöst werden musste, war die Kommunikation mit dem LiDAR.
+    Das erste größere Problem welches gelöst werden musste, war die Kommunikation mit dem \ac{lidar}.
     Der \ac{lidar} kommuniziert über eine serielle Schnittstelle.
     Zusätzlich gibt es einen Pin zur Steuerung der Motordrehzahl. 
     Siehe Abbildung \ref{fig:lidar_pins}
@@ -38,7 +37,7 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
     Um den Motor zu steuern musste ein entsprechendes PWM-Signal an dem korrekten Pin des Raspberry Pi manuell gesetzt werden.
     Zur Vereinfachung dieses Prozess wurde ein Interface implementiert, welches den Motor bei Bedarf automatisch startet und stoppt.
 
-    \item \textbf{Simulation des LiDAR} \\
+    \item \textbf{Simulation des \ac{lidar}} \\
     Das größte Problem, welches bei der Entwicklung der Simulation auftrat, war die Umsetzung der \ac{lidar} Simulation.
     Da ein solcher Sensor mit Lichtstrahlen arbeitet, erschien eine Umsetzung mittels Ray Castig am sinnvollsten.
     Die Simulation der Umgebung und den darin enthaltenen Hindernissen funktionierte bereits.
@@ -105,7 +104,8 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
 
     Das Problem wurde gelöst, indem die Punktewolken, um die Rotation des Autos zum Zeitpunkt der Erstellung der ersten Punktewolke, gedreht wurden.
     Dies hatte zur Folge, dass das Koordinatensystem des Scans auf das globale Koordinatensystem gelegt wurde.
-    Dadurch stimmte die berechnete Translation wieder mit den realen Werten überein. Siehe Abbildung \ref{fig:coordinatesFixC}
+    Dadurch stimmte die berechnete Translation wieder mit den realen Werten überein. 
+    Siehe Abbildung \ref{fig:coordinatesFixC}
 
     \item \textbf{\ac{icp} Genauigkeit} \\
     Ein weiteres Problem bei der Implementierung des \ac{icp}-Algorithmus war die Genauigkeit des Ergebnis.
@@ -116,7 +116,8 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche gelöst w
 
     Es fiel auf, das der \ac{icp}-Algorithmus, selbst mit etwas lockerer gesetzten Parametern ausreichend gute Ergebnisse liefert.
     Nur in seltenen Fällen war ein Ergebnis suboptimal, was sich durch einen hohen Fittness-Wert des Ergebnis auszeichnete.
-    Um die Laufzeit weiter zu verbessern wurde eine interne Schleifen implementiert, welche den Fitness-Score des Ergebnis als Abbruchkriterium hat.
+    Um die Laufzeit weiter zu verbessern wurde eine zusätzliche Schleifen um den ICP-Algorithmus herum implementiert. \ref{slamImplementierung}
+    Diese hat den Fitness-Score des Iterations-Ergebnis als Abbruchkriterium.
     Somit wird der \ac{icp}-Algorithmus mindestens einmal durchgeführt.
     Sollte das Ergebnis nicht genau genug sein, wird der Algorithmu ein weiteres Mal aufgerufen.
     Diesmal mit dem vorherigen Ergebnis als Input.
@@ -190,7 +191,7 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
     Das Fahrzeug selbst wird so simuliert, dass es über entsprechende Steuerungsbefehle gesteuert werden kann.
     Des Weiteren wird auf den maximalen Lenkwinkel rücksicht genommen.
     
-    Ein Kollisionserkennung sowie manuelle Steuerung wurde ebenfalls, zu Debug-Zwecken, implementiert.
+    Ein Kollisionserkennung, sowie manuelle Steuerung wurde ebenfalls, zu Debug-Zwecken, implementiert.
     Eine statische Umgebung kann ebenfalls erfolgreich simuliert werden.
     Neben den zum Start bereits vorhandenen Hindernissen, können weitere Hindernisse manuell hinzugefügt werden.
     
@@ -211,6 +212,19 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
 
     Sofern die Fahrzeug-Position zum Zeitpunkt des Scans bekannt ist, kann die Karte beliebig erweitert werden.
     Hierbei ist darauf zu achten, dass die Fahrzeug-Position nicht außerhalb der Karte liegt.
+    Siehe Abbildung \ref{fig:mapErstellung}
+
+    \begin{figure}[H]
+        \centering
+        \subfloat[a][Map zum Zeitpunkt t1]{
+            \includegraphics[width=6cm]{graphics/map_generation_1.png}
+        }
+        \subfloat[b][Map zu einem späteren Zeitpunkt t2]{
+            \includegraphics[width=6cm]{graphics/map_generation_2.png}
+        }
+        \caption{Beispiel einer Erweiterungen der Karte durch Bewegung des Fahrzeug}
+        \label{fig:mapErstellung}
+    \end{figure}
 
     \item \textbf{Lokalisierung} \\
     Zur Lokalisierung des Fahrzeugs wird ein \ac{icp}-Algorithmus der Point Cloud Library verwendet.
@@ -234,12 +248,34 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
     
     Dem Path-Finding-Algorithmus wird die aktuelle Position des Roboters, sowie die Zielkoordinate übergeben.
     Daraufhin wird, mit Hilfe der Map-Daten, ein Pfad um die Hindernisse herum berechnet.
-    Bei der Berechnung des Pfades wird auf den maximalen Lenkwinkel des Autos Rücksicht genommen.
+    Siehe Abbildung \ref{fig:pathfinding}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=12cm]{graphics/pathfinding.png}
+        \caption{Darstellung eines Pfad um ein Hinderniss herum}
+        \label{fig:pathfinding}
+    \end{figure}
+
+    Bei der Berechnung des Pfades wird nicht auf den maximalen Lenkwinkel des Autos Rücksicht genommen.
     Eine autonome Steuerung ist noch nicht möglich, da der Algorithmus weder mit dem simulierten noch dem realen Auto kommunizieren kann.
 
     Da der Pfad bei jedem Positions-Update neu berechnet wird, können so auch Ziele angefahren werden,
     welche sich in noch unbekanntem Gebiet der Karte befinden.
     In dem Fall wird die Karte erstellt sobald der Bereich für den \ac{lidar} sichtbar wird.
+    Siehe Abbildung \ref{fig:pathfindingUnknown}
+
+    \begin{figure}[H]
+        \centering
+        \subfloat[a][Pfad mit Ziel in unbekanntem Gebiet]{
+            \includegraphics[width=12cm]{graphics/pathfinding_unknown_1.png}
+        }
+        \\
+        \subfloat[b][Pfad nachdem das Gebiet erkundet wurde]{
+            \includegraphics[width=12cm]{graphics/pathfinding_unknown_2.png}
+        }
+        \caption{Berechnung eines Pfades mit Ziel in einem unbekanntem Gebiet}
+        \label{fig:pathfindingUnknown}
+    \end{figure}
 
     Die Eingabe der Zielkoordinaten erfolgt über die Simulierte Umgebung.
 \end{enumerate}
@@ -280,8 +316,7 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
 
     \textbf{Beschreibung des Ergebnisses:}
 
-    In der Simulation werden alle Hindernisse korrekt erkannt, auch wenn diese erst zur Laufzeit hinzugefügt werden. 
-    % Wäre hier ein Bild hilfreich?     
+    In der Simulation werden alle Hindernisse korrekt erkannt, auch wenn diese erst zur Laufzeit hinzugefügt werden.   
 
     \textbf{Metrik erfüllt:}
     \begin{itemize}
@@ -291,10 +326,10 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
     
     \textbf{Übertrag auf die Realität:}
 
-    Der LiDAR generiert 2D-Daten. Da die Simulation ebenfalls nur 2D ist und auch nicht von äußeren Einflüssen betroffen ist,
+    Der \ac{lidar} generiert 2D-Daten. Da die Simulation ebenfalls nur 2D ist und auch nicht von äußeren Einflüssen betroffen ist,
     sind die Umwelteinflüsse und Begebenheiten in der Implementierung nicht von Bedeutung.
     In der Realität ist darauf zu achten, dass die Umgebung den in Kapitel \ref{umwelt} beschriebenen Voraussetzungen entspricht. 
-    Da die Implementierung des LiDAR-Sensors in der Simulation dem verwendeten Modell nachempfunden ist, 
+    Da die Implementierung des \ac{lidar}-Sensors in der Simulation dem verwendeten Modell nachempfunden ist, 
     sollten Hindernisse in einer korrekten Umgebung ebenfalls erkannt werden.
 
 
@@ -307,7 +342,6 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
     \textbf{Beschreibung des Ergebnisses:}
 
     In der Simulation ist es möglich zur Laufzeit einen Zielpunkt zu setzen. 
-    % Wäre hier ein Bild hilfreich?     
 
     \textbf{Metrik erfüllt:}
     \begin{itemize}
@@ -317,7 +351,7 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
     
     \textbf{Übertrag auf die Realität:}
     Der Zielpunkt wird über Koordinaten abgebildet. 
-    Diese Koordinaten können in der Simulation auch außerhalb des Bereiches liegen, der vom LiDAR bereits erfasst wurde.
+    Diese Koordinaten können in der Simulation auch außerhalb des Bereiches liegen, der vom \ac{lidar} bereits erfasst wurde.
     Eine vorausgehende \glqq Erkundungsfahrt\grqq ist also nicht notwendig.
     Allerdings ist darauf zu achten, dass in der Simulation die Umgebung bekannt ist und darauf geachtet werden kann,
     das Ziel nicht innerhalb eines Hindernisses zu setzen.
@@ -334,7 +368,7 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
 
     \textbf{Beschreibung des Ergebnisses:}
 
-    Die Verwendung von Raycasting ermöglicht die Simulation eines LiDAR-Sensors.      
+    Die Verwendung von Raycasting ermöglicht die Simulation eines \ac{lidar}-Sensors.      
 
     \textbf{Metrik erfüllt:}
     \begin{itemize}
@@ -344,7 +378,7 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
     
     \textbf{Übertrag auf die Realität:}
 
-    Bei diesem Ziel macht ein Übertrag auf die Realität keinen Sinn, da der LiDAR-Sensor nicht implementiert werden muss.
+    Bei diesem Ziel macht ein Übertrag auf die Realität keinen Sinn, da der \ac{lidar}-Sensor nicht implementiert werden muss.
 
     \item \textbf{Lokalisierung des Fahrzeugs}
 
@@ -355,7 +389,7 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
 
     \textbf{Beschreibung des Ergebnisses:}
 
-    Wie bereits beschrieben, ist die Lokalisierung des Fahrzeuges basierend auf den LiDAR-Daten noch nicht fehlerfrei.
+    Wie bereits beschrieben, ist die Lokalisierung des Fahrzeuges basierend auf den \ac{lidar}-Daten noch nicht fehlerfrei.
     Aus diesem Grund wurde für dieses Ziel keine Metrik definiert. 
     Die Definition einer Metrik macht Sinn, wenn sichergestellt ist, dass der Algorithmus zuverlässig arbeitet.
     Dann kann daran gearbeitet werden, theoretische Höchstwerte der Präzision und Geschwindigkeit der genutzten Technik zu erheben.
