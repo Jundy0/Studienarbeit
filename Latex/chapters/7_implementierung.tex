@@ -184,7 +184,6 @@ Dieser Plan wurde jedoch, aufgrund der hohen Komplexität eines solchen Filters 
 Im aktuellen Stand wird somit nur ein einzelnes Partikel bei der Initialisierung des \textit{SlamHandler} erstellt.
 Das \textit{Particle}-Objekt repräsentiert den aktuellen Zustand des Roboters.
 In ihm werden Position, Rotation und Karte, sowie eine Instanz des \textit{PclHandler} gespeichert.
-
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/particle.cpp}{src/core/src/particle.cpp}]
 
 Neben Get-Methoden für die Karte, Position und Rotation gibt es Methoden zum Aktualisieren des Partikels.
@@ -192,15 +191,128 @@ Diese aktualisieren sowohl die Karte, als auch die Position und Rotation des Par
 Auf den Ablauf wird in dem Kapitel \ref{position_update} eingegangen.
 
 \paragraph{Erstellung einer Karte}
-Wie bereits in Kapitel \ref{mapping} beschrieben, wird für den Aufbau der Karte eine Occupancy Grid Map verwendet.
+Wie bereits in Kapitel \ref{mapping} beschrieben, wird für den Aufbau der Karte ein Occupancy Grid verwendet.
 Hierzu gibt es die entsprechende Klasse \textit{OccupancyGrid}.
-
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/occupancyGrid.cpp}{src/core/src/occupancyGrid.cpp}]
 
+Eine wichtige Unterscheidung ist die ziwschen Karte und Grid.
+Die Karte selbst wird lediglich für die Berechnungen benutzt.
+Sie beschreibt nur Grenzwerte für Koordinaten und somit einen Bereich in dem der Roboter und die gescannten Punkte sein können.
 
+Sämtliche Informationen über den Status der Karte an sämtlichen Koordinaten werden in dem Occupancy Grid gespeichert.
+Man kann sich das Grid als Etwas, dass auf der virtuellen Karte drauf liegt vorstellen.
+Sowohl die Maße der Karte, als auch die Maße des Grid werden mittels Konstanten in einer Settings-Datei festgelegt.
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/include/settings.h}{src/core/include/settings.h}]
+
+Das Grid selbst, sowie eine Kopie des Grids, welcher per shared Pointer über die Get-Methode erfragt werden kann, werden als Matrix gespeichert.
+Da es sich hier um sehr große Matritzen handelt, wurde für die Handhabung dieser die Bibliothek Eigen3 verwendet.
+Eigen ist eine vielseitig einsetzbare und schnelle Bibliothek für die Handhabung von Vektoren und Matritzen.
+
+Die beiden Matritzen werden im Konstruktor des \textit{OccupancyGrid} als \textit{probMap} und \textit{probMapCpy} deklariert und mit Nullen initialisiert.
+\newline
+
+Jedes mal wenn neue Daten mittels Scan erstellt werden, wird die Funktion \textit{updateProbMap} aufgerufen.
+Hierbei werden sowohl die Scan-Daten, in Form einer Matrix mit einem Punkt pro Zeile, 
+als auch die aktuelle Position des Roboters in der Karte und die Rotation des Roboters in Grad übergeben.
+
+Für die Aktualisierung des Grid werden die Scan-Daten genutzt um zwei Arten von Punkten zu berechnen.
+Punkte an denen ein Hindernis ist und Punkte welche frei befahrbar sind.
+Hierzu wird die Methode \textit{getPoints} genutzt. \ref{lst:getPoints}
+
+Zuerst werden zwei RowMajor Matritzen deklariert.
+Die Option RowMajor sorgt dafür, dass die Matrix Zeilenweise in den Speicher geschrieben wird.
+Da jede Zeile einem Punkt entspricht, verkürzt das die Laufzeit beim Auslesen der Punkte aus der Matrix enorm.
+
+Danach wird jeder Punkt des Scans von den Polarkoordinaten, welche der \ac{lidar}-Scan zurückgibt, in kartesische Koordinaten umgerechnet.
+Hierbei werden die Punkte zusätzlich in ein globales Koordinatensystem übertragen.
+Dies geschieht durch die Addition der Rotation des Roboters auf den Winkel der Polarkoordinate
+und der Addition der Position des Roboters auf die resultierenden kartesischen Koordinaten.
+Die gescannten Punkte werden dann an die Matrix für die belegten Punkte angehangen.
+
+Die frei befahrbaren Punkte sind alle die Punkte, welche sich zwischen dem Sensor und dem gescannten Hindernis befinden.
+Zur Berechnung dieser Punkte wird der Bresenham-Algorithmus verwendet.
+Der entsprechende Methode werden die X- und Y-Koordinaten des Roboters, sowie die Koordinaten des Zielpunkt übergeben.
+Zurückgegeben wird eine Matrix, welche Koordinaten sämtlicher Punkte enthält, die sich auf einer Linie zwischen den übergebenen Punkten befinden.
+Diese werden der Matrix für frei befahrbare Punkte angehangen.
+
+Am Ende werden beide Matrizen als Pair zurückgegeben.
+
+\begin{lstlisting}[caption={Berechnung occPoints und freePoints},label={lst:getPoints},language={C++}]
+std::pair<Eigen::MatrixX2d, Eigen::MatrixX2d> OccupancyGrid::getPoints(const Eigen::MatrixX2d &scan, const Eigen::RowVector2d &robPos, double robRotAngle)
+{
+    // Define X,2 Matrices for occupied and free points.
+    // RowMajor stores the matrix row wise in memory and is used since each point is represented by one row in the matrix.
+    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> occPoints;
+    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> freePoints;
+
+    Eigen::Matrix<double, -1, 2, Eigen::RowMajor> data = scan;
+
+    for (int i = 0; i < data.rows(); i++)
+    {
+        // Converts each of the polar points from the scan data into cartesian and stores it in occPoints
+        Eigen::RowVector2d polarPoint = data.block<1, 2>(i, 0);
+        Eigen::RowVector2d cartPoint = polarToCartesian(polarPoint, robPos, robRotAngle);
+        occPoints.conservativeResize(occPoints.rows() + 1, Eigen::NoChange);
+        occPoints.row(occPoints.rows() - 1) = cartPoint;
+
+        // Calculates free points using bresenham and stores them into freePoints
+        Eigen::MatrixX2d bresenhamPoints = bresenham(robPos[0], robPos[1], cartPoint[0], cartPoint[1]);
+        for (int j = 0; j < bresenhamPoints.rows(); j++)
+        {
+            freePoints.conservativeResize(freePoints.rows() + 1, Eigen::NoChange);
+            freePoints.row(freePoints.rows() - 1) = bresenhamPoints.block<1, 2>(j, 0);
+        }
+    }
+    // Returns both matrices
+    return std::make_pair(occPoints, freePoints);
+}
+\end{lstlisting}
+
+Die berechneten Punkte werden dann verwendet um die \textit{probMap} bzw. das Grid zu aktualisieren. \ref{lst:update-prob-map}
+
+Für jeden Punkt der Matrix mit belegten Punkten, werden X- und Y-Koordinate ausgelesen.
+Da die Koordinaten in der Karte liegen, das Grid jedoch kleiner ist, müssen die Koordinaten der Punkte angepasst werden.
+Daher werden diese durch den Faktor, um den die Map größer ist als das Grid, geteilt.
+Zusätzlich ist darauf zu achten, dass die Matrix per (Zeile,Spalte) adressiert wird.
+Da die Zeilen der Y-Achse entsprechen und die Spalten der X-Achse muss die Adressierung entsprechen per (Y,X) erfolgen.
+Der Wert in der Matrix wird, so lange er unter einem Grenzwert liegt, um ein Delta erhöht.
+Wird der Grenzwert erreicht, wird der Punkt im Grid als belegt angesehen.
+Auch der Grenzwert und das Delta können in der oben erwähnten Settings-Datei festgelegt werden.
+
+Der selbe Vorgang wird für die freien Punkte wiederholt.
+Einziger Unterschied ist, dass der Wert im Grid gesenkt statt erhöht wird.
+Auch hier können Grenzwert und Delta per Settings-Datei festgelegt werden.
+
+\begin{lstlisting}[caption={Auschnitt aus updateProbMap},label={lst:update-prob-map},language={C++}]
+// Updates values in the probMap for occupied points
+for (int i = 0; i < occPoints->rows(); i++)
+{
+    // Gets x and y for each point from the matrix
+    // Must be divided by the ratio between map and grid since the grind is a fraction of the size to allow for some error
+    // (e.g. 1x1 in the grid is 10x10 in the map so all the points on the map that lay in this 10x10 area will change the value of probability at that single point in the grid)
+    int x = occPoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
+    int y = occPoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
+
+    if ((*probMap)(y, x) < PROB_OCC_THRES)
+        (*probMap)(y, x) += DELTA_OCC;
+}
+
+// Updates values in the probMap for free points
+for (int i = 0; i < freePoints->rows(); i++)
+{
+    // Gets x and y for each point from the matrix
+    // Must be divided by the ratio between map and grid since the grind is a fraction of the size to allow for some error
+    int x = freePoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
+    int y = freePoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
+
+    if ((*probMap)(y, x) > PROB_FREE_THRES)
+        (*probMap)(y, x) += DELTA_FREE;
+}
+\end{lstlisting}
 
 \paragraph{Aktualisierung der Position und Rotation}
-\label{position_update}%TODO
+\label{position_update}
+
 
 
 

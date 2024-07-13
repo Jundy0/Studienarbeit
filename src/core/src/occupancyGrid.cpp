@@ -25,7 +25,7 @@ void OccupancyGrid::updateProbMap(const Eigen::MatrixX2d &scan, const Eigen::Row
     {
         // Gets x and y for each point from the matrix
         // Must be divided by the ratio between map and grid since the grind is a fraction of the size to allow for some error
-        // (e.g. 1x1 in the grid is 10x10 in the map so all the points on the map that lay in this 10x10 area will change the value of probability at that point in the grid)
+        // (e.g. 1x1 in the grid is 10x10 in the map so all the points on the map that lay in this 10x10 area will change the value of probability at that single point in the grid)
         int x = occPoints->coeff(i, 0) / (MAP_WIDTH / GRID_WIDTH);
         int y = occPoints->coeff(i, 1) / (MAP_WIDTH / GRID_WIDTH);
 
