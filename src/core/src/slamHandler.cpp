@@ -36,7 +36,7 @@ void SlamHandler::update(lidar_point_t *data, const Eigen::RowVector2d &position
         }
         else
         {
-            this->particle.update(this->lastScan, this->currentScan, positionDiff, rotationDiff);
+            this->particle.update(this->lastScan, this->currentScan, positionDiff, rotationDiff); // Uses ICP. Odometry data gets used for debug output
         }
     }
 

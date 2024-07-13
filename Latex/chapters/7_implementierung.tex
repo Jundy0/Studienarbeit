@@ -426,10 +426,147 @@ for (int i = 0; i < freePoints->rows(); i++)
 \end{lstlisting}
 
 \paragraph{Aktualisierung der Position und Rotation}
-\label{position_update}
+\label{position_update}Zur Aktualisierung der Position wird die Methode \textit{updatePosition} des \textit{Particle} aufgerufen.
+Dieser werden die notwendige Werte für Positionsänderung und Rotationsänderung übergeben, welche dann auf die akutellen Werte addiert werden.
 
+Die Berechnung der Werte kann auf zwei Arten erfolgen. \ref{lst:slam-handler-update}
+\begin{enumerate}
+    \item \textbf{Auslesen aus der Simulation} \\
+    Die erste Möglichkeit an die Werte zu kommen ist das Auslesen dieser aus der Simulation.
+    Hierzu wird der Methode \textit{update} des \textit{Particle} nur der aktuelle Scan, 
+    sowie die Werte für Positionsänderung und Rotationsänderung übergeben.
+    Diese wurden vorher aus der Simulation ausgelesen und über die Update-Funktion des \textit{SlamHandler} an diesen übergeben.
+    Der Scan wird für das Updaten der Karte benötigt.
+    Die Werte für Positionsänderung und Rotationsänderung werden einfach an die Methode \textit{updatePosition} des \textit{Particle} weitergegeben.
 
+    Diese Methode ist ausschließlich für Debugzwecke gedacht und kann nur in Kombination mit der Simulation verwendet werden.
 
+    \item \textbf{Berechnung mittels \ac{icp}} \\
+    Die zweite Möglichkeit ist das Berechnen der Transformationsmatrix zwischen vorherigem Scan und dem Aktuellen.
+    Hierzu wird ein \ac{icp}-Algorithmus der \ac{pcl}-Bibliothek verwendet.
+    Auch hier wird die Methode \textit{update} des \textit{Particle} aufgerufen.
+    Neben dem aktuellen Scan wird diesmal jedoch auch der vorherige Scan mit übergeben.
+    Die Werte für Positionsänderung und Rotationsänderung werden zwar ebenfalls übergeben, allerdings geschieht das nur für Debugzwecke.
+    Die übergebenen Werte haben auf die weitere Berechnung und die Werte welche letztendlich an die \textit{updatePosition} Methode übergeben werden keinen Einfluss.
+\end{enumerate}
+
+Die Auswahl der genutzten Möglichkeit wird über ein Flag in der Header-File des \textit{SlamHandler} ermöglicht.
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/include/slamHandler.h}{src/core/include/slamHandler.h}]
+
+\begin{lstlisting}[caption={Auschnitt aus der Methode \textit{update} des \textit{SlamHandler}},label={lst:slam-handler-update},language={C++}]
+void SlamHandler::update(lidar_point_t *data, const Eigen::RowVector2d &positionDiff, double rotationDiff)
+{
+    [...]
+
+    // If update is called the first time no lastScan exists so update of the particle gets skipped
+    if (this->initial)
+    {
+        this->initial = false;
+    }
+    else
+    {
+        if (this->useOdometry)
+        {
+            this->particle.update(this->currentScan, positionDiff, rotationDiff); // Only Ododmetry, no ICP
+        }
+        else
+        {
+            this->particle.update(this->lastScan, this->currentScan, positionDiff, rotationDiff); // Uses ICP. Odometry data gets used for debug output
+        }
+    }
+
+    [...]
+} 
+\end{lstlisting}
+
+\paragraph{Umsetzung mittels \ac{icp}} \mbox{}
+Die Methode zur Berechnung der Werte für Positionsänderung und Rotationsänderung,
+welche bei Verwendung des echten \ac{lidar} zum Einsatz kommen soll, verwendet einen \ac{icp}-Algorithmus.
+
+Als Interface zur Kommunikation zwischen \textit{Particle} und der \ac{pcl}-Bibliothek, gibt es die Klasse \textit{pclHandler}.
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/pclHandler.cpp}{src/core/src/pclHandler.cpp}]
+
+Durch Aufruf der Methode \textit{computeTransformation} werden die Werte für Positionsänderung und Rotationsänderung, 
+basierend auf den letzten beiden Scans, berechnet und als \textit{TransformationComponents} \ref{lst:trans-comp} zurückgegeben.
+
+\begin{lstlisting}[caption={Aufbau \textit{TransformationComponents}},label={lst:trans-comp},language={C++}]
+typedef struct
+{
+    /// @brief A vector composed of global x and y values
+    Eigen::RowVector2d translation_vector;
+    /// @brief A rotation angle in deg
+    double rotation_angle;
+} TransformationComponents;
+\end{lstlisting}
+
+Die, für den \ac{icp}-Algorithmus verwendeten Parameter, sowie typedefs, welche den Code übersichtlicher machen, lassen sich in der Header-Datei finden.
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/include/pclHandler.h}{src/core/include/pclHandler.h}]
+
+Beim Aufruf der Methode \textit{computeTransformation} werden die Scans, in Form zweier Matritzen mit Punkten in Polarkoordinaten, 
+sowie die Rotation des Roboters zum Zeitpunkt des ersten Scans übergeben.
+Da \ac{pcl} Punktewolken für sämtliche Berechnungen verwendet, müssen diese Matritzen zuerst in Punktewolken umgewandelt werden.
+
+Hierzu werden die Punkte zuerst in ein kartesisches Koordinatensystem überführt.
+Dabei gilt zu beachten, dass die Rotaion des Roboters auf den Winkel der Punkte addiert wird.
+Damit wird sichergestellt, dass die resultierenden Wolken nach den globalen Koordinatenachsen der Karte ausgerichtet sind.
+Genaueres hierzu in Kapitel \ref{coordinates_problem}.
+
+Nachdem die Scan-Daten korrekt ausgerichtet und in ein Punktewolken-Format gebracht wurden, wird der \ac{icp}-Algorithmus durchgeführt. \ref{lst:icp}
+%%% Ablauf beschreiben
+
+\begin{lstlisting}[caption={Implementierung des \ac{icp}-Algorithmus},label={lst:icp},language={C++}]
+Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints, const PointCloud::Ptr &targetPoints)
+{
+    // Create ICP instance
+    pcl::IterativeClosestPoint<PointT, PointT> icp;
+
+    // Set registration output to the pointer of the source cloud
+    // This overwrites the source cloud with the result of the icp so it can be used for another iteration
+    PointCloud::Ptr registrationOutput = sourcePoints;
+
+    // Create initial transformation matrix that does nothing
+    Eigen::Matrix4f tfMatrix;
+    tfMatrix << 1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1;
+
+    int iterations = 0;
+
+    // Loop ICP until fitness score is under a threshhold or other criteria is met
+    do
+    {
+        // Set ICP parameter
+        icp.setMaximumIterations(MAX_ITERATIONS_ICP);
+        icp.setMaxCorrespondenceDistance(MAX_CORRESPONDENCE_DISTANCE_ICP - (iterations * 20));
+        icp.setRANSACOutlierRejectionThreshold(OUTLIER_REJECTION_THRESHOLD_ICP);
+        icp.setTransformationEpsilon(TRANSFORMATION_EPSILON_ICP);
+        icp.setTransformationRotationEpsilon(ROTATION_EPSILON_ICP);
+        icp.setEuclideanFitnessEpsilon(EUCLIDEAN_FITNESS_EPSILON_ICP);
+
+        // Set ICP source and target point cloud
+        icp.setInputSource(registrationOutput);
+        icp.setInputTarget(targetPoints);
+
+        // Run ICP
+        icp.align(*registrationOutput);
+
+        // Get transformation matrix and store it to tfMatrix
+        // If icp is not run for the first time the result gets added onto the results from previous iterations
+        tfMatrix = icp.getFinalTransformation() * tfMatrix;
+
+        iterations++; 
+
+    } while (icp.getFitnessScore() > ICP_FITNESS_THRESHOLD && iterations < ICP_MAX_NR_CORRECTIONS);
+
+    // Output of ICP results
+    std::cout << "Converged: " << (bool)icp.hasConverged() << std::endl;
+    std::cout << "Fitness: " << icp.getFitnessScore() << std::endl;
+    std::cout << "Reason: " << convCrit[icp.getConvergeCriteria()->getConvergenceState()] << std::endl;
+
+    return tfMatrix;
+} 
+\end{lstlisting}
 
 \subsubsection{Umsetzung des Ausweichalgorithmus}
 

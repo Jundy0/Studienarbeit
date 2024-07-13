@@ -65,8 +65,8 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     somit konnte das Ziel von einer Laufzeit unter 500ms, selbst bei Nutzung von 720 Punkten pro Scan, erreicht werden.
 
     \item \textbf{Koordinatensysteme} \\
-    Zusätzlich zu dem Problem der Laufzeit, gab es das Problem, das die Werte für die X und Y Translation, welche der \ac{icp}-Algorithmus berechnete, ungenau waren.
-    Vor allem bei Bewegungen des Fahrzeuges auf der y-Achse unterschieden sich die berechneten Werte deutlich von den tatsächlichen Werten.
+    \label{coordinates_problem}Zusätzlich zu dem Problem der Laufzeit, gab es das Problem, das die Werte für die X und Y Translation, welche der \ac{icp}-Algorithmus berechnete, ungenau waren.
+    Vor allem bei Bewegungen des Fahrzeug auf der Y-Achse unterschieden sich die berechneten Werte deutlich von den tatsächlichen Werten.
     
     Ausführliches Debugging ergab, dass der \ac{icp}-Algorithmus die Punktewolken nahezu perfekt übereinander legte.
     Das Problem war jedoch, das die resultierenden Werte für X- und Y-Translation basierten auf dem lokalen Koordinatensystem des Autos.
