@@ -499,7 +499,7 @@ typedef struct
 } TransformationComponents;
 \end{lstlisting}
 
-Die, für den \ac{icp}-Algorithmus verwendeten Parameter, sowie typedefs, welche den Code übersichtlicher machen, lassen sich in der Header-Datei finden.
+Die, für den \ac{icp}-Algorithmus verwendeten Parameter, sowie typedefs, welche den Code übersichtlicher machen, befinden sich in der Header-Datei.
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/include/pclHandler.h}{src/core/include/pclHandler.h}]
 
 Beim Aufruf der Methode \textit{computeTransformation} werden die Scans, in Form zweier Matritzen mit Punkten in Polarkoordinaten, 
@@ -512,7 +512,50 @@ Damit wird sichergestellt, dass die resultierenden Wolken nach den globalen Koor
 Genaueres hierzu in Kapitel \ref{coordinates_problem}.
 
 Nachdem die Scan-Daten korrekt ausgerichtet und in ein Punktewolken-Format gebracht wurden, wird der \ac{icp}-Algorithmus durchgeführt. \ref{lst:icp}
-%%% Ablauf beschreiben
+
+Zuerst wird ein Pointer auf eine PointCloud erzeugt, in welchen die vom Algorithmus transformierte Punktewolke geschrieben wird.
+Dieser wird mit dem Pointer der PointCloud des ersten Scans gleichgesetzt.
+Dass sorgt dafür, dass das Ergebnis des Algorithmus die Punktewolke des ersten Scans überschreibt.
+Somit wird bei der Durchführung einer weiteren Iteration des Algorithmus, das Ergebnis der vorherigen Iteration als Input genommen.
+
+Außerdem wird die Transformationsmatrix und ein Counter initialisiert.
+
+Danach beginnt eine do-while Schleife.
+So wird sichergestellt, dass der Algorithmus mindestens einmal durchlaufen wird.
+Sollte das Ergebnis zu ungenau sein, wird der Algorithmus erneut durchgeführt.
+Das geschieht so lange, bis das Ergebnis eine gewünschte Genauigkeit erreicht hat 
+oder die maximale Anzahl an Iterationen erreicht wurde.
+
+Der Ablauf einer Iteration ist recht simpel.
+Die, in der Header-Datei festgelegten Parameter werden gesetzt.
+Hierbei wird die \textit{MAX\_CORRESPONDENCE\_DISTNACE\_ICP} mit jeder Iteration verringert.
+Dies geschiet weil davon ausgegangen wird, dass nach jeder Iteration der Abstand zwischen den beiden Punktewolken verringert wurde.
+
+Danach werden Input und Target des Algorithmus gesetzt und der Algorithmus wird ausgeführt.
+Genauere Informationen über den Ablauf des Algorithmus und die Möglichkeiten finden sich in der PCL-Dokumentation. \cite{pcl2024icp}
+Das Ergebnis ist eine transformierte Punktewolke, welche an den dafür erstellten Pointer geschrieben wird.
+Im Optimalfall stimmt diese mit der Target PointCloud überein.
+
+Als Nächstes wird die Transformationsmatrix ausgelesen.
+Diese beschreibt die transformation die nötig ist um die Source Punktewolke in die, 
+vom Algorithmus berechnete Punktewolke, zu transformieren.
+Sie wird mit der Transformationsmatrix der vorherigen Iteration multipliziert.
+Das Resultat ist eine Kombination beider Matrizen.
+Diese kann auf die ursprüngliche Punktewolke des ersten Scans angewendet werden, 
+um das Ergebnis der aktuellen Iteration zu erhalten.
+
+Zusätzlich wird noch der Counter für die Iterationen erhöht.
+\newline
+
+Nachdem eines der Abbruchkriterien der Schleife erfüllt ist, werden zusätzliche Informationen der finalen Iteration ausgelesen und ausgegeben.
+Einmal die Information ob der Algorithmus überhaupt erfolgreich abgeschlossen hat.
+Dann der Fitness-Score des Erfebnis. 
+Dieser ist nichts Anderes als die mittlere, quadratische Abweichung der Konvergenzen.
+Außerdem wird noch die Information ausgegeben, aus welchem Grund der Algorithmus beendet hat.
+Mögliche Gründe sind z.B. das erreichen der maximalen Anzahl an internen Iterationen
+oder das unterschreiten eines Schwellwerts, welche über die Parameter festgelegt wurden.
+
+Abschließend wird die finale Transformationsmatrix zurückgegeben.
 
 \begin{lstlisting}[caption={Implementierung des \ac{icp}-Algorithmus},label={lst:icp},language={C++}]
 Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints, const PointCloud::Ptr &targetPoints)
@@ -567,6 +610,11 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints
     return tfMatrix;
 } 
 \end{lstlisting}
+
+Mittels der Methode \textit{extractTransformationComponents} können die relevanten Werte aus der berechnete Transformationsmatrix ausgelesen
+und in \textit{TransformationComponents} umgewandelt werden.
+
+Diese werden an das \textit{Particle} zurückgegeben und dort verwendet um die Position zu aktualisieren.
 
 \subsubsection{Umsetzung des Ausweichalgorithmus}
 
