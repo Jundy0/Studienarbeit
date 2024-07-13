@@ -49,3 +49,5 @@ Latex/*.lol
 Latex/*.run.xml
 Latex/*.synctex.gz
 Latex/*.toc
+.vscode/launch.json
+.vscode/settings.json
