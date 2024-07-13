@@ -27,15 +27,15 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Dieser ermöglicht es, über Standard USB-A, mittels SDK mit dem \ac{lidar} zu kommunizieren und auch den Motor des \ac{lidar} anzusteuern.
     Bei unserem Exemplar des \ac{lidar} lag ein solcher Adapter jedoch nicht bei.
     Anstelle des Adapters stand lediglich ein Kabel zur Verfügung, dass an den \ac{lidar} angeschlossen werden konnte.
-    Das andere Ende des Kabels war nicht terminiert, so dass die einzelnen Kabel direkt an den Pins des Raspberry Pi angeschlossen werden mussten.
+    Das andere Ende des Kabels war nicht terminiert, sodass die einzelnen Kabel direkt an den Pins des Raspberry Pi angeschlossen werden mussten.
 
-    Zu Beginn funtkionierte die serielle Kommunikation überhaupt nicht.
+    Zu Beginn funktionierte die serielle Kommunikation überhaupt nicht.
     Es stellte sich jedoch raus, dass die Kabel lediglich an den falschen Pins des Raspberry Pi angeschlossen wurden.
     Durch korrektes Anschließen der Kabel zur seriellen Kommunikation wurde das Problem gelöst.
 
     Eine weitere Folge des fehlenden Adapters war, dass die Motorsteuerung mittels SDK nicht länger möglich war.
-    Um den Motor zu steuern musste ein entsprechendes PWM-Signal an dem korrekten Pin des Raspberry Pi manuell gesetzt werden.
-    Zur Vereinfachung dieses Prozess wurde ein Interface implementiert, welches den Motor bei Bedarf automatisch startet und stoppt.
+    Um den Motor zu steuern, musste ein entsprechendes PWM-Signal an dem korrekten Pin des Raspberry Pi manuell gesetzt werden.
+    Zur Vereinfachung dieses Prozesses wurde ein Interface implementiert, welches den Motor bei Bedarf automatisch startet und stoppt.
 
     \item \textbf{Simulation des \ac{lidar}} \\
     Das größte Problem, welches bei der Entwicklung der Simulation auftrat, war die Umsetzung der \ac{lidar} Simulation.
@@ -51,22 +51,22 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Trotz der geringen Anzahl an Punkten, aus denen die einzelnen Scans bestanden, brauchte der Algorithmus teilweise mehrere Sekunden zur Berechnung der Transformationsmatrix.
     Da der gesamte Ausweichalgorithmus eine Laufzeit von unter 500ms haben sollte, war die Laufzeit des \ac{icp}-Algorithmus zu hoch.
     Ein erster Versuch die Laufzeit zu verbessern bestand darin, die Anzahl an Punkten zu verringern.
-    Hierzu wurde sich dazu entscheiden die n nähsten Punkte zu verwenden.
+    Hierzu wurde sich dazu entscheiden die n Punkte zu verwenden, die am nächsten sind.
     Das hatte jedoch zur Folge, dass das Ergebnis des Algorithmus deutlich ungenauer wurde.
     Zudem entstand durch die geringe Anzahl an Punkten, welche sich zudem meistens nur in einem kleinen Bereich des 360° Sichtfeld des Sensors befanden, 
-    eine hohe Fehleranfälligkeit bei Bewegungen nahe des Sensors.
-    Diese entstanden vor allem dann, wenn das Fahrzeug sich einem Hinderniss näherte.
+    eine hohe Fehleranfälligkeit bei Bewegungen nahe am Sensor.
+    Diese entstanden vor allem dann, wenn das Fahrzeug sich einem Hindernis näherte.
 
     Um das Problem zu lösen wurde sich dazu entschieden die Implementation der Point Cloud Library zu nutzen. \ref{pcl}
     Da diese open-source Bibliothek für die Arbeit mit Punktewolken gedacht ist, bietet sie verschiedene \ac{icp}-Algorithmen,
     welche nicht nur optimiert sind, sondern auch deutlich mehr Konfigurationsmöglichkeiten als die ursprünglich verwendete Implementation bieten.
     
-    Durch die Nutzung der PCL-Implementation konnte die Laufzeit erheblich verbessert werden
-    Somit konnte das Ziel von einer Laufzeit unter 500ms, selbst bei Nutzung von 720 Punkten pro Scan, erreicht werden.
+    Durch die Nutzung der PCL-Implementation konnte die Laufzeit erheblich verbessert werden,
+    somit konnte das Ziel von einer Laufzeit unter 500ms, selbst bei Nutzung von 720 Punkten pro Scan, erreicht werden.
 
     \item \textbf{Koordinatensysteme} \\
     Zusätzlich zu dem Problem der Laufzeit, gab es das Problem, das die Werte für die X und Y Translation, welche der \ac{icp}-Algorithmus berechnete, ungenau waren.
-    Vor allem bei Bewegungen des Fahrzeug auf der Y-Achse unterschieden sich die berechneten Werte deutlich von den tatsächlichen Werten.
+    Vor allem bei Bewegungen des Fahrzeuges auf der y-Achse unterschieden sich die berechneten Werte deutlich von den tatsächlichen Werten.
     
     Ausführliches Debugging ergab, dass der \ac{icp}-Algorithmus die Punktewolken nahezu perfekt übereinander legte.
     Das Problem war jedoch, das die resultierenden Werte für X- und Y-Translation basierten auf dem lokalen Koordinatensystem des Autos.
@@ -77,25 +77,25 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Somit stimmte auch das Ergebnis des \ac{icp}-Algorithmus.
     Siehe Abbildung \ref{fig:coordinatesFixA}
 
-    Fuhr das Auto jetzt aber vorwärts entlang der Y-Achse, also um 90 Grad verdreht
-    nahm der \ac{icp}-Algorithmus das als Bewegung auf der X-Achse war. 
-    Sieh Abbildung \ref{fig:coordinatesFixB}
-    Das lag daran, dass er das lokale Koordinatensystem des Autos nutzte, bei der die X-Achse nach vorne (0 Grad) gerichtet ist,
+    Fuhr das Auto jetzt aber vorwärts entlang der y-Achse, also um 90 Grad verdreht
+    nahm der \ac{icp}-Algorithmus das als Bewegung auf der x-Achse war,
+    siehe Abbildung \ref{fig:coordinatesFixB}.
+    Das lag daran, dass er das lokale Koordinatensystem des Autos nutzte, bei der die x-Achse nach vorne (0 Grad) gerichtet ist.
     Sämtliche, nach vorne gerichtete Bewegung, wurde also als Bewegung in X-Richtung interpretiert.
 
     \begin{figure}[H]
         \centering
-        \subfloat[a][Umgebung und Source- und Target-Wolke bei Bewegung vorwärts entlang der X-Achse]{
+        \subfloat[a][Umgebung und Source- und Target-Wolke bei Bewegung vorwärts entlang der x-Achse]{
             \includegraphics[width=12cm]{graphics/movement_x.png}
             \label{fig:coordinatesFixA}
         }
         \\
-        \subfloat[b][Umgebung und Source- und Target-Wolke bei Bewegung vorwärts entlang der Y-Achse]{
+        \subfloat[b][Umgebung und Source- und Target-Wolke bei Bewegung vorwärts entlang der y-Achse]{
             \includegraphics[width=12cm]{graphics/movement_y.png}
             \label{fig:coordinatesFixB}
         }
         \\
-        \subfloat[c][Source und Target Punktewolke - Bewegung entlang der Y-Achse nach Implementierung des Fix]{
+        \subfloat[c][Source und Target Punktewolke - Bewegung entlang der y-Achse nach Implementierung des Fix]{
             \includegraphics[width=6cm]{graphics/movement_y_cloud_fixed.png}
             \label{fig:coordinatesFixC}
         }
@@ -108,20 +108,20 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Siehe Abbildung \ref{fig:coordinatesFixC}
 
     \item \textbf{\ac{icp} Genauigkeit} \\
-    Ein weiteres Problem bei der Implementierung des \ac{icp}-Algorithmus war die Genauigkeit des Ergebnis.
+    Ein weiteres Problem bei der Implementierung des \ac{icp}-Algorithmus war die Genauigkeit des Ergebnisses.
     Die anfänglich eher schlechte Genauigkeit, konnte durch Anpassen der Konfigurations-Parameter erheblich verbessert werden.
     Hierzu wurden verschiedene Werte in unterschiedliche Situationen getestet und ausgewertet.
     Hierbei war es wichtig die Laufzeit des Algorithmus im Auge zu behalten.
     Je enger die Parameter gesetzt werden, desto genauer ist das Ergebnis des Algorithmus, jedoch steigt dadurch auch die Menge an Iterationen und somit die Laufzeit.
 
     Es fiel auf, das der \ac{icp}-Algorithmus, selbst mit etwas lockerer gesetzten Parametern ausreichend gute Ergebnisse liefert.
-    Nur in seltenen Fällen war ein Ergebnis suboptimal, was sich durch einen hohen Fittness-Wert des Ergebnis auszeichnete.
-    Um die Laufzeit weiter zu verbessern wurde eine zusätzliche Schleifen um den ICP-Algorithmus herum implementiert. \ref{slamImplementierung}
-    Diese hat den Fitness-Score des Iterations-Ergebnis als Abbruchkriterium.
+    Nur in seltenen Fällen war ein Ergebnis suboptimal, was sich durch einen hohen Fittness-Wert des Ergebnisses auszeichnete.
+    Um die Laufzeit weiter zu verbessern wurde eine zusätzliche Schleifen, um den ICP-Algorithmus herum implementiert \ref{slamImplementierung}.
+    Diese hat den Fitness-Score des Iterations-Ergebnises als Abbruchkriterium.
     Somit wird der \ac{icp}-Algorithmus mindestens einmal durchgeführt.
-    Sollte das Ergebnis nicht genau genug sein, wird der Algorithmu ein weiteres Mal aufgerufen.
+    Sollte das Ergebnis nicht genau genug sein, wird der Algorithmus ein weiteres Mal aufgerufen.
     Diesmal mit dem vorherigen Ergebnis als Input.
-    Des weiteren werden mit jeder Iteration die Parameter enger gesetzt.
+    Des Weiteren werden mit jeder Iteration die Parameter enger gesetzt.
 
     Leider kam es in seltenen Fällen dazu, dass die Berechnung auf diese Art und Weise, mehrere Sekunden dauerte.
     Daher wurde eine maximale Anzahl an \ac{icp}-Iterationen festgelegt.
@@ -132,11 +132,11 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Zudem resultiert ein Fehler in der berechneten Rotation des Fahrzeugs dazu, dass das oben beschriebene Problem mit den Koordinaten-Achsen nicht mehr so gut ausgeglichen werden kann.
     Das hat zur Folge, dass sich der Fehler exponentiell erhöht.
 
-    Eine mögliche Lösung für dieses Problem, wären die Verwendung weiterer Sensoren zum Messen der Bewegung des Fahrzeugs.
-    Durch zusätzliche Odometrie-Daten und einer Gewichtung der Ergebnisse, kann die Lokalisierung des Fahrzeugs erheblich verbessert werden.
+    Eine mögliche Lösung für dieses Problem wären die Verwendung weiterer Sensoren zum Messen der Bewegung des Fahrzeugs.
+    Durch zusätzliche Odometrie-Daten und einer Gewichtung der Ergebnisse kann die Lokalisierung des Fahrzeugs erheblich verbessert werden.
     Eine weitere Lösung wäre die Integration von Filtern, welche die Ergebnisse des \ac{icp}-Algorithmus filtern.
 
-    Zum jetzigen Zeitpunkt sind jedoch keine Lösungen für das Problem implemntiert.
+    Zum jetzigen Zeitpunkt sind jedoch keine Lösungen für das Problem implementiert.
     Der Fehler ist, vor allem zu Beginn, vernachlässigbar und beschränkt sich auf die Position und Rotation des Fahrzeugs.
     Da sich der \ac{lidar} auf dem Fahrzeug befindet, ist die Erkennung von Hindernissen unabhängig von der Position des Fahrzeugs.
     Lediglich die Erstellung der Karte und somit auch die Navigation zum Zielort wird mit der Zeit ungenauer.
@@ -150,13 +150,13 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Da sich das Auto nicht auf der Stelle drehen kann, waren diese Pfade nicht für das Auto abfahrbar.
     Siehe Abbildung \ref{fig:pathWithoutFix}.
 
-    Dieses Problem konnte nicht vollständig behohben werden.
-    Es wurde versucht, den Winkel in dem sich die Punkte befinden, welche der Algorithmus als nächsten Schritt in Erwähgung zieht, einzuschränken.
+    Dieses Problem konnte nicht vollständig behoben werden.
+    Es wurde versucht, den Winkel, in dem sich die Punkte befinden, welche der Algorithmus als nächsten Schritt in Erwägung zieht, einzuschränken.
     Das resultierte darin, dass der Pfad nahe am Auto, den Lenkwinkel berücksichtigt.
     Durch Fehler in der Logik verhält sich der Pfad jedoch nach kurzer Zeit unvorhersehbar.
     Siehe Abbildung \ref{fig:pathWithFix}.
 
-    Dadurch entstehen unmögliche Pfade weshalb die neue Logik, zum aktuellen Zeitpunk, noch rein experimentell und für die Anwendung ungeeignet ist.
+    Dadurch entstehen unmögliche Pfade weshalb die neue Logik, zum aktuellen Zeitpunkt, noch rein experimentell und für die Anwendung ungeeignet ist.
 
     \begin{figure}[H]
         \centering
@@ -172,28 +172,28 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
         \caption{Vergleich der Pfadberechnung vor und nach dem Versuch eines Fix}
     \end{figure}
 
-    Des Weiteren neigte der Algorithmus dazu, Pfade zu generieren, welche duch Wände führten.
+    Des Weiteren neigte der Algorithmus dazu, Pfade zu generieren, welche durch Wände führten.
     Wie sich herausstellte, war das Problem die Darstellung der Koordinaten.
     Die Implementierung des Algorithmus repräsentierte Punkte in der Form (x,y).
-    Die Werte, welche zeigen ob sich an einem Punkt ein Hinderniss befindet, werden jedoch in einer Matrix gespeichert.
+    Die Werte, welche zeigen, ob sich an einem Punkt ein Hindernis befindet, werden jedoch in einer Matrix gespeichert.
     Diese wird in der Form (Zeile, Spalte) angesprochen.
-    Sieht man die Matrix nun als Koordinaten-System, entsprechen die Zeilen der, nach unten gerichteten Y-Achse.
-    Die Spalten entsprechen der, nach rechts gerichteten X-Achse.
+    Sieht man die Matrix nun als Koordinaten-System entsprechen die Zeilen der, nach unten gerichteten y-Achse.
+    Die Spalten entsprechen der, nach rechts gerichteten x-Achse.
     Somit muss, um den korrekten Wert aus der Matrix auslesen zu können, diese in der Form (y,y) angesprochen werden.
-    Ein einfaches Tauschen der Koordinaten bei der Abfrage des Matrix-Wert löste das Problem.
+    Ein einfaches Tauschen der Koordinaten bei der Abfrage des Matrix-Wertes löste das Problem.
 \end{enumerate}
 
 \paragraph{Ergebnisse} \mbox{}\\
-Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgenden genauer eingegnagen werden soll.
+Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgenden genauer eingegangen werden soll.
 
 \begin{enumerate}[leftmargin=*]
     \item \textbf{Simulation} \\
     Das Fahrzeug selbst wird so simuliert, dass es über entsprechende Steuerungsbefehle gesteuert werden kann.
-    Des Weiteren wird auf den maximalen Lenkwinkel rücksicht genommen.
+    Des Weiteren wird auf den maximalen Lenkwinkel Rücksicht genommen.
     
-    Ein Kollisionserkennung, sowie manuelle Steuerung wurde ebenfalls, zu Debug-Zwecken, implementiert.
+    Ein Kollisionserkennung sowie manuelle Steuerung wurde ebenfalls, zu Debug-Zwecken, implementiert.
     Eine statische Umgebung kann ebenfalls erfolgreich simuliert werden.
-    Neben den zum Start bereits vorhandenen Hindernissen, können weitere Hindernisse manuell hinzugefügt werden.
+    Neben den zum Start bereits vorhandenen Hindernissen können weitere Hindernisse manuell hinzugefügt werden.
     
     Der \ac{lidar}-Sensor kann ebenfalls realitätsnah simuliert werden.
     Die Anzahl an Punkten pro Scan lässt sich variabel einstellen.
@@ -203,11 +203,11 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
     die als Ergebnis eines Scans mit dem realen Sensor über dessen Schnittstelle zurückgegeben wird.
 
     \item \textbf{Map-Erstellung} \\
-    Die Sensordaten können genutzt werden um eine Map aufzubauen.
+    Die Sensordaten können genutzt werden, um eine Map aufzubauen.
     Basierend auf einkommenden Daten, werden Werte innerhalb der Felder eines Grids angepasst.
-    Somit kann erfasst werden, an welchen Stellen der Karte ein Hinderniss erkannt wurde und an welchen Stelle frei ist.
+    Somit kann erfasst werden, an welchen Stellen der Karte ein Hindernis erkannt wurde und an welchen Stellen frei ist.
     
-    Die größe der Karte, sowie die größe des Grids können beliebig angepasst werden.
+    Die Größe der Karte, sowie die Größe des Grids können beliebig angepasst werden.
     Eine zu große Karte hat jedoch deutlich längere Laufzeiten zu Folge.
 
     Sofern die Fahrzeug-Position zum Zeitpunkt des Scans bekannt ist, kann die Karte beliebig erweitert werden.
@@ -222,24 +222,24 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
         \subfloat[b][Map zu einem späteren Zeitpunkt t2]{
             \includegraphics[width=6cm]{graphics/map_generation_2.png}
         }
-        \caption{Beispiel einer Erweiterungen der Karte durch Bewegung des Fahrzeug}
+        \caption{Beispiel einer Erweiterungen der Karte durch Bewegung des Fahrzeuges}
         \label{fig:mapErstellung}
     \end{figure}
 
     \item \textbf{Lokalisierung} \\
     Zur Lokalisierung des Fahrzeugs wird ein \ac{icp}-Algorithmus der Point Cloud Library verwendet.
-    Dieser berechnet, basierend auf zwei aufeinanderfoglenden Scans, die Positionsifferenz des Fahrzeug zwischen den Scans.
-    Somit kann, sofern der Startpunkt bekannt ist, die Fahrzeugposition nach jedem Scan angepasst werden.
+    Dieser berechnet, basierend auf zwei aufeinanderfolgenden Scans, die Positionsdifferenz des Fahrzeuges zwischen den Scans.
+    Somit kann, sofern der Startpunkt bekannt ist, die Fahrzeug-Position nach jedem Scan angepasst werden.
 
-    Aufgrund der Frequenz mit welcher die Scans erstellt werden, ist die Differenz recht gering.
+    Aufgrund der Frequenz, mit welcher die Scans erstellt werden, ist die Differenz recht gering.
     Das hat zur Folge, dass der \ac{icp}-Algorithmus sehr schnell und sehr präzise arbeiten kann.
     
     Wie bereits in \ref{probleme} beschrieben ist der Algorithmus nicht zu 100 Prozent akkurat.
-    Aufgrund fehlender Filter und Bewegungsdaten des Fahrzeugs, kann dieser Fehler nicht korrigiert werden.
+    Aufgrund fehlender Filter und Bewegungsdaten des Fahrzeugs kann dieser Fehler nicht korrigiert werden.
     Somit addiert er sich immer weiter auf.
     Das Ergebnis ist eine, immer weiter von der Realität abweichende, berechnete Position und Rotation des Fahrzeugs.
 
-    Da die Hindernisse basierend auf der berechneten Position und Rotation des Fahrzeug in die Map eingetragen werden,
+    Da die Hindernisse basierend auf der berechneten Position und Rotation des Fahrzeuges in die Map eingetragen werden,
     sind die Abstände zu den Hindernissen weiterhin akkurat.
     Die resultierende Map ist jedoch verzerrt was zu Problemen bei der Navigation führen kann.
 
@@ -252,7 +252,7 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
     \begin{figure}[H]
         \centering
         \includegraphics[width=12cm]{graphics/pathfinding.png}
-        \caption{Darstellung eines Pfad um ein Hinderniss herum}
+        \caption{Darstellung eines Pfades um ein Hindernis herum}
         \label{fig:pathfinding}
     \end{figure}
 
@@ -261,7 +261,7 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
 
     Da der Pfad bei jedem Positions-Update neu berechnet wird, können so auch Ziele angefahren werden,
     welche sich in noch unbekanntem Gebiet der Karte befinden.
-    In dem Fall wird die Karte erstellt sobald der Bereich für den \ac{lidar} sichtbar wird.
+    In dem Fall wird die Karte erstellt, sobald der Bereich für den \ac{lidar} sichtbar wird.
     Siehe Abbildung \ref{fig:pathfindingUnknown}
 
     \begin{figure}[H]
@@ -273,11 +273,11 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
         \subfloat[b][Pfad nachdem das Gebiet erkundet wurde]{
             \includegraphics[width=12cm]{graphics/pathfinding_unknown_2.png}
         }
-        \caption{Berechnung eines Pfades mit Ziel in einem unbekanntem Gebiet}
+        \caption{Berechnung eines Pfades mit Ziel in einem unbekannten Gebiet}
         \label{fig:pathfindingUnknown}
     \end{figure}
 
-    Die Eingabe der Zielkoordinaten erfolgt über die Simulierte Umgebung.
+    Die Eingabe der Zielkoordinaten erfolgt über die simulierte Umgebung.
 \end{enumerate}
 
 \subsection{Evaluation}
@@ -495,11 +495,11 @@ Regelmäßige Meetings und Absprachen sorgten für einen größtenteils reibungs
 Die Kommunikation mit der anderen Gruppe hingegen war eher mangelhaft.
 Meetings wurden selten gehalten und das Kommunizieren wichtiger Informationen dauerte teilweise viel zu lange.
 Zudem wurden keine Protokolle geführt, was zu dem Verlust weitere Informationen führte.
-Deutlichere und häufigere Kommunikation wäre wichtig gewesen und hättte den Fortschritt des Projektes vorangebracht.
+Deutlichere und häufigere Kommunikation wäre wichtig gewesen und hätte den Fortschritt des Projektes vorangebracht.
 
 \paragraph{Aufgabenteilung} \mbox{}\\
 Die Aufgabenteilung war gut.
-Es wurde umfangreich geplant wodurch jeder zu jedem Zeitpunkt konkrete Aufgaben hatte.
+Es wurde umfangreich geplant, wodurch jeder zu jedem Zeitpunkt konkrete Aufgaben hatte.
 Somit konnte die Zeit gut genutzt werden.
 
 \subsection{Ausblick}
@@ -508,7 +508,7 @@ Allerdings gibt es diverse Verbesserungsvorschläge und Erweiterungen, welche da
 
 \paragraph{Steuerung des Fahrzeugs} \mbox{}\\
 Der wohl wichtigste Punkt ist die Nutzung des Algorithmus zur Steuerung des Fahrzeugs.
-Zum aktuellen Zeitpunkt ist der Algorithmus lediglich in der Lage, eine Pfad zu berechnen.
+Zum aktuellen Zeitpunkt ist der Algorithmus lediglich in der Lage, einen Pfad zu berechnen.
 
 Eine notwendige Ergänzung ist somit die Verbindung des simulierten und des realen Fahrzeugs mit dem Algorithmus.
 Die Logik des Algorithmus ist vollständig von der Quelle der Daten abstrahiert.
@@ -517,35 +517,35 @@ Die Schnittstelle für die Kommunikation mit dem simulierten Auto existiert bere
 der Algorithmus ist jedoch noch nicht in der Lage diese zur Steuerung des simulierten Fahrzeugs zu verwenden.
 
 Die Schnittstelle für die Kommunikation mit dem realen Auto ist noch gar nicht implementiert.
-Der Aufbau der Schnittstelle sollte von der schnittstelle des Simulierten Autos kopiert werden.
-Anstelle von Methoden-Aufrufen zur steuerung des Autos, muss die Schnittstelle für das reale Auto Pins des Raspberry Pi setzten.
+Der Aufbau der Schnittstelle sollte von der Schnittstelle des simulierten Autos kopiert werden.
+Anstelle von Methoden-Aufrufen zur Steuerung des Autos, muss die Schnittstelle für das reale Auto Pins des Raspberry Pi setzten.
 Die entsprechende Python-Implementierung der Hardware-Gruppe ist vorhanden und muss nur in C++ übersetzt werden.
 
 \paragraph{Handy-Stuerung} \mbox{}\\
 Die Übermittlung der Zielkoordinaten erfolgt bei der Simulation über einen Mausklick innerhalb der simulierten Umgebung.
 
 Eine Möglichkeit die Zielkoordinaten an das reale Fahrzeug zu übermitteln ist das Erstellen einer Handy-App.
-Da der Raspberry Pi über WLAN und Bluetooth verfügt, ist es möglich, eine App zu erstellen, welche die generierte Karte anziegt.
-Zur Zeit wird eine solche Karte, bei Nutzung der Simulation, in einem zweiten Fenster angezeigt.
+Da der Raspberry Pi über WLAN und Bluetooth verfügt, ist es möglich, eine App zu erstellen, welche die generierte Karte anzeigt.
+Zurzeit wird eine solche Karte, bei Nutzung der Simulation, in einem zweiten Fenster angezeigt.
 Die Eingabe einer Zielkoordinaten könnte dann mittels Klick auf die Karte erfolgen.
 
 \paragraph{Zusätzliche Sensorik} \mbox{}\\
 Es wurden bereits zusätzliche Ultraschall-Sensoren an dem Fahrzeug verbaut.
-Eine Integration dieser in die bestehnde Logik ist eine weitere, sinnvolle Ergänzung.
+Eine Integration dieser in die bestehende Logik ist eine weitere, sinnvolle Ergänzung.
 
 Da diese Sensoren unterhalb des \ac{lidar}, vorne an dem Fahrzeug angebracht sind,
 können sie genutzt werden um flache Hindernisse, welche sich unterhalb des \ac{lidar}-Sensors befinden, zu erkenne.
 Außerdem können sie als fail-safe dienen, falls das Fahrzeug auf ein Hindernis zusteuert, diesem aber nicht ausweicht.
-Ein solcher fail-safe dient vor allem dem Schutz der Hardware. welche fragil und teuer ist.
+Ein solcher fail-safe dient vor allem dem Schutz der Hardware, welche fragil und teuer ist.
 
-Neben Ultraschall-Sensoren macht auch die Erweiterungen um eine Beschleunigungs-Sensor Sinn.
+Neben Ultraschall-Sensoren macht auch die Erweiterungen um einen Beschleunigungs-Sensor Sinn.
 Ein solcher Sensor kann genutzt werden, um zusätzliche Bewegungsdaten zu sammeln.
 Diese können verwendet werden, um z.B. durch Gewichtung, die Ergebnisse der Lokalisierung zu verbessern.
 
 \paragraph{Filter} \mbox{}\\
-Eine weitere wichtige Ergänzung zur Verbesserung der Loakalisierung sind Filter.
+Eine weitere wichtige Ergänzung zur Verbesserung der Lokalisierung sind Filter.
 
-Filter sind eine reine Software-Lösung und können somit ohne zusätliche Materialkosten integriert werden.
+Filter sind eine reine Software-Lösung und können somit ohne zusätzliche Materialkosten integriert werden.
 Ein solcher Filter sorgt dafür, dass schlechte Ergebnisse gefiltert werden.
 Hierdurch kann der durchschnittliche Fehler, welcher die Ergebnisse des \ac{icp}-Algorithmus haben, gesenkt werden.
 
