@@ -86,10 +86,17 @@ Das Fahrzeug kommuniziert mit Sendern, die in der Umgebung verfügbar sind.
 Mit Hilfe dieser Sender wird ein globales Netz erstellt, dass dem Fahrzeug die Berechnung der absoluten Position im 
 globalen Koordinatensystem ermöglicht.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{graphics/gps.jpg}
+    \caption{Visualisierung von GPS als Beispiel einer Datenquelle zur Erzeugung globaler Bewegungsdaten }
+    \label{fig:gpsPicture}
+\end{figure}
+
 \begin{enumerate}[leftmargin=*]
     \item \textbf{\acf{gps}} \\
     Für die Ortung eines Fahrzeugs kommt in der Praxis das \ac{gps} zum Einsatz. 
-    \ac{gps} arbeitet mit Satelliten, die die Position des Benutzers, in diesem Fall des Fahrzeugs, bestimmen und übermitteln \cite{ashby2003relativity}. 
+    \ac{gps} arbeitet mit Satelliten, die die Position des Benutzers, in diesem Fall des Fahrzeugs, bestimmen und übermitteln \cite{ashby2003relativity} \autoref{fig:gpsPicture}. 
     Die Genauigkeit des \ac{gps} beträgt ca. 5-10 cm \cite{ashby2003relativity}.
 
     Der Vorteil der Nutzung eines \ac{gps}-Sensors ist eine globale Verfügbarkeit.
@@ -122,8 +129,29 @@ Ist in der Umgebung keine Kommunikation mit den Sendern möglich, so ist keine L
 Dabei ist es nicht von Bedeutung, ob das Signal von Satelliten oder von selbst angebrachten Sendern in der Umgebung stammt.
 Aus diesem Grund gibt es auch relative Verfahren, die die Positionsänderung anhand von Differenzen in den gesammelten Daten von verbauten Sensoren berechnen.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{graphics/localization.png}
+    \caption{Visualisierung von LiDAR als Beispiel einer Datenquelle zur Erzeugung relativer Bewegungsdaten (entnommen aus \cite{Wu.2024})}
+    \label{fig:relativeLocLocalization}
+\end{figure}
+In \autoref{fig:relativeLocLocalization} ist die Punktewolke eines LiDAR-Sensors zu zwei Zeitpunkten abgebildet. 
+Die orangen Punkte gehören zu der Situation, in der das Auto noch nicht vom LiDAR erkannt wird.
+Die blauen Punkte gehören zu der Situation, in der das Auto vom LiDAR erkannt wird. 
+In diesem Fall ist die Position des Sensors statisch, während im Rahmen dieser Arbeit die Umgebung statisch ist.
+Die Funktionsweise bleibt aber die gleiche. 
+Anhand der Differenz zwischen zwei Scans kann die Bewegung von Objekten ermittelt werden.
+
 \begin{enumerate}[leftmargin=*]
     \item \textbf{LiDAR-Sensor} \\
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=10cm]{graphics/funktionLidar.jpg}
+        \caption{Visualisierung der Funktionsweise eines LiDAR-Sensors}
+        \label{fig:lidarFunction}
+    \end{figure}
+
     Bei einem LiDAR-Sensor wird die Umgebung mit Hilfe von Laserstrahlen erfasst.
     Dabei werden Werte generiert, die die Distanz und Richtung des Objektes beinhalten. 
     LiDAR-Sensoren bieten den Vorteil, dass sie unabhängig von den Lichtverhältnissen der Umgebung sind \cite{lidar}. 
