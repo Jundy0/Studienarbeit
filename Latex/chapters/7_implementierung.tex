@@ -27,15 +27,16 @@ Die Implementierung der Interfaces erfolgt in den Simulations- und \ac{lidar}-Pr
 Dort können die Interfaces so implementiert werden, dass durch Verwendung des Interfaces die richtige Aktion im jeweiligen Projekt ausgeführt wird. 
 So stellt z. B. das Interface zum Auslesen der \ac{lidar} Daten im Simulations-Projekt Daten, welche den aktuellen Stand der Simulation widerspiegeln, 
 und im \ac{lidar}-Projekt Daten, welche über das RPLiDAR-\ac{sdk} aus dem verbauten \ac{lidar} ausgelesen wurden, zurückgegeben werden.
- Damit die Implementierungen der Interfaces an das Core-Projekt übergeben werden können und abhängig von der aktuellen Verwendung des Core-Projektes 
- die richtige Implementierung verwendet wird, wird das Dependency Injection Design Pattern angewandt. 
- Dieses Design Pattern besagt, dass Abhängigkeiten, wie z. B. die Logik für das Auslesen der \ac{lidar} Daten, 
- ausgelagert und über festgelegt Schnittstellen von einem Injector zur Verfügung gestellt werden. 
- In diesem Projekt werden die Schnittstellen in Form der Implementierungen der Interfaces bei der Initialisierung der Klasse, 
- welche die Abhängigkeiten, also die Interfaces, benutzt von dem aufrufendem Code übergeben, 
- welcher in diesem Fall als Injector fungiert \cite{dependencyInjection}. 
+Damit die Implementierungen der Interfaces an das Core-Projekt übergeben werden können und abhängig von der aktuellen Verwendung des Core-Projektes 
+die richtige Implementierung verwendet wird, wird das Dependency Injection Design Pattern angewandt. 
+Dieses Design Pattern besagt, dass Abhängigkeiten, wie z. B. die Logik für das Auslesen der \ac{lidar} Daten, 
+ausgelagert und über festgelegt Schnittstellen von einem Injector zur Verfügung gestellt werden. 
+In diesem Projekt werden die Schnittstellen in Form Interfaces festgelegt. 
+Die Implementierungen der Interfaces werden bei der Initialisierung der Klasse von dem aufrufendem Code übergeben. 
+Dieser fungiert hierbei als Injector. 
+Die Implementierungen der Interfaces, welche die Abhängigkeiten darstellen, können nun von der Klasse verwendet werden \cite{dependencyInjection}.
 
-Neben den Interfaces für das Auslesen der \ac{lidar} Daten und der Steuerung des Fahrzeugs befinden sich außerdem noch der Ausweichalgorithmus 
+Außer den Interfaces für das Auslesen der \ac{lidar} Daten und der Steuerung des Fahrzeugs befinden sich außerdem noch der Ausweichalgorithmus 
 und der SLAM-Algorithmus, welcher ebenfalls durch Interfaces abstrahiert sind, damit auch diese einfach ausgetauscht werden können. 
 Die gesamte Logik für das autonome Fahrzeug ist in der Klasse \textit{SelfdrivingVehicle} gebündelt. 
 Diese besitzt eine Methode \textit{update}, welche in der Hauptschleife des jeweiligen Programms aufgerufen wird. 
@@ -127,9 +128,9 @@ Wie auch das Control Window, besitzt das Visualize Window eine \textit{update} u
 
 Das \ac{lidar}-Projekt enthält das Programm, welches auf dem Raspberry Pi des autonomen Fahrzeugs ausgeführt wird und mit diesem das Fahrzeug steuert. 
 Damit dies möglich ist, werden Implementierungen für das \ac{lidar} Interface und das Interface zur Steuerung des Fahrzeugs benötigt. 
-Da zum Endzeitpunkt dieser Arbeit die genau Schnittstelle mit dem Motor und der Lenkung des Fahrzeugs feststeht, 
+Da zum Endzeitpunkt dieser Arbeit die genaue Schnittstelle mit dem Motor und der Lenkung des Fahrzeugs nicht feststeht, 
 ist nur die Implementierung des \ac{lidar} Interfaces vorhanden, welche in Kapitel \ref{lidar_implementation} näher beschrieben wird. 
-Voraussichtlich wäre die Schnittstelle mit dem Motor und der Lenkung durch das Setzen von Spannungen über die GPIO Pins des Raspberry Pis gelaufen. 
+Voraussichtlich wäre die Schnittstelle mit dem Motor und der Lenkung durch das Setzen von Spannungen über die \ac{gpio} Pins des Raspberry Pis gelaufen. 
 Hierfür könnte die Library pigpio verwendet werden.  
 Mit den Implementierungen der Interfaces könnten daraufhin das \textit{SelfdrivingVehicle} verwendet werden, um die Logik des Fahrzeugs auszuführen. 
 Allerdings wurde für das Programm noch keine Lösung gefunden, wie das Ziel des Fahrzeugs an den Raspberry Pi übergeben werden kann. 
@@ -291,7 +292,7 @@ Die gesamte Implementierung wird durch den \textit{SlamHandler} vom Rest des Cod
 Somit wird für jedes Update lediglich die update-Funktion des \textit{SlamHandler} durch das \textit{SelfdrivingVehicle} aufgerufen.
 Das entsprechende Sequenzdiagramm befindet sich im Anhang. \ref{fig:slam_sequence_diagram}
 
-\paragraph{\textit{Particle}-Klasse} \mbox{}
+\paragraph{\textit{Particle}-Klasse} \mbox{} \\
 Ursprünglich war geplant \ac{slam} mittels eines Partikel Filter umzusetzen.
 Ein Beispiel für einen solchen Filter ist der FastSLAM-Algorithmus \cite{montemerlo2002fastslam}.
 Dieser Plan wurde jedoch, aufgrund der hohen Komplexität eines solchen Filters und der begrenzten Rechenleistung und Zeit, verworfen.
@@ -305,7 +306,7 @@ Neben Get-Methoden für die Karte, Position und Rotation gibt es Methoden zum Ak
 Diese aktualisieren sowohl die Karte, als auch die Position und Rotation des Partikels.
 Auf den Ablauf wird in dem Kapitel \ref{position_update} eingegangen.
 
-\paragraph{Erstellung einer Karte}
+\paragraph{Erstellung einer Karte} \mbox{} \\
 Wie bereits in Kapitel \ref{mapping} beschrieben, wird für den Aufbau der Karte ein Occupancy Grid verwendet.
 Hierzu gibt es die entsprechende Klasse \textit{OccupancyGrid}.
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/occupancyGrid.cpp}{src/core/src/occupancyGrid.cpp}]
@@ -425,7 +426,7 @@ for (int i = 0; i < freePoints->rows(); i++)
 }
 \end{lstlisting}
 
-\paragraph{Aktualisierung der Position und Rotation}
+\paragraph{Aktualisierung der Position und Rotation} \mbox{} \\
 \label{position_update}Zur Aktualisierung der Position wird die Methode \textit{updatePosition} des \textit{Particle} aufgerufen.
 Dieser werden die notwendigen Werte für Positionsänderung und Rotationsänderung übergeben, welche dann auf die aktuellen Werte addiert werden.
 
@@ -479,7 +480,7 @@ void SlamHandler::update(lidar_point_t *data, const Eigen::RowVector2d &position
 } 
 \end{lstlisting}
 
-\paragraph{Umsetzung mittels \ac{icp}} \mbox{}
+\paragraph{Umsetzung mittels \ac{icp}} \mbox{}\\
 Die Methode zur Berechnung der Werte für Positionsänderung und Rotationsänderung,
 welche bei Verwendung des echten \ac{lidar} zum Einsatz kommen soll, verwendet einen \ac{icp}-Algorithmus.
 
@@ -653,12 +654,12 @@ Die Schleife wird nun so lange wiederholt, bis keine Einträge mehr in der Liste
 Um den Pfad zu rekonstruieren wir von dem Ziel die jeweiligen Parent-Punkte nachgefahren, bis der Startpunkt erreicht wurde \cite{hartFormalBasisHeuristic1968}. 
 
 Umgesetzt wurde der Algorithmus mit einer Priority Queue, welche immer das Element mit der geringsten f-Cost zurückgibt.
- Außerdem wird jeweils eine Matrix für f-Cost, g-Cost und das Festhalten der Parent-Punkten benutzt. 
- In der Schleife werden Nachbarn nur zur Priority Queue hinzugefügt, wenn dies innerhalb der Karte und der Wert an diesem Punkt kleiner als \(PROB\_OCC\) ist, 
- was bedeutet, dass dort wahrscheinlich kein Hindernis vorhanden ist. 
- Da ein Punkt auch über mehrere Punkte angefahren werden kann, wird der Punkt nur in die Priority Queue hinzugefügt, 
- wenn der g-Cost größer ist, als der aktuell in der Matrix hinterlegte Wert 
- [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/evasionAStar.cpp}{src/core/src/evasionAStar.cpp}]. 
+Außerdem wird jeweils eine Matrix für f-Cost, g-Cost und das Festhalten der Parent-Punkten benutzt. 
+In der Schleife werden Nachbarn nur zur Priority Queue hinzugefügt, wenn dies innerhalb der Karte und der Wert an diesem Punkt kleiner als \(PROB\_OCC\) ist, 
+was bedeutet, dass dort wahrscheinlich kein Hindernis vorhanden ist. 
+Da ein Punkt auch über mehrere Punkte angefahren werden kann, wird der Punkt nur in die Priority Queue hinzugefügt, 
+wenn der g-Cost größer ist, als der aktuell in der Matrix hinterlegte Wert 
+[\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/evasionAStar.cpp}{src/core/src/evasionAStar.cpp}]. 
 
 \begin{lstlisting}[caption={Pathfinding mit A*},label={lst:astar-pathfinding},language={C++}]
 void EvasionAStar::execute()
@@ -769,7 +770,7 @@ void EvasionControl::inflateObstacles()
 }
 \end{lstlisting}
 
-\paragraph{Natürliches Fahrtverhalten} \mbox{}
+\paragraph{Natürliches Fahrtverhalten} \mbox{}\\
 
 Die aktuelle Implementierung des A*-Algorithmus, ergibt zwar einen Pfad, welcher nicht über Hindernisse und, durch Ostacle Inflation, 
 zu nah an einem Hindernis vorbeigeht, jedoch ist der resultierende Pfad für das autonome Fahrzeug dennoch nicht befahrbar. 
@@ -786,7 +787,7 @@ wenn es zu diesem Punkt gefahren wäre \cite{restricted_pathfindng_2017}.
 Aus zeitlichen Gründen konnte dieses Konzept nicht funktionieren und effizient umgesetzt werden 
 [\href{https://github.com/Jundy0/Studienarbeit/blob/advanced-pathfinding/src/core/src/evasionAdvancedAStar.cpp}{src/core/src/evasionAdvancedAStar.cpp (tree advanced-pathfinding)}]. 
 
-\paragraph{Ansteuerung des autonomen Fahrzeugs} \mbox{}
+\paragraph{Ansteuerung des autonomen Fahrzeugs} \mbox{}\\
 
 Nachdem ein valider Pfad erstellt wurde, muss dieser mit Fahrzeug abgefahren wurde. 
 Dafür kann das \textit{VehicleActuator} Interface benutzt werden, mit welchen das echte bzw. simulierte Fahrtzeug gesteuert werden kann. 

@@ -50,9 +50,6 @@ Zusätzlich werden Schwellenwerte definiert, die festlegen, ab wann ein Feld des
 Das Ergebnis ist eine Occupancy Grid Map, welche eine geringere Auflösung als die gesamte Karte hat.
 In ihr werden Informationen über den Status des Teils der Karte gespeichert, welche von dem Feld der Grid Map repräsentiert wird.
 
-Aufgrund der Simplizität und einfachen Umsetzung wurde sich dazu entschieden, eine solche Occupancy Grid zum Mapping zu verwenden.
-Siehe Abbildung \ref{fig:gridMap}
-
 \begin{figure}[H]
     \centering
     \subfloat[a][Simulierte Umgebung]{
@@ -69,19 +66,22 @@ Wie in der Abbildung \ref{fig:gridMap} zu sehen ist, wird die Umgebung (a) gesca
 Die Map selbst ist mit 2000mm x 2000mm doppelt so groß wie die Umgebung, das Grid hat jedoch nur eine Auflösung von 500px x 500px.
 Das bedeutet, dass jeder Pixel des Grid ein 4mm x 4mm Quadrat der Map darstellt.
 
+Aufgrund der Simplizität und einfachen Umsetzung wurde sich dazu entschie\-den, eine solche Occupancy Grid zum Mapping zu verwenden.
+Siehe Abbildung \ref{fig:gridMap}
+
 \subsection{Lokalisierung}
 Das selbstfahrende Fahrzeug soll in der Lage sein ein vorgegebenes Ziel zu erreichen. 
 Daher ist neben dem Mapping auch die Lokalisierung des Fahrzeuges eine zentrale Aufgabe. 
 Denn ohne das Wissen über die aktuelle Position auf der Karte kann kein Weg zum Ziel berechnet werden
 und es kann auch nicht bestimmt werden, ob das Ziel erreicht ist.
 
-In Folgenden werden verschiedene Ansätze zur Lösung des Lokalisierungsproblems mit den Vor- und Nachteilen beschrieben.
+In Folgenden werden verschiedene Ansätze zur Lösung des Lokalisierungs\-problems mit den Vor- und Nachteilen beschrieben.
 
 \subsubsection{Datengenerierung}
 In diesem Abschnitt werden verschiedene Möglichkeiten zur Generierung von Daten, welche zur Lokalisierung eines Fahrzeugs genutzt werden können, näher betrachtet.
 
 \paragraph{Datenquellen zur Erzeugung globaler Bewegungsdaten} \mbox{}\\
-Globale Verfahren zur Datenerzeugung für Lokalisierungsalgorithmen basieren darauf, dass die Umgebung dafür präpariert ist.
+Globale Verfahren zur Datenerzeugung für Lokalisierungsalgorithmen ba\-sieren darauf, dass die Umgebung dafür präpariert ist.
 Das Fahrzeug kommuniziert mit Sendern, die in der Umgebung verfügbar sind. 
 Mit Hilfe dieser Sender wird ein globales Netz erstellt, dass dem Fahrzeug die Berechnung der absoluten Position im 
 globalen Koordinatensystem ermöglicht.
@@ -183,7 +183,7 @@ Anhand der Differenz zwischen zwei Scans kann die Bewegung von Objekten ermittel
     wodurch diese als primäre Datenquelle zur Lokalisierung eher für Fahrzeuge mit hoher Rechenleistung geeignet sind.
 
     Ein weiterer Nachteil von Kameras ist die eingeschränkte Sichtweite. 
-    Das Bild kann nur einen gewissen Teil der Umgebung aufnehmen und bietet nur durch die Kombination mehrerer Kameras eine vollständige Wahrnehmung der Umgebung.
+    Das Bild kann nur einen gewissen Teil der Umgebung aufnehmen und bietet nur durch die Kombination mehrerer Kameras eine vollständige Wahrneh\-mung der Umgebung.
 
     \item \textbf{Ultraschall} \\
     Ultraschallsensoren erfassen die Umgebung mit Hilfe von Schallwellen und deren Reflexionen. 
@@ -203,7 +203,7 @@ Anhand der Differenz zwischen zwei Scans kann die Bewegung von Objekten ermittel
 \label{pcl}
 Point Cloud Registration beschreibt ein Problem zur Schätzung der Transformation zwischen mehreren Punktewolken. Siehe Abbildung \ref{fig:registrationExample}
 
-Mit Hilfe von Punktewolken können beliebig große Mengen an Punkten dargestellt werden.
+Mit Hilfe von Punktewolken können beliebig große Mengen an Punkten dar\-gestellt werden.
 Die Wolke beinhaltet Informationen zu jedem der Punkte.
 Hierzu gehören zumindest die Koordinaten.
 Eine solche Wolke kann jedoch auch weitere Informationen wie Farbe oder Krümmung beinhalten. 
@@ -215,7 +215,7 @@ Beschränkt sich die Transformation auf Rotation und Translation, spricht man vo
 Des Weiteren wird anhand der Quelle und Anzahl der Datensätze unterschieden.
 
 Die Punktewolken, welche Teil dieser Arbeit sind, werden mit Hilfe eines einzelnen, zwei-dimensionalen \ac{lidar}-Sensor erstellt.
-Sie enthalten ausschließlich Informationen über die X und Y Koordinaten der einzelnen Punkte.
+Sie enthalten ausschlie\-ßlich Informationen über die X und Y Koordinaten der einzelnen Punkte.
 
 Somit spricht man bei der, im Kontext dieser Arbeit durchgeführten Point Cloud Registration, von einer paarweisen und steifen 2D Registration.
 Diese Art der Registration ist eine der simpelste, da lediglich zwei Punktewolken desselben Sensors miteinander verglichen werden 
@@ -357,7 +357,7 @@ bietet sich die Nutzung der Point Cloud Registration im Rahmen dieser Arbeit an.
 Die Datensätze dieser Arbeit sind mit unter 1000 Punkten recht klein.
 Somit ist eine Schätzung von Keypoints wenig Sinnvoll und teilweise auch nicht umsetzbar.
 
-In der Theorie verringert das Berechnen von Feature-Deskriptoren die Laufzeit und verbessert das Ergebnis.
+In der Theorie verringert das Berechnen von Feature-Deskriptoren die Lauf\-zeit und verbessert das Ergebnis.
 Selbst durchgeführten Tests ergaben jedoch, dass die Laufzeit sich verschlechterte 
 und das Ergebnis auch ohne die Nutzung von Feature-Deskriptoren ausreichend genau ist.
 Das lässt sich durch die geringe Anzahl an Punkten innerhalb unserer Datensätze und der Nutzung von lediglich zwei Dimensionen erklären.
