@@ -61,6 +61,7 @@ Der Ablauf in der \textit{update} Methode, ist:
     Daraus wird mit einem zuvor definierten Ziel ein Pfad berechnet, welcher um die erkannten Hindernisse fährt. 
     Mit dieser wird dann berechnet, wie der Motor und die Lenkung gesetzt werden, damit das Fahrzeug auf diesem Pfad fährt. 
 
+    \newpage
     \item \textbf{Updaten der Motor- und Lenksteuerung} 
 
     In diesem Schritt werden mit den Werten aus dem vorherigen Schritt die Steuerung für den Motor und die Lenkung geändert. 
@@ -250,6 +251,7 @@ wird der Abstand durch \(4000\) und der Winkel mal \(90\) und durch \(16384\) (e
 Mit den konvertierten Werten kann nun auch der \(x\) und \(y\) Wert des Punktes über \(cos\) und \(sin\) gerechnet werden 
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/lidar/src/a1lidarSensor.cpp}{src/lidar/src/a1lidarSensor.cpp}]. 
 
+\newpage
 \begin{lstlisting}[caption={Auslesen der LiDAR Daten},label={lst:auslesen_lidar},language={C++}]
 void A1LidarSensor::getScanData(lidar_point_t *data, size_t count)
 {
@@ -529,7 +531,7 @@ oder die maximale Anzahl an Iterationen erreicht wurde.
 
 Der Ablauf einer Iteration ist recht simpel.
 Die, in der Header-Datei festgelegten Parameter werden gesetzt.
-Hierbei wird die \textit{MAX\_CORRESPONDENCE\_DISTNACE\_ICP} mit jeder Iteration verringert.
+Hierbei wird die \textit{MAX\_CORRESPON\-DENCE\_DISTNACE\_ICP} mit jeder Iteration verringert.
 Dies geschieht weil davon ausgegangen wird, dass nach jeder Iteration der Abstand zwischen den beiden Punktewolken verringert wurde.
 
 Danach werden Input und Target des Algorithmus gesetzt und der Algorithmus wird ausgeführt.

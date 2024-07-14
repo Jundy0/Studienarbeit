@@ -158,20 +158,6 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
 
     Dadurch entstehen unmögliche Pfade weshalb die neue Logik, zum aktuellen Zeitpunkt, noch rein experimentell und für die Anwendung ungeeignet ist.
 
-    \begin{figure}[H]
-        \centering
-        \subfloat[a][Berechneter Pfad mit der alten Logik]{
-            \includegraphics[width=12cm]{graphics/path_without_fix.png}
-            \label{fig:pathWithoutFix}
-        }
-        \\
-        \subfloat[b][Berechneter Pfad mit der neuen Logik]{
-            \includegraphics[width=12cm]{graphics/path_with_fix.png}
-            \label{fig:pathWithFix}
-        }
-        \caption{Vergleich der Pfadberechnung vor und nach dem Versuch eines Fix}
-    \end{figure}
-
     Des Weiteren neigte der Algorithmus dazu, Pfade zu generieren, welche durch Wände führten.
     Wie sich herausstellte, war das Problem die Darstellung der Koordinaten.
     Die Implementierung des Algorithmus repräsentierte Punkte in der Form (x,y).
@@ -179,10 +165,25 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Diese wird in der Form (Zeile, Spalte) angesprochen.
     Sieht man die Matrix nun als Koordinaten-System entsprechen die Zeilen der, nach unten gerichteten y-Achse.
     Die Spalten entsprechen der, nach rechts gerichteten x-Achse.
-    Somit muss, um den korrekten Wert aus der Matrix auslesen zu können, diese in der Form (y,y) angesprochen werden.
+    Somit muss, um den korrekten Wert aus der Matrix auslesen zu können, diese in der Form (y,x) angesprochen werden.
     Ein einfaches Tauschen der Koordinaten bei der Abfrage des Matrix-Wertes löste das Problem.
 \end{enumerate}
 
+\begin{figure}[H]
+    \centering
+    \subfloat[a][Berechneter Pfad mit der alten Logik]{
+        \includegraphics[width=14cm]{graphics/path_without_fix.png}
+        \label{fig:pathWithoutFix}
+    }
+    \\
+    \subfloat[b][Berechneter Pfad mit der neuen Logik]{
+        \includegraphics[width=14cm]{graphics/path_with_fix.png}
+        \label{fig:pathWithFix}
+    }
+    \caption{Vergleich der Pfadberechnung vor und nach dem Versuch eines Fix}
+\end{figure}
+
+\newpage
 \paragraph{Ergebnisse} \mbox{}\\
 Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgenden genauer eingegangen werden soll.
 
@@ -243,6 +244,7 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
     sind die Abstände zu den Hindernissen weiterhin akkurat.
     Die resultierende Map ist jedoch verzerrt was zu Problemen bei der Navigation führen kann.
 
+    \newpage
     \item \textbf{Ausweichen} \\
     Die Möglichkeit auszuweichen wurde mittels Path-Finding und der generierten Karten umgesetzt.
     
@@ -280,6 +282,7 @@ Die Umsetzung der Studienarbeit erzielte diverse Ergebnisse auf welche im Folgen
     Die Eingabe der Zielkoordinaten erfolgt über die simulierte Umgebung.
 \end{enumerate}
 
+\newpage
 \subsection{Evaluation}
 Im Folgenden werden wichtige Aspekte der Arbeit beleuchtet und evaluiert.
 
@@ -452,6 +455,7 @@ In diesem Abschnitt wird evaluiert, ob die eingangs definierten Metriken und Zie
     bevor damit das Modellauto gesteuert wird. 
     Außerdem muss die Performance der Lösung noch optimiert werden, da bei laufender Neuberechnung der Route eine Dauer von 500ms nur für die Route zu lange ist.
 
+    \newpage
     \item \textbf{Steuerung des Fahrzeuges}
 
     \textbf{Angewandte Metrik:}
@@ -538,8 +542,8 @@ können sie genutzt werden um flache Hindernisse, welche sich unterhalb des \ac{
 Außerdem können sie als fail-safe dienen, falls das Fahrzeug auf ein Hindernis zusteuert, diesem aber nicht ausweicht.
 Ein solcher fail-safe dient vor allem dem Schutz der Hardware, welche fragil und teuer ist.
 
-Neben Ultraschall-Sensoren macht auch die Erweiterungen um einen Beschleunigungs-Sensor Sinn.
-Ein solcher Sensor kann genutzt werden, um zusätzliche Bewegungsdaten zu sammeln.
+Neben Ultraschall-Sensoren macht auch die Erweiterungen um einen Be\-schleunigungs-Sensor Sinn.
+Ein solcher Sensor kann genutzt werden, um zu\-sätzliche Bewegungsdaten zu sammeln.
 Diese können verwendet werden, um z.B. durch Gewichtung, die Ergebnisse der Lokalisierung zu verbessern.
 
 \paragraph{Filter} \mbox{}\\
