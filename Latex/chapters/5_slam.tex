@@ -21,11 +21,12 @@ Da es sich, aufgrund des verwendeten \ac{lidar}-Sensors, in dieser Arbeit um ein
 ist der simpelste Weg eine Karte umzusetzen eine einfache Matrix.
 In dieser steht für jede Koordinate der Karte eine 1, -1 oder 0.
 
-Die Matrix wird mit 0 gefüllt.
+Die Matrix wird mit 0 gefüllt, was dem Status "Unbekannt" entspricht.
 Erkennt die Sensorik ein Hindernis an einer Koordinate (X,Y), wird der Wert an der Stelle in der Matrix auf 1 gesetzt.
 Die Werte zwischen dem Hindernis und der aktuellen Position des Sensors können auf -1 gesetzt werden,
 da keine Hindernisse in diesem Bereich erkannt wurden.
 Somit kann, solange die Position des Fahrzeugs bekannt ist, die Karte Scan für Scan gefüllt werden.
+Der Status jedes Feldes, kann dann über die Matrix ausgelesen werden.
 
 \paragraph{Grid Map} \mbox{}\\
 Im Falle dieser Arbeit werden sämtliche Distanzen in Millimetern angegeben.
