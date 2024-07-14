@@ -33,13 +33,13 @@ In diesem Abschnitt wird auf die Software eingegangen, welche zur Entwicklung de
     Des Weiteren bietet Slamtec, der Hersteller des zur Verfügung stehenden \ac{lidar}-Sensors, eine Bibliothek, zur Nutzung des \ac{lidar}-Sensors, in Kombination mit verschiedenen Versionen des \ac{ros} an. \cite{RplidarRos2023}
 
     \item \textbf{Slamtec RPLiDAR Public SDK} \\
-    Slamtec bietet, neben der \ac{ros}-Bibliothek, auch eine öffentlich zugängliche SDK für sämtliche RPLiDAR-Produkte an. 
-    Die SDK ist in C++ geschrieben und unter der BSD 2-clause Lizenz lizenziert. \cite{RplidarSDK2023}
+    Slamtec bietet, neben der \ac{ros}-Bibliothek, auch eine öffentlich zugängliches \ac{sdk} für sämtliche RPLiDAR-Produkte an. 
+    Das \ac{sdk} ist in C++ geschrieben und unter der BSD 2-clause Lizenz lizenziert. \cite{RplidarSDK2023}
 
     \item \textbf{Slamtec RPLiDAR SDK Python-Ports} \\
     Die Slamtec RPLidar Sensoren sind, aufgrund des erschwinglichen Preises, vor allem bei Einsteigern sehr beliebt.
     Auch die Programmiersprache Python ist in den letzten Jahren immer beliebter geworden.
-    Da Slamtec selbst keine Python-SDK anbietet, entstanden über die Jahre diverse Ports der C++ SDK.
+    Da Slamtec selbst kein Python-\ac{sdk} anbietet, entstanden über die Jahre diverse Ports des C++-\ac{sdk}.
 \end{enumerate}
 
 \subsection{Technologie-Entscheidung}
@@ -66,12 +66,12 @@ Diese kommt mit vielen, für die Studienarbeit nicht relevanten, Komponenten dah
 Des Weiteren benötigt \ac{ros} ein anderes, nicht für den Raspberry Pi optimiertes, Betriebssystem wie Ubuntu.
 Das hat zu Folge, das weitere Ressourcen für das Betriebssystem benötigt werden und nicht für die notwendigen Berechnungen zur Verfügung stehen.
 
-Die Alternative zur Verwendung von \ac{ros}, ist das Nutzen einer SDK.
-Die Python-Ports der SDK sind alle schon einige Jahre alt und haben teilweise keine wirklich übersichtliche Struktur.
-Die offizielle C++ SDK hingegen wird immer noch regelmäßige upgedatet und bietet eine umfangreiche Dokumentation sowie einige Beispielprogramme.
+Die Alternative zur Verwendung von \ac{ros}, ist das Nutzen eines \ac{sdk}.
+Die Python-Ports des SDK sind alle schon einige Jahre alt und haben teilweise keine wirklich übersichtliche Struktur.
+Das offizielle C++-\ac{sdk} hingegen wird immer noch regelmäßige upgedatet und bietet eine umfangreiche Dokumentation sowie einige Beispielprogramme.
 
-Um die begrenzt vorhandenen Ressourcen des Raspberry Pi optimal nutzen zu können, ist daher die Nutzung der C++ SDK und einem entsprechenden Interface die beste Lösung.
-Da die SDK in C++ geschrieben ist, ergibt es Sinn, die restliche Software ebenfalls in C++ zu implementieren.
+Um die begrenzt vorhandenen Ressourcen des Raspberry Pi optimal nutzen zu können, ist daher die Nutzung des C++-\ac{sdk} und einem entsprechenden Interface die beste Lösung.
+Da das \ac{sdk} in C++ geschrieben ist, ergibt es Sinn, die restliche Software ebenfalls in C++ zu implementieren.
 Zusätzlich verbessert die Nutzung einer kompilierten Programmiersprache wie C++ die Laufzeit der Software was die Reaktionszeit des Autos verbessert.
 
 \newpage

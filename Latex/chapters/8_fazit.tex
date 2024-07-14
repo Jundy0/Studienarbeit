@@ -24,7 +24,7 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     \end{figure}
 
     Standardmäßig liegt dem Slamtec RPLiDAR A1M8-R6 ein Adapter bei.
-    Dieser ermöglicht es, über Standard USB-A, mittels SDK mit dem \ac{lidar} zu kommunizieren und auch den Motor des \ac{lidar} anzusteuern.
+    Dieser ermöglicht es, über Standard USB-A, mittels \ac{sdk} mit dem \ac{lidar} zu kommunizieren und auch den Motor des \ac{lidar} anzusteuern.
     Bei unserem Exemplar des \ac{lidar} lag ein solcher Adapter jedoch nicht bei.
     Anstelle des Adapters stand lediglich ein Kabel zur Verfügung, dass an den \ac{lidar} angeschlossen werden konnte.
     Das andere Ende des Kabels war nicht terminiert, sodass die einzelnen Kabel direkt an den Pins des Raspberry Pi angeschlossen werden mussten.
@@ -33,7 +33,7 @@ In sämtlichen Bereichen der Studienarbeit kam es zu Problemen, welche versucht 
     Es stellte sich jedoch raus, dass die Kabel lediglich an den falschen Pins des Raspberry Pi angeschlossen wurden.
     Durch korrektes Anschließen der Kabel zur seriellen Kommunikation wurde das Problem gelöst.
 
-    Eine weitere Folge des fehlenden Adapters war, dass die Motorsteuerung mittels SDK nicht länger möglich war.
+    Eine weitere Folge des fehlenden Adapters war, dass die Motorsteuerung mittels \ac{sdk} nicht länger möglich war.
     Um den Motor zu steuern, musste ein entsprechendes PWM-Signal an dem korrekten Pin des Raspberry Pi manuell gesetzt werden.
     Zur Vereinfachung dieses Prozesses wurde ein Interface implementiert, welches den Motor bei Bedarf automatisch startet und stoppt.
 
