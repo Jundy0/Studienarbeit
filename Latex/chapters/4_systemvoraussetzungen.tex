@@ -26,11 +26,10 @@ In diesem Abschnitt werden die Voraussetzungen an das Einsatzgebiet des Autos de
     Hintergrund ist, dass die Elektronik nicht vor eindringendem Wasser geschützt ist.
     Eindringendes Wasser könnte das Fahrzeug so beschädigen, dass es nicht mehr funktioniert.
    
-    \item \textbf{Höhe der Hindernisse} \\
-    Der verwendete LiDAR-Sensor liefert 2D-Daten in einem 360 Grad Winkel. 
-    Das bedeutet, dass die Hindernisse auf der Höhe des LiDAR-Sensors sein müssen, um erfasst zu werden.
-    Sind die Hindernisse unterhalb des LiDAR, so können diese Hindernisse von diesem nicht erfasst werden.
-    Dadurch können diese auch nicht um Ausweichalgorithmus berücksichtigt werden, was ein Ausweichen dieser Hindernisse unmöglich macht.
+    \item \textbf{Höhennnterschiede der Umgebung} \\
+    Das Fahrzeug darf nur in ebenen Umgebungen verwendet werden. 
+    Steigungen sorgen dafür, dass Hindernisse oberhalb oder unterhalb des Fahrzeuges nicht erkannt werden. Dadurch ist eine Vermeidung von Kollisionen 
+    und eine korrekte Berechnung der Route nicht zu jedem Zeitpunkt gegeben.
 \end{enumerate}
 
 \subsection{Einschränkungen}
