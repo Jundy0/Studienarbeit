@@ -310,20 +310,20 @@ Wie bereits in Kapitel \ref{mapping} beschrieben, wird für den Aufbau der Karte
 Hierzu gibt es die entsprechende Klasse \textit{OccupancyGrid}.
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/src/occupancyGrid.cpp}{src/core/src/occupancyGrid.cpp}]
 
-Eine wichtige Unterscheidung ist die ziwschen Karte und Grid.
+Eine wichtige Unterscheidung ist die zwischen Karte und Grid.
 Die Karte selbst wird lediglich für die Berechnungen benutzt.
 Sie beschreibt nur Grenzwerte für Koordinaten und somit einen Bereich in dem der Roboter und die gescannten Punkte sein können.
 
 Sämtliche Informationen über den Status der Karte an sämtlichen Koordinaten werden in dem Occupancy Grid gespeichert.
-Man kann sich das Grid als Etwas, dass auf der virtuellen Karte drauf liegt vorstellen.
+Man kann sich das Grid als Etwas, dass auf der virtuellen Karte darauf liegt vorstellen.
 Sowohl die Maße der Karte, als auch die Maße des Grid werden mittels Konstanten in einer Settings-Datei festgelegt.
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/include/settings.h}{src/core/include/settings.h}]
 
 Das Grid selbst, sowie eine Kopie des Grids, welcher per shared Pointer über die Get-Methode erfragt werden kann, werden als Matrix gespeichert.
-Da es sich hier um sehr große Matritzen handelt, wurde für die Handhabung dieser die Bibliothek Eigen3 verwendet.
+Da es sich hier um sehr große Matrizen handelt, wurde für die Handhabung dieser die Bibliothek Eigen3 verwendet.
 Eigen ist eine vielseitig einsetzbare und schnelle Bibliothek für die Handhabung von Vektoren und Matritzen.
 
-Die beiden Matritzen werden im Konstruktor des \textit{OccupancyGrid} als \textit{probMap} und \textit{probMapCpy} deklariert und mit Nullen initialisiert.
+Die beiden Matrizen werden im Konstruktor des \textit{OccupancyGrid} als \textit{probMap} und \textit{probMapCpy} deklariert und mit Nullen initialisiert.
 \newline
 
 Jedes mal wenn neue Daten mittels Scan erstellt werden, wird die Funktion \textit{updateProbMap} aufgerufen.
@@ -346,7 +346,7 @@ Die gescannten Punkte werden dann an die Matrix für die belegten Punkte angehan
 
 Die frei befahrbaren Punkte sind alle die Punkte, welche sich zwischen dem Sensor und dem gescannten Hindernis befinden.
 Zur Berechnung dieser Punkte wird der Bresenham-Algorithmus verwendet.
-Der entsprechende Methode werden die X- und Y-Koordinaten des Roboters, sowie die Koordinaten des Zielpunkt übergeben.
+Der entsprechenden Methode werden die X- und Y-Koordinaten des Roboters, sowie die Koordinaten des Zielpunktes übergeben.
 Zurückgegeben wird eine Matrix, welche Koordinaten sämtlicher Punkte enthält, die sich auf einer Linie zwischen den übergebenen Punkten befinden.
 Diese werden der Matrix für frei befahrbare Punkte angehangen.
 
@@ -389,12 +389,12 @@ Für jeden Punkt der Matrix mit belegten Punkten, werden X- und Y-Koordinate aus
 Da die Koordinaten in der Karte liegen, das Grid jedoch kleiner ist, müssen die Koordinaten der Punkte angepasst werden.
 Daher werden diese durch den Faktor, um den die Map größer ist als das Grid, geteilt.
 Zusätzlich ist darauf zu achten, dass die Matrix per (Zeile,Spalte) adressiert wird.
-Da die Zeilen der Y-Achse entsprechen und die Spalten der X-Achse muss die Adressierung entsprechen per (Y,X) erfolgen.
-Der Wert in der Matrix wird, so lange er unter einem Grenzwert liegt, um ein Delta erhöht.
+Da die Zeilen der y-Achse entsprechen und die Spalten der x-Achse muss die Adressierung entsprechen per (Y,X) erfolgen.
+Der Wert in der Matrix wird, solange er unter einem Grenzwert liegt, um ein Delta erhöht.
 Wird der Grenzwert erreicht, wird der Punkt im Grid als belegt angesehen.
 Auch der Grenzwert und das Delta können in der oben erwähnten Settings-Datei festgelegt werden.
 
-Der selbe Vorgang wird für die freien Punkte wiederholt.
+Derselbe Vorgang wird für die freien Punkte wiederholt.
 Einziger Unterschied ist, dass der Wert im Grid gesenkt statt erhöht wird.
 Auch hier können Grenzwert und Delta per Settings-Datei festgelegt werden.
 
@@ -427,7 +427,7 @@ for (int i = 0; i < freePoints->rows(); i++)
 
 \paragraph{Aktualisierung der Position und Rotation}
 \label{position_update}Zur Aktualisierung der Position wird die Methode \textit{updatePosition} des \textit{Particle} aufgerufen.
-Dieser werden die notwendige Werte für Positionsänderung und Rotationsänderung übergeben, welche dann auf die akutellen Werte addiert werden.
+Dieser werden die notwendigen Werte für Positionsänderung und Rotationsänderung übergeben, welche dann auf die aktuellen Werte addiert werden.
 
 Die Berechnung der Werte kann auf zwei Arten erfolgen. \ref{lst:slam-handler-update}
 \begin{enumerate}
@@ -502,12 +502,12 @@ typedef struct
 Die, für den \ac{icp}-Algorithmus verwendeten Parameter, sowie typedefs, welche den Code übersichtlicher machen, befinden sich in der Header-Datei.
 [\href{https://github.com/Jundy0/Studienarbeit/blob/main/src/core/include/pclHandler.h}{src/core/include/pclHandler.h}]
 
-Beim Aufruf der Methode \textit{computeTransformation} werden die Scans, in Form zweier Matritzen mit Punkten in Polarkoordinaten, 
+Beim Aufruf der Methode \textit{computeTransformation} werden die Scans, in Form zweier Matrizen mit Punkten in Polarkoordinaten, 
 sowie die Rotation des Roboters zum Zeitpunkt des ersten Scans übergeben.
-Da \ac{pcl} Punktewolken für sämtliche Berechnungen verwendet, müssen diese Matritzen zuerst in Punktewolken umgewandelt werden.
+Da \ac{pcl} Punktewolken für sämtliche Berechnungen verwendet, müssen diese Matrizen zuerst in Punktewolken umgewandelt werden.
 
 Hierzu werden die Punkte zuerst in ein kartesisches Koordinatensystem überführt.
-Dabei gilt zu beachten, dass die Rotaion des Roboters auf den Winkel der Punkte addiert wird.
+Dabei gilt zu beachten, dass die Rotation des Roboters auf den Winkel der Punkte addiert wird.
 Damit wird sichergestellt, dass die resultierenden Wolken nach den globalen Koordinatenachsen der Karte ausgerichtet sind.
 Genaueres hierzu in Kapitel \ref{coordinates_problem}.
 
@@ -515,7 +515,7 @@ Nachdem die Scan-Daten korrekt ausgerichtet und in ein Punktewolken-Format gebra
 
 Zuerst wird ein Pointer auf eine PointCloud erzeugt, in welchen die vom Algorithmus transformierte Punktewolke geschrieben wird.
 Dieser wird mit dem Pointer der PointCloud des ersten Scans gleichgesetzt.
-Dass sorgt dafür, dass das Ergebnis des Algorithmus die Punktewolke des ersten Scans überschreibt.
+Das sorgt dafür, dass das Ergebnis des Algorithmus die Punktewolke des ersten Scans überschreibt.
 Somit wird bei der Durchführung einer weiteren Iteration des Algorithmus, das Ergebnis der vorherigen Iteration als Input genommen.
 
 Außerdem wird die Transformationsmatrix und ein Counter initialisiert.
@@ -529,15 +529,15 @@ oder die maximale Anzahl an Iterationen erreicht wurde.
 Der Ablauf einer Iteration ist recht simpel.
 Die, in der Header-Datei festgelegten Parameter werden gesetzt.
 Hierbei wird die \textit{MAX\_CORRESPONDENCE\_DISTNACE\_ICP} mit jeder Iteration verringert.
-Dies geschiet weil davon ausgegangen wird, dass nach jeder Iteration der Abstand zwischen den beiden Punktewolken verringert wurde.
+Dies geschieht weil davon ausgegangen wird, dass nach jeder Iteration der Abstand zwischen den beiden Punktewolken verringert wurde.
 
 Danach werden Input und Target des Algorithmus gesetzt und der Algorithmus wird ausgeführt.
-Genauere Informationen über den Ablauf des Algorithmus und die Möglichkeiten finden sich in der PCL-Dokumentation. \cite{pcl2024icp}
+Genauere Informationen über den Ablauf des Algorithmus und die Möglichkeiten finden sich in der PCL-Dokumentation \cite{pcl2024icp}.
 Das Ergebnis ist eine transformierte Punktewolke, welche an den dafür erstellten Pointer geschrieben wird.
 Im Optimalfall stimmt diese mit der Target PointCloud überein.
 
 Als Nächstes wird die Transformationsmatrix ausgelesen.
-Diese beschreibt die transformation die nötig ist um die Source Punktewolke in die, 
+Diese beschreibt die Transformation die nötig ist um die Source Punktewolke in die, 
 vom Algorithmus berechnete Punktewolke, zu transformieren.
 Sie wird mit der Transformationsmatrix der vorherigen Iteration multipliziert.
 Das Resultat ist eine Kombination beider Matrizen.
@@ -548,12 +548,12 @@ Zusätzlich wird noch der Counter für die Iterationen erhöht.
 \newline
 
 Nachdem eines der Abbruchkriterien der Schleife erfüllt ist, werden zusätzliche Informationen der finalen Iteration ausgelesen und ausgegeben.
-Einmal die Information ob der Algorithmus überhaupt erfolgreich abgeschlossen hat.
-Dann der Fitness-Score des Erfebnis. 
+Einmal die Information, ob der Algorithmus überhaupt erfolgreich abgeschlossen hat.
+Dann der Fitness-Score des Ergebnisses. 
 Dieser ist nichts Anderes als die mittlere, quadratische Abweichung der Konvergenzen.
 Außerdem wird noch die Information ausgegeben, aus welchem Grund der Algorithmus beendet hat.
-Mögliche Gründe sind z.B. das erreichen der maximalen Anzahl an internen Iterationen
-oder das unterschreiten eines Schwellwerts, welche über die Parameter festgelegt wurden.
+Mögliche Gründe sind z.B. das Erreichen der maximalen Anzahl an internen Iterationen
+oder das Unterschreiten eines Schwellwerts, welche über die Parameter festgelegt wurden.
 
 Abschließend wird die finale Transformationsmatrix zurückgegeben.
 
@@ -614,7 +614,7 @@ Eigen::Matrix4f PclHandler::computeAlignment(const PointCloud::Ptr &sourcePoints
 Mittels der Methode \textit{extractTransformationComponents} können die relevanten Werte aus der berechnete Transformationsmatrix ausgelesen
 und in \textit{TransformationComponents} umgewandelt werden.
 
-Diese werden an das \textit{Particle} zurückgegeben und dort verwendet um die Position zu aktualisieren.
+Diese werden an das \textit{Particle} zurückgegeben und dort verwendet, um die Position zu aktualisieren.
 
 \subsubsection{Umsetzung des Ausweichalgorithmus}
 
